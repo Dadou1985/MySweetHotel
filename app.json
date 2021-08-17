@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "scheme": "mysweethotel",
+    "name": "My Sweet Hotel",
+    "slug": "mySweatHotel",
+    "version": "10.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/appstore.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dadou1885.mySweatHotel",
+      "buildNumber": "10.0.0",
+      "infoPlist": {
+        "NSCalendarsUsageDescription":
+          "Allow our app to access your calendar in order to ease your experience.",
+        "NSCameraUsageDescription":
+          "Our app uses your camera to scan hotels QR codes in order to create communication access to them.",
+        "NSPhotoLibraryAddUsageDescription":
+          "Give our app permission to save photos in order to ease your experience.",
+        "NSPhotoLibraryUsageDescription":
+          "Give our app permission to access your photos to improve your experience."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.dadou1885.mySweatHotel",
+      "versionCode": 2,
+      "useNextNotificationsApi": true
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "description": "",
+    "notification": {
+      "icon": "./assets/notification_icon.png",
+      "color": "#ffffff",
+      "androidMode": "default",
+      "iosDisplayInForeground": false
+    }
+  }
+}

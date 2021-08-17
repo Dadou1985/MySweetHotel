@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>746435372425-2vsottijdbq5tdjhvjukdrgkkoa6t2ue.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.746435372425-2vsottijdbq5tdjhvjukdrgkkoa6t2ue</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD_MN30h49lXLpWpEKYeiWpM4CXatZyfxg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>746435372425</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dadou1885.mySweatHotel</string>
+	<key>PROJECT_ID</key>
+	<string>notel-765b1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>notel-765b1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:746435372425:ios:3bfddea6039d77c704ed58</string>
+	<key>DATABASE_URL</key>
+	<string>https://notel-765b1.firebaseio.com</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow Expo experiences to access your calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow Expo experiences to use your camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow Expo experiences to access your contacts</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow Expo experiences to use your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow Expo experiences to access your microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Allow Expo experiences to access your device's accelerometer</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Give Expo experiences permission to save photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Give Expo experiences permission to access your photos</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Allow Expo experiences to access your reminders</string>
+</dict>
+</plist>
