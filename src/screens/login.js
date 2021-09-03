@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView, Platform } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'
 import { auth, db } from "../../firebase"
@@ -8,6 +8,7 @@ import { showMessage } from "react-native-flash-message"
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
+import ModalWeb from 'modal-enhanced-react-native-web';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
@@ -133,23 +134,9 @@ const Login = ({ navigation }) => {
         //{title: "عرب", value: "ar", countryFlag: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAs0lEQVR4nO3QsQ1BURiA0X+FR1QSFTXRI6JTm0IjYQKFikSiZQCFARQ63gKiMc0zhNvcvPMl3wInQpIkSZLq2COG1xTvx73j9NK65nY8YlCleDfrlpNzs8ptAAAAAAAAAAAAAAD+/DIfvdb3xSe3kwF8V4eyyjAAAAAAAAAAAAAAAAD897bRfxZF8c7tZADLaJcRUWU3AAAAAAAAAAAAgPoC9G8p3kTnFBG3DJckSZKk+vUD4GJjvgc8XTAAAAAASUVORK5CYII="},
       ]
 
-
-    return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-            <StatusBar style="light" />
-            <View style={styles.containerText}>
-                <Image source={require('../../img/new-logo-msh.png')} style={{width: "75%", height: "55%", marginLeft: 75}} />
-            </View>
-            <View style={styles.inputContainer}>
-                <Input placeholder={t('email')} autofocus type="email" value={email} 
-                onChangeText={(text) => setEmail(text)} />
-                <Input placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
-                onChangeText={(text) => setPassword(text)} />
-            </View>
-            <Button raised={true} onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
-            {userDB === null && <Button raised={true} onPress={() => navigation.navigate('Inscription')} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
-       
-            <Modal 
+    const modalLanguage = () => {
+        if(Platform.OS === "web"){
+            return (<ModalWeb 
             animationType="slide"
             transparent={true}
             visible={showModalLanguage} 
@@ -173,7 +160,7 @@ const Login = ({ navigation }) => {
                     <View style={{
                         padding: 15, 
                         marginBottom: 30}}>
-                            <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", justifyContent: "center"}} onPress={() => {
+                            <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}} onPress={() => {
                                 setShowModalLanguage(false)
                                 i18next.changeLanguage(data.value)
                             }}>
@@ -185,7 +172,88 @@ const Login = ({ navigation }) => {
                         </View>
                     )) }
                 </ScrollView>
-            </Modal>
+            </ModalWeb>)
+        }else{
+            return (
+                <Modal 
+                animationType="slide"
+                transparent={true}
+                visible={showModalLanguage} 
+                style={styles.centeredView}>
+                    <ScrollView contentContainerStyle={styles.modalView}>
+                        <View style={{
+                            flexDirection: "row", 
+                            width: "100%", 
+                            alignItems: "center", 
+                            justifyContent: "center", 
+                            marginBottom: 10, 
+                            paddingTop: 10, 
+                            paddingBottom: 10, 
+                            backgroundColor: "lightblue"}}>
+                            <Text style={{fontSize: 25, marginRight: 20}}>{t('selection_langue')}</Text>
+                            <TouchableOpacity>
+                                <AntDesign name="closecircle" size={24} color="black" onPress={() => setShowModalLanguage(false)} />
+                            </TouchableOpacity>
+                        </View>
+                    {internationalization.map(data =>(
+                        <View style={{
+                            padding: 15, 
+                            marginBottom: 30}}>
+                                <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", justifyContent: "center"}} onPress={() => {
+                                    setShowModalLanguage(false)
+                                    i18next.changeLanguage(data.value)
+                                }}>
+                                    <Image source={{uri: data.countryFlag}} style={{width: 30, height: 30, marginRight: 15}} />
+                                    <Text style={{fontSize: 15}}>
+                                        {data.title}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )) }
+                    </ScrollView>
+                </Modal>
+            )
+        }
+    }
+
+    const queryString = window.location.search;
+    console.log("url", queryString)
+    const urlParams = new URLSearchParams(queryString);
+    const hotelLogo = urlParams.get('url')
+
+
+    return (
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <StatusBar style="light" />
+            {queryString ? 
+            <View style={styles.containerText}>
+                <ImageBackground source={{uri: hotelLogo}} style={{
+                flex: 1,
+                resizeMode: "contain",
+                justifyContent: "center",
+                width: "100%"}}></ImageBackground>
+            </View> :
+            <View style={styles.containerText}>
+                <Image source={require('../../img/new-logo-msh.png')} style={{
+                flex: 1,
+                resizeMode: "contain",
+                justifyContent: "center",
+                width: "100%",
+                marginLeft: 50}} />
+            </View>}
+            <View style={styles.inputContainer}>
+                <Input placeholder={t('email')} autofocus type="email" value={email} 
+                onChangeText={(text) => setEmail(text)} />
+                <Input placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
+                onChangeText={(text) => setPassword(text)} />
+            </View>
+            <View style={{flex: 2}}>
+                <Button raised={true} onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
+                {userDB === null && <Button raised={true} onPress={() => navigation.navigate('Inscription')} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
+            </View>
+       
+       {showModalLanguage && modalLanguage()}
+            
         </KeyboardAvoidingView>
     )
 }
@@ -199,19 +267,17 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
     },
     containerText: {
-        width: 500, 
-        height: 300, 
-        flexDirection: "row", 
-        justifyContent: "center", 
-        alignItems: "center"
+        flex: 3,
+        width: "100%"
     },
     text: {
         fontSize: 40,
         textAlign: "center"
     },
     inputContainer: {
+        flex: 2,
         width: 300,
-        marginBottom: 50
+        justifyContent: "center"
     },
     button: {
         width: 200,
@@ -227,7 +293,7 @@ const styles = StyleSheet.create({
         marginTop: 22,
       },
     modalView: {
-        marginTop: 55,
+        marginTop: 40,
         backgroundColor: 'white',
         alignItems: 'center',
         shadowColor: '#000',

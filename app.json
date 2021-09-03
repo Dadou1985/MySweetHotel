@@ -3,7 +3,7 @@
     "scheme": "mysweethotel",
     "name": "My Sweet Hotel",
     "slug": "mySweatHotel",
-    "version": "10.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/appstore.png",
     "splash": {
@@ -15,21 +15,24 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*",
+      "src/img/*",
+      "img/*"
     ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dadou1885.mySweatHotel",
-      "buildNumber": "10.0.0",
+      "buildNumber": "1.1.0",
       "infoPlist": {
-        "NSCalendarsUsageDescription":
-          "Allow our app to access your calendar in order to ease your experience.",
-        "NSCameraUsageDescription":
-          "Our app uses your camera to scan hotels QR codes in order to create communication access to them.",
-        "NSPhotoLibraryAddUsageDescription":
-          "Give our app permission to save photos in order to ease your experience.",
-        "NSPhotoLibraryUsageDescription":
-          "Give our app permission to access your photos to improve your experience."
+        "NSCalendarsUsageDescription": "Allow our app to access your calendar in order to ease your experience.",
+        "NSCameraUsageDescription": "Our app uses your camera to scan hotels QR codes in order to create communication access to them.",
+        "NSContactsUsageDescription": "Allow our app to access your contacts",
+        "NSLocationWhenInUseUsageDescription": "Allow our app to use your location",
+        "NSMicrophoneUsageDescription": "Allow our app to access your microphone",
+        "NSMotionUsageDescription": "Allow our app to access your device's accelerometer",
+        "NSPhotoLibraryAddUsageDescription": "Give our app permission to save photos in order to keep your profile up to date.",
+        "NSPhotoLibraryUsageDescription": "Give our app permission to access your photos in order to picture your needs instead of writing them.",
+        "NSRemindersUsageDescription": "Allow our app to access your reminders"
       }
     },
     "android": {

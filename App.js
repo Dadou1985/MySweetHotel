@@ -100,7 +100,7 @@ export default function App() {
       <FlashMessage position="top" style={{zIndex: 10}} />
       </>
   }else{
-    return <Image id="flag" 
+    return <Image id="flag" style={styles.container}
     source={require('./assets/splash.png')} 
     /> 
   }

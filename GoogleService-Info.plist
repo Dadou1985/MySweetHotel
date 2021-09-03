@@ -33,22 +33,22 @@
 	<key>DATABASE_URL</key>
 	<string>https://notel-765b1.firebaseio.com</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Allow Expo experiences to access your calendar</string>
+	<string>Allow our app to access your calendar in order to ease your experience.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow Expo experiences to use your camera</string>
+	<string>Our app uses your camera to scan hotels QR codes in order to create communication access to them.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow Expo experiences to access your contacts</string>
+	<string>Allow our app to access your contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow Expo experiences to use your location</string>
+	<string>Allow our app to use your location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Expo experiences to access your microphone</string>
+	<string>Allow our app to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Allow Expo experiences to access your device's accelerometer</string>
+	<string>Allow our app to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give Expo experiences permission to save photos</string>
+	<string>Give our app permission to save photos in order to keep your profile up to date.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give Expo experiences permission to access your photos</string>
+	<string>Give our app permission to access your photos to improve your experience. That way, you could picture your needs instead of writing them.</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>Allow Expo experiences to access your reminders</string>
+	<string>Allow our app to access your reminders</string>
 </dict>
 </plist>

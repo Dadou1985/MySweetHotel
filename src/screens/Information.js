@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Modal, 
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { auth, db } from "../../firebase"
-import { paris_arrondissement, ile_de_france, auvergne_rhone_alpes, bourgogne_franche_comte, bretagne, centre_val_de_loire, corse, grand_est, hauts_de_france, normandie, nouvelle_aquitaine, occitanie, pays_de_la_loire,provence_alpes_cote_d_azur } from "../../hotels"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
@@ -37,8 +36,6 @@ const Information = ({ navigation }) => {
     const [hotelId, setHotelId] = useState(null)
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-
-    const deptDetails = [paris_arrondissement, ile_de_france, auvergne_rhone_alpes, bourgogne_franche_comte, bretagne, centre_val_de_loire, corse, grand_est, hauts_de_france, normandie, nouvelle_aquitaine, occitanie, pays_de_la_loire,provence_alpes_cote_d_azur]
 
     const { t } = useTranslation()
 
@@ -206,12 +203,12 @@ const Information = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
+    {/*useEffect(() => {
         (async () => {
           const { status } = await BarCodeScanner.requestPermissionsAsync();
           setHasPermission(status === 'granted');
         })();
-      }, []);
+      }, []);*/}
     
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
@@ -219,7 +216,7 @@ const Information = ({ navigation }) => {
       };
     
       if (hasPermission === null) {
-        return <Text style={{color: "white"}}>Requesting for camera permission</Text>;
+        return <Text style={{color: "transparent"}}>Requesting for camera permission</Text>;
       }
       if (hasPermission === false) {
         return <Text>No access to camera</Text>;
