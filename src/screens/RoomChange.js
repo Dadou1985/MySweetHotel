@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, ImageBackground, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 

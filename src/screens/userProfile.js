@@ -17,6 +17,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChatNotification from '../components/chatNotification'
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import ModalWeb from 'modal-enhanced-react-native-web';
+import { DatePickerModal } from 'react-native-paper-dates';
+import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
@@ -36,12 +39,22 @@ const UserProfile = ({navigation}) => {
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
     const [isForegrounding, setIsForegrounding] = useState(false)
+    const [conciergePanel, setConciergePanel] = useState(false)
 
     const Logout = () => {
       auth.signOut()
   }
 
   const { t } = useTranslation()
+
+  LocaleConfig.locales[i18next.language] = {
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+    today: 'Aujourd\'hui'
+  };
+  LocaleConfig.defaultLocale = 'fr';
 
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -50,7 +63,7 @@ const UserProfile = ({navigation}) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                <Image source={require('../../img/new-mini-logo-msh.png')} style={{width: 80, height: 60, marginTop: 15}} />
+                {userDB.logo ? <ImageBackground source={{uri: userDB.logo}} style={{width: 100, height: 50}}></ImageBackground> : <Image source={require('../../img/new-mini-logo-msh.png')} style={{width: 80, height: 60, marginTop: 15}} />}
               </View>
           ),
           headerLeft: null,
@@ -219,7 +232,7 @@ const UserProfile = ({navigation}) => {
       await db.collection('guestUsers')
       .doc(user.uid)
       .update({
-        checkoutDate: moment(date).format('L')
+        checkoutDate: moment(date.timestamp).format('L')
       })
 
       await showMessage({
@@ -315,36 +328,76 @@ const UserProfile = ({navigation}) => {
                         value={date}
                         mode='date'
                         is24Hour={true}
-                        minimumDate={new Date()}
+                        minimumDate={date}
                         display="spinner"
                         onChange={onChange}
                         style={styles.datePicker}
                     />
                     <Button raised={true} onPress={() => {
-                        setShowDate(false)                   
-                      }} containerStyle={styles.datePickerButton} title={t('validation')} />
+                        setUpdateCheckout(true)
+                        setShowDate(false)
+                    }} containerStyle={styles.datePickerButton} title={t('validation')} />
                 </View>
             </Modal>
         )
     }else{
-        return (
-            <View>
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    locale={i18next.language}
-                    value={date}
-                    mode='date'
-                    is24Hour={true}
-                    minimumDate={tomorrow}
-                    display="default"
-                    onChange={onChange}
-                />
-            </View>
-        )
+        if(Platform.OS === "android") {
+            return (
+                <View>
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        locale={i18next.language}
+                        value={date}
+                        mode='date'
+                        is24Hour={true}
+                        minimumDate={Date.now() + 86400000}
+                        display="default"
+                        onChange={onChange}
+                    />
+                </View>
+            )
+        }else{
+            return (
+                <ModalWeb 
+                animationType="slide"
+                visible={showDate} 
+                style={styles.datePickerModal}>
+                <View style={{
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    width: "100%",
+                    height: "100%"
+                }}>
+                    <View style={{
+                        flexDirection: "row", 
+                        width: 420, 
+                        alignItems: "center", 
+                        justifyContent: "center", 
+                        marginBottom: 10, 
+                        paddingTop: 10, 
+                        paddingBottom: 10, 
+                        backgroundColor: "lightblue"}}>
+                        <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
+                    </View>
+                    <Calendar
+                        minDate={date} 
+                        theme={{arrowColor: "blue"}}
+                        pastScrollRange={0}
+                        onDayPress={(day) => setDate(day)} />
+                    <Button raised={true} onPress={() => {
+                        setUpdateCheckout(true)
+                        setShowDate(false)
+                    }} containerStyle={styles.datePickerButton} title={t('validation')} />
+                </View>
+            </ModalWeb>
+            )
+        }
     }
 }
 
-useEffect(() => {
+{/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
 }, [])
 
@@ -384,7 +437,7 @@ const registerForPushNotificationsAsync = async() => {
   }
 
   return token;
-}
+}*/}
 
 {/*useEffect(() => {
   if(Platform.OS === 'ios') {
@@ -413,6 +466,8 @@ const _handleAppStateChange = (nextAppState) => {
   setAppStateVisible(appState.current);
   console.log('AppState', appState.current);
 };
+
+const handleCloseConciergePanel = () => setConciergePanel(false)
 
 console.log("photoURL", reloadPhotoURLIos)
    
@@ -483,11 +538,18 @@ if(isForegrounding) {
                 <Image source={{uri: "https://cdn2.iconfinder.com/data/icons/car-11/100/taxi3-512.png"}} style={styles.img} />
             </TouchableOpacity>
           </View>
-          <Button raised={true} title={t('conciergerie')} containerStyle={{width: 2000, position: "absolute", bottom: 0}} onPress={fadeIn} /> 
-          <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} navigation={navigation} />
+          <Button raised={true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0}} onPress={() => {
+            setConciergePanel(true)
+            fadeIn()}} /> 
+          {conciergePanel && <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} closePanel={handleCloseConciergePanel} navigation={navigation} />}
         </View>
 
-        <Overlay isVisible={updateMail} onBackdropPress={() => setUpdateMail(false)}>
+        <ModalWeb 
+          animationType="slide" 
+          style={{backgroundColor: "white"}}
+          transparent={true} 
+          isVisible={updateMail} 
+          onBackdropPress={() => setUpdateMail(false)}>
           <View style={{width: "100%", flexDirection: "column", alignItems: "center", padding: 10}}>
             <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 20}}>{t('actualisation_email')}</Text>
             <View style={styles.inputContainer}>
@@ -497,9 +559,14 @@ if(isForegrounding) {
             </View>
             <Button title={t('actualiser')} containerStyle={styles.button} onPress={handleChangeEmail} />
           </View>
-        </Overlay>
+        </ModalWeb>
 
-        <Overlay isVisible={updateRoom} onBackdropPress={() => setUpdateRoom(false)}>
+        <ModalWeb 
+          animationType="slide"
+          style={{backgroundColor: "white"}}                
+          transparent={true} 
+          isVisible={updateRoom} 
+          onBackdropPress={() => setUpdateRoom(false)}>
           <View style={{width: "100%", flexDirection: "column", alignItems: "center", padding: 10}}>
             <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 20}}>{t('actualisation_chbre')}</Text>
             <View style={styles.inputContainer}>
@@ -509,9 +576,14 @@ if(isForegrounding) {
             </View>
             <Button title={t('actualiser')} containerStyle={styles.button} onPress={handleSubmit} />
           </View>
-        </Overlay>
+        </ModalWeb>
 
-        <Overlay isVisible={updatePhoto} onBackdropPress={() => setUpdatePhoto(false)}>
+        <ModalWeb 
+          animationType="slide"
+          style={{backgroundColor: "white"}}                
+          transparent={true} 
+          isVisible={updatePhoto} 
+          onBackdropPress={() => setUpdatePhoto(false)}>
           <View style={{width: "80%"}}>
             <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 18, marginBottom: 15}}>{t('message_confirmation_actualisation_photo')}</Text>
             <Button title={t('confirmer')} style={{marginTop: 1, marginBottom: 1}} onPress={(event) => {
@@ -523,9 +595,14 @@ if(isForegrounding) {
               })
             }} />
           </View>
-        </Overlay>
+        </ModalWeb>
 
-        <Overlay isVisible={updateCheckout} onBackdropPress={() => setUpdateCheckout(false)}>
+        <ModalWeb 
+          animationType="slide" 
+          style={{backgroundColor: "white"}}
+          transparent={true}  
+          isVisible={updateCheckout} 
+          onBackdropPress={() => setUpdateCheckout(false)}>
           <View style={{width: "80%"}}>
             <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 18, marginBottom: 15}}>{t('message_confirmation_actualisation_checkout')}</Text>
             <Button title={t('confirmer')} style={{marginTop: 1, marginBottom: 1}} onPress={() => {
@@ -533,7 +610,7 @@ if(isForegrounding) {
               setUpdateCheckout(false)
             }} />
           </View>
-        </Overlay>
+        </ModalWeb>
 
         {showDate && handlePlatformDate()}
 

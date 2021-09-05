@@ -6,8 +6,9 @@ import { showMessage } from "react-native-flash-message";
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
+import ModalWeb from 'modal-enhanced-react-native-web';
 
-const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation}) => {
+const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
     const [user, setUser] = useState(auth.currentUser)
     const [showModal, setShowModal] = useState(false)
     const {userDB, setUserDB} = useContext(UserContext)
@@ -56,7 +57,9 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation}) => {
         <Animated.View style={[styles.fadingContainer, {bottom: fadeAnim}]}>
                 <View style={{flexDirection: "row", justifyContent: "flex-end", mawWidth: "90%", alignItems: "center"}}>
                     <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 120}}>{t('conciergerie')}</Text>
-                    <TouchableOpacity activeOpacity={0.5} onPress={fadeOut} style={{marginLeft: 100}}>
+                    <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                        fadeOut()
+                        closePanel()}} style={{marginLeft: 100}}>
                         <AntDesign name="closecircle" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
@@ -165,7 +168,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation}) => {
                             <Text>{t('conciergerie_message_fin')}</Text>
                         </TouchableOpacity>}
                 </View>
-                <Modal 
+                <ModalWeb 
                 animationType="slide"
                 transparent={true}
                 visible={showModal} 
@@ -183,7 +186,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation}) => {
                             <Text style={{textAlign: "center"}}>{t('conciergerie_conditions_para2')}</Text>
                             <Text style={{textAlign: "right", marginTop: 10, width: 300, fontWeight: "bold"}} onPress={() => setShowModal(false)}>{t('fermer')}</Text>
                     </View>
-                </Modal>
+                </ModalWeb>
         </Animated.View>
     )
 }
@@ -209,7 +212,8 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         bottom: 0, 
         padding: 20,
-        marginBottom: 50
+        marginBottom: 50,
+        width: "100%"
     },
     cncContainer: {
           flexDirection: "row",

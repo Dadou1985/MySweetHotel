@@ -25,7 +25,7 @@ const Information = ({ navigation, route }) => {
     const [currentRoom, setCurrentRoom] = useState("Numéro de chambre")
     const [date, setDate] = useState(new Date())
     const [showDate, setShowDate] = useState(true)
-    const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: ""})
+    const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: "", logo: ""})
     const [filter, setFilter] = useState("")
     const [initialFilter, setInitialFilter] = useState("")
     const [hotelName, setHotelName] = useState("Lancer la recherche")
@@ -43,13 +43,14 @@ const Information = ({ navigation, route }) => {
 
     const { t } = useTranslation()
 
-    LocaleConfig.locales[i18next.language] = {
+    LocaleConfig.locales['fr'] = {
         monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
         monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
         dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
         dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
         today: 'Aujourd\'hui'
       };
+
     LocaleConfig.defaultLocale = 'fr';
 
     useLayoutEffect(() => {
@@ -142,7 +143,8 @@ const Information = ({ navigation, route }) => {
             babyBed: true, 
             website: formValue.website,
             phone: formValue.phone,
-            language: i18next.language
+            language: i18next.language,
+            logo: formValue.logo
             })
         return handleLoadUserDB()
     }
@@ -243,7 +245,8 @@ const Information = ({ navigation, route }) => {
                             minDate={date} 
                             theme={{arrowColor: "blue"}}
                             pastScrollRange={0}
-                            onDayPress={(day) => setDate(day)} />
+                            onDayPress={(day) => setDate(day)}
+                             />
                         <Button raised={true} onPress={() => {
                             info.map(hotel => {
                                 setFormValue({
@@ -256,7 +259,8 @@ const Information = ({ navigation, route }) => {
                                     room: hotel.room,
                                     standing: hotel.classement,
                                     website: hotel.website,
-                                    phone: hotel.phone
+                                    phone: hotel.phone,
+                                    logo: hotel.logo
                                 })
                                 setHotelName(hotel.hotelName)
                                 setUrl(hotel.website)})
@@ -355,17 +359,17 @@ const Information = ({ navigation, route }) => {
             {userDB.checkoutDate !== "" ? <View style={styles.containerText}>
                         <View style={styles.containerImg}>
                         <ImageBackground source={ require('../../img/booking11.png') } style={{
-                            flex: 1,
                             resizeMode: "contain",
                             justifyContent: "center",
-                            width: 410}}>
+                            width: 250,
+                            height: 400}}>
                         </ImageBackground>
                             <View style={{
                                 position: "absolute",
                                 flexDirection: "column",
                                 alignItems: "center",
                                 width: "100%",
-                                top: 500}}>
+                                top: "90%"}}>
                                 <Button containerStyle={styles.button} type="clear" title={t("oui")} onPress={handleLinkWebsite} />
                                 <Button raised={true} containerStyle={styles.button} title={t("non")} onPress={async() => {
                                     await handleUpdateLanguage()
@@ -478,7 +482,7 @@ const Information = ({ navigation, route }) => {
 
             {showModalRoom && roomModal()}
 
-            {showDate && handlePlatformDate()}
+            {userDB.checkoutDate === "" && showDate && handlePlatformDate()}
            
         </KeyboardAvoidingView>
     )
@@ -508,7 +512,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        marginTop: 150
       },
     containerInput: {
         flex: 3,

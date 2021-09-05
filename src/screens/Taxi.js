@@ -1,5 +1,5 @@
 import React, { useState,useContext, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, ImageBackground, TouchableOpacity, Modal } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, View, ImageBackground, TouchableOpacity, Modal, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { auth, db } from "../../firebase"
@@ -11,7 +11,8 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import ModalWeb from 'modal-enhanced-react-native-web';
+import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
 const Taxi = ({ navigation }) => {
     const [date, setDate] = useState(new Date())
@@ -26,6 +27,15 @@ const Taxi = ({ navigation }) => {
     const [showHour, setShowHour] = useState(false)
 
     const { t } = useTranslation()
+
+    LocaleConfig.locales[i18next.language] = {
+        monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+        monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+        dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+        dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+        today: 'Aujourd\'hui'
+      };
+      LocaleConfig.defaultLocale = 'fr';
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -84,7 +94,7 @@ const Taxi = ({ navigation }) => {
             model: type,
             markup: Date.now(),
             hour: moment(hour).format('LT'),
-            date: moment(date).format('L'),
+            date: moment(date.timestamp).format('L'),
             status: true
           }).then(function(docRef){
             console.log(docRef.id)
@@ -117,7 +127,7 @@ const Taxi = ({ navigation }) => {
                             paddingTop: 10, 
                             paddingBottom: 10, 
                             backgroundColor: "lightblue"}}>
-                            <Text style={{fontSize: 25, marginRight: 20}}>{t('reveil_jour')}</Text>
+                            <Text style={{fontSize: 25, marginRight: 20}}>{t('date_checkout')}</Text>
                             <TouchableOpacity>
                                 <AntDesign name="closecircle" size={24} color="black" onPress={() => setShowDate(false)} />
                             </TouchableOpacity>
@@ -128,9 +138,9 @@ const Taxi = ({ navigation }) => {
                             value={date}
                             mode='date'
                             is24Hour={true}
-                            minimumDate={new Date()}
+                            minimumDate={date}
                             display="spinner"
-                            onChange={onDateChange}
+                            onChange={onChange}
                             style={styles.datePicker}
                         />
                         <Button raised={true} onPress={() => {
@@ -140,20 +150,58 @@ const Taxi = ({ navigation }) => {
                 </Modal>
             )
         }else{
-            return (
-                <View>
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        locale={i18next.language}
-                        value={date}
-                        mode='date'
-                        is24Hour={true}
-                        minimumDate={new Date()}
-                        display="default"
-                        onChange={onDateChange}
-                    />
-                </View>
-            )
+            if(Platform.OS === "android") {
+                return (
+                    <View>
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            locale={i18next.language}
+                            value={date}
+                            mode='date'
+                            is24Hour={true}
+                            minimumDate={Date.now() + 86400000}
+                            display="default"
+                            onChange={onChange}
+                        />
+                    </View>
+                )
+            }else{
+                return (
+                    <ModalWeb 
+                    animationType="slide"
+                    visible={showDate} 
+                    style={styles.datePickerModal}>
+                    <View style={{
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        backgroundColor: "white",
+                        width: "100%",
+                        height: "100%"
+                    }}>
+                        <View style={{
+                            flexDirection: "row", 
+                            width: 420, 
+                            alignItems: "center", 
+                            justifyContent: "center", 
+                            marginBottom: 10, 
+                            paddingTop: 10, 
+                            paddingBottom: 10, 
+                            backgroundColor: "lightblue"}}>
+                            <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
+                        </View>
+                        <Calendar
+                            minDate={date} 
+                            theme={{arrowColor: "blue"}}
+                            pastScrollRange={0}
+                            onDayPress={(day) => setDate(day)} />
+                        <Button raised={true} onPress={() => {
+                            setShowDate(false)
+                        }} containerStyle={styles.datePickerButton} title={t('validation')} />
+                    </View>
+                </ModalWeb>
+                )
+            }
         }
     }
 
@@ -233,8 +281,9 @@ const Taxi = ({ navigation }) => {
                 <View style={{flexDirection: "row", justifyContent: "space-around"}}>
                     <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                         <Text>{t('jour')}</Text>
-                        <Button type="clear" title={moment(date).format('L')} 
-                        onPress={handleShowDate} />
+                        {date.timestamp ? <Button type="clear" title={moment(date.timestamp).format('L')}
+                        onPress={handleShowDate} /> : <Button type="clear" title={moment(date).format('L')}
+                        onPress={handleShowDate} />}
                     </View>
                     <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                         <Text>{t('heure')}</Text>
