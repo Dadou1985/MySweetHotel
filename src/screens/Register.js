@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -12,7 +12,7 @@ import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 
 
-const Register = ({ navigation }) => {
+const Register = ({ navigation, route }) => {
     const { t } = useTranslation()
 
     const [email, setEmail] = useState("")
@@ -25,6 +25,8 @@ const Register = ({ navigation }) => {
     const [language, setLanguage] = useState(i18next.language)
     const [gender, setGender] = useState(t("male"))
     const [guestCategory, setGuestCategory] = useState(t("tourisme"))
+
+    const { hotelLogo } = route.params
   
 
     useLayoutEffect(() => {
@@ -157,7 +159,7 @@ const Register = ({ navigation }) => {
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar style="light" />
             <View style={styles.containerText}>
-                <Image source={require('../../img/new-mini-logo-msh.png')} style={{width: 150, height: 100}} />
+                <Image source={{uri: hotelLogo}} style={{width: 150, height: 100}} />
                 <Text style={styles.text}>{t("creation_compte")}</Text>
             </View>    
             <View style={styles.inputContainer}>

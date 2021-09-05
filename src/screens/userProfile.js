@@ -386,7 +386,7 @@ const registerForPushNotificationsAsync = async() => {
   return token;
 }
 
-useEffect(() => {
+{/*useEffect(() => {
   if(Platform.OS === 'ios') {
     AppState.addEventListener('change', _handleAppStateChange);
   }
@@ -394,7 +394,7 @@ useEffect(() => {
   return () => {
     AppState.removeEventListener('change', _handleAppStateChange);
   };
-}, []);
+}, []);*/}
 
 const _handleAppStateChange = (nextAppState) => {
   if (

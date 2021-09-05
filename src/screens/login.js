@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
                 console.log("No such document!");
             }
         }).then(() => {
-            return navigation.navigate('Information')
+            return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId:hotelId })
         })
     }
 
@@ -220,7 +220,7 @@ const Login = ({ navigation }) => {
     console.log("url", queryString)
     const urlParams = new URLSearchParams(queryString);
     const hotelLogo = urlParams.get('url')
-
+    const hotelId = urlParams.get('hotelId')
 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -249,7 +249,7 @@ const Login = ({ navigation }) => {
             </View>
             <View style={{flex: 2}}>
                 <Button raised={true} onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
-                {userDB === null && <Button raised={true} onPress={() => navigation.navigate('Inscription')} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
+                {userDB === null && <Button raised={true} onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
             </View>
        
        {showModalLanguage && modalLanguage()}
@@ -268,7 +268,8 @@ const styles = StyleSheet.create({
     },
     containerText: {
         flex: 3,
-        width: "100%"
+        width: "100%",
+        padding: 5
     },
     text: {
         fontSize: 40,

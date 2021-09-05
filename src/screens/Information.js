@@ -14,13 +14,17 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import ModalWeb from 'modal-enhanced-react-native-web';
+import { DatePickerModal } from 'react-native-paper-dates';
+import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
-const Information = ({ navigation }) => {
+const Information = ({ navigation, route }) => {
+    const { hotelLogo, currentHotelId } = route.params
     
     const [info, setInfo] = useState([])
     const [currentRoom, setCurrentRoom] = useState("Numéro de chambre")
     const [date, setDate] = useState(new Date())
-    const [showDate, setShowDate] = useState(false)
+    const [showDate, setShowDate] = useState(true)
     const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: ""})
     const [filter, setFilter] = useState("")
     const [initialFilter, setInitialFilter] = useState("")
@@ -33,11 +37,20 @@ const Information = ({ navigation }) => {
     const [checkoutButton, setCheckoutButton] = useState(false)
     const [inputRoom, setInputRoom] = useState(false)
     const [url, setUrl] = useState("")
-    const [hotelId, setHotelId] = useState(null)
+    const [hotelId, setHotelId] = useState(currentHotelId)
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
 
     const { t } = useTranslation()
+
+    LocaleConfig.locales[i18next.language] = {
+        monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+        monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+        dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+        dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+        today: 'Aujourd\'hui'
+      };
+    LocaleConfig.defaultLocale = 'fr';
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -47,7 +60,7 @@ const Information = ({ navigation }) => {
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
                     {userDB.checkoutDate !== "" ? 
-                     <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t("prochain_sejour")}</Text> : <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t("trouver_hotel")}</Text>}
+                     <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t("prochain_sejour")}</Text> : <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>}
                 </View>
             ),
             headerLeft: null
@@ -118,7 +131,7 @@ const Information = ({ navigation }) => {
             city: formValue.city,
             classement: formValue.standing,            
             room: currentRoom,
-            checkoutDate: moment(date.getTime()).format('L'),
+            checkoutDate: moment(date.timestamp).format('L'),
             towel: true,
             soap: true,
             toiletPaper: true,
@@ -186,19 +199,131 @@ const Information = ({ navigation }) => {
                 </Modal>
             )
         }else{
+            if(Platform.OS === "android") {
+                return (
+                    <View>
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            locale={i18next.language}
+                            value={date}
+                            mode='date'
+                            is24Hour={true}
+                            minimumDate={Date.now() + 86400000}
+                            display="default"
+                            onChange={onChange}
+                        />
+                    </View>
+                )
+            }else{
+                return (
+                    <ModalWeb 
+                    animationType="slide"
+                    visible={showDate} 
+                    style={styles.datePickerModal}>
+                    <View style={{
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        backgroundColor: "white",
+                        width: "100%",
+                        height: "100%"
+                    }}>
+                        <View style={{
+                            flexDirection: "row", 
+                            width: 420, 
+                            alignItems: "center", 
+                            justifyContent: "center", 
+                            marginBottom: 10, 
+                            paddingTop: 10, 
+                            paddingBottom: 10, 
+                            backgroundColor: "lightblue"}}>
+                            <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
+                        </View>
+                        <Calendar
+                            minDate={date} 
+                            theme={{arrowColor: "blue"}}
+                            pastScrollRange={0}
+                            onDayPress={(day) => setDate(day)} />
+                        <Button raised={true} onPress={() => {
+                            info.map(hotel => {
+                                setFormValue({
+                                    hotelId: hotelId,
+                                    departement: hotel.departement,
+                                    region: hotel.region,
+                                    city: hotel.city,
+                                    code_postal: hotel.code_postal,
+                                    country: hotel.country,
+                                    room: hotel.room,
+                                    standing: hotel.classement,
+                                    website: hotel.website,
+                                    phone: hotel.phone
+                                })
+                                setHotelName(hotel.hotelName)
+                                setUrl(hotel.website)})
+                            setShowModalRoom(true)
+                            setShowDate(false)
+                        }} containerStyle={styles.datePickerButton} title={t('validation')} />
+                    </View>
+                </ModalWeb>
+                )
+            }
+        }
+    }
+
+    const roomModal = () => {
+        if(Platform.OS === "web") {
             return (
-                <View>
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        locale={i18next.language}
-                        value={date}
-                        mode='date'
-                        is24Hour={true}
-                        minimumDate={Date.now() + 86400000}
-                        display="default"
-                        onChange={onChange}
-                    />
-                </View>
+                <ModalWeb
+                animationType="slide"
+                transparent={true}
+                visible={showModalRoom} 
+                style={styles.roomBoxView}>
+                    <View style={styles.modalRoom}>
+                    <Text style={{
+                        width: "100%", 
+                        marginBottom: 10, 
+                        fontSize: 20,
+                        paddingTop: 10, 
+                        paddingBottom: 10,
+                        borderRadius: 5,
+                        textAlign: "center", 
+                        backgroundColor: "lightblue"
+                        }}>{t("num_chbre")}</Text>
+                        <Input 
+                            placeholder={t("entre_num_chbre")} 
+                            type="number" 
+                            value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
+                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                        <Button raised={true} onPress={() => setShowModalRoom(false)} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                    </View>
+                </ModalWeb>
+            )
+        }else{
+            return (
+                <Modal 
+                animationType="slide"
+                transparent={true}
+                visible={showModalRoom} 
+                style={styles.roomBoxView}>
+                    <View style={styles.modalRoom}>
+                    <Text style={{
+                        width: "100%", 
+                        marginBottom: 10, 
+                        fontSize: 20,
+                        paddingTop: 10, 
+                        paddingBottom: 10,
+                        borderRadius: 5,
+                        textAlign: "center", 
+                        backgroundColor: "lightblue"
+                        }}>{t("num_chbre")}</Text>
+                        <Input 
+                            placeholder={t("entre_num_chbre")} 
+                            type="number" 
+                            value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
+                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                        <Button raised={true} onPress={() => setShowModalRoom(false)} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                    </View>
+                </Modal>
             )
         }
     }
@@ -208,7 +333,7 @@ const Information = ({ navigation }) => {
           const { status } = await BarCodeScanner.requestPermissionsAsync();
           setHasPermission(status === 'granted');
         })();
-      }, []);*/}
+      }, []);
     
       const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
@@ -220,9 +345,9 @@ const Information = ({ navigation }) => {
       }
       if (hasPermission === false) {
         return <Text>No access to camera</Text>;
-      }
+      }*/}
 
-    console.log(hotelId)
+    console.log(date)
 
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -257,12 +382,12 @@ const Information = ({ navigation }) => {
                     </View>
                 :  
                     <View style={styles.containerText}>
-                        <View style={styles.containerImg}>
+                        {/*<View style={styles.containerImg}>
                             <ImageBackground source={ require('../../img/qr_code.png') } style={{width: 700, height: 800}}>
                             </ImageBackground>
-                        </View>
+                            </View>*/}
                         <View style={styles.buttonView}>
-                            {!hotelId && <Button 
+                            {/*{!hotelId && <Button 
                                 raised={true} 
                                 icon={<Ionicons name="search-circle" size={25} color="black" style={{marginRight: 5}} />}
                                 onPress={() => {
@@ -270,7 +395,7 @@ const Information = ({ navigation }) => {
                             {hotelId && <Button 
                                 raised={true} 
                                 icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
-                                onPress={() => setCheckoutButton(true)} containerStyle={styles.button} title={hotelName} type="solid" />}
+                            onPress={() => setCheckoutButton(true)} containerStyle={styles.button} title={hotelName} type="solid" />}*/}
                                
                                 {checkoutButton &&
                                 <Button 
@@ -302,7 +427,7 @@ const Information = ({ navigation }) => {
                 
             }
 
-            <Modal 
+            {/*<Modal 
             animationType="slide"
             transparent={true}
             visible={showModalHotel} 
@@ -349,32 +474,9 @@ const Information = ({ navigation }) => {
                         }} containerStyle={{width: "80%", position: "absolute", bottom: "10%", left: "10%", borderRadius: 20}} title={t("validation")} />}
                     </View>
                 </ScrollView>
-            </Modal>
+                    </Modal>*/}
 
-            <Modal 
-            animationType="slide"
-            transparent={true}
-            visible={showModalRoom} 
-            style={styles.roomBoxView}>
-                <View style={styles.modalRoom}>
-                <Text style={{
-                    width: "100%", 
-                    marginBottom: 10, 
-                    fontSize: 20,
-                    paddingTop: 10, 
-                    paddingBottom: 10,
-                    borderRadius: 5,
-                    textAlign: "center", 
-                    backgroundColor: "lightblue"
-                    }}>{t("num_chbre")}</Text>
-                    <Input 
-                        placeholder={t("entre_num_chbre")} 
-                        type="number" 
-                        value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
-                        onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
-                    <Button raised={true} onPress={() => setShowModalRoom(false)} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
-                </View>
-            </Modal>
+            {showModalRoom && roomModal()}
 
             {showDate && handlePlatformDate()}
            
@@ -499,7 +601,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 55,
+        marginTop: 60,
         backgroundColor: "white"
       },
     datePickerButton: {
