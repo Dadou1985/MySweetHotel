@@ -54,8 +54,10 @@ export default function App() {
 }
 
   useEffect(() => {
-      load().then(async() => {
-        return setIsLoading(false)})
+      load().then(() => {
+        return setTimeout(() => {
+          setIsLoading(false)
+        }, 3000);})
   }, [])
 
   useEffect(() => {
@@ -63,6 +65,8 @@ export default function App() {
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
     setNotification(notification);
   });
+
+  
 
   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {

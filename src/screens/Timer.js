@@ -16,12 +16,15 @@ import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calenda
 
 const Timer = ({navigation}) => {
     const [date, setDate] = useState(new Date())
-    const [hour, setHour] = useState(new Date())
+    const [time, setTime] = useState("")
+    const [hour, setHour] = useState("")
+    const [minute, setMinute] = useState("")
     const [user, setUser] = useState(auth.currentUser)
     const {userDB, setUserDB} = useContext(UserContext)
 
     const [showDate, setShowDate] = useState(false)
-    const [showHour, setShowHour] = useState(false)
+    const [showTime, setShowTime] = useState(false)
+    const [showPhoneNumber, setshowPhoneNumber] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
 
     const { t } = useTranslation()
@@ -71,12 +74,13 @@ const Timer = ({navigation}) => {
         setShowDate(true)
     }
 
-    const handleShowHour = () => {
-        setShowHour(true)
+    const handleShowTime = () => {
+        setShowTime(true)
     }
 
     const handleSubmit = () => {
         setPhoneNumber("")
+        
         return db.collection("hotel")
         .doc(userDB.hotelId)
         .collection('clock')
@@ -85,7 +89,7 @@ const Timer = ({navigation}) => {
             client: user.displayName,
             room: userDB.room,
             markup: Date.now(),
-            hour: moment(hour).format('LT'),
+            hour: time,
             date: moment(date.timestamp).format('L'),
             phoneNumber: phoneNumber,
             status: true
@@ -143,7 +147,6 @@ const Timer = ({navigation}) => {
                 </Modal>
             )
         }else{
-            if(Platform.OS === "android") {
                 return (
                     <View>
                         <DateTimePicker
@@ -158,43 +161,6 @@ const Timer = ({navigation}) => {
                         />
                     </View>
                 )
-            }else{
-                return (
-                    <ModalWeb 
-                    animationType="slide"
-                    visible={showDate} 
-                    style={styles.datePickerModal}>
-                    <View style={{
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        backgroundColor: "white",
-                        width: "100%",
-                        height: "100%"
-                    }}>
-                        <View style={{
-                            flexDirection: "row", 
-                            width: 420, 
-                            alignItems: "center", 
-                            justifyContent: "center", 
-                            marginBottom: 10, 
-                            paddingTop: 10, 
-                            paddingBottom: 10, 
-                            backgroundColor: "lightblue"}}>
-                            <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
-                        </View>
-                        <Calendar
-                            minDate={date} 
-                            theme={{arrowColor: "blue"}}
-                            pastScrollRange={0}
-                            onDayPress={(day) => setDate(day)} />
-                        <Button raised={true} onPress={() => {
-                            setShowDate(false)
-                        }} containerStyle={styles.datePickerButton} title={t('validation')} />
-                    </View>
-                </ModalWeb>
-                )
-            }
         }
     }
 
@@ -282,14 +248,16 @@ const Timer = ({navigation}) => {
                 </View>
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                     <Text style={{fontSize: 15}}>{t('heure')}</Text>
-                    <Button type="clear" title={moment(hour).format('LT')} 
-                        onPress={handleShowHour} />
+                    <Button type="clear" title={time !== "" ? time : moment(new Date()).format('LT')}
+                        onPress={handleShowTime} />
+                </View>
+                <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+                    <Text style={{fontSize: 15}}>{t('timer_num_tel')}</Text>
+                    <Button type="clear" title={phoneNumber !== "" ? phoneNumber : "Cliquez ici"}
+                        onPress={() => setshowPhoneNumber(true)} />
                 </View>
             </View> 
-            <View style={styles.inputContainer}>
-                <Input style={{textAlign: "center"}} placeholder={t("timer_num_tel")} type="text" value={phoneNumber} 
-                onChangeText={(text) => setPhoneNumber(text)} />
-            </View>
+           
             <Button raised={true} onPress={() => {
                 handleSubmit()
                 showMessage({
@@ -298,8 +266,101 @@ const Timer = ({navigation}) => {
                   })
                 }} containerStyle={styles.button} title={t('reveil_bouton')} />
             
-            {showDate && handlePlatformDate()}
-            {showHour && handlePlatformTime()}
+            {/*showDate && handlePlatformDate()*/}
+            {showTime && handlePlatformTime()}
+
+            <ModalWeb
+                animationType="slide"
+                transparent={true}
+                visible={showTime} 
+                style={styles.roomBoxView}
+                onBackdropPress={() => setShowTime(false)}>
+                    <View style={styles.modalRoom}>
+                    <Text style={{
+                        width: "100%", 
+                        marginBottom: 10, 
+                        fontSize: 20,
+                        paddingTop: 10, 
+                        paddingBottom: 10,
+                        borderRadius: 5,
+                        textAlign: "center", 
+                        backgroundColor: "lightblue"
+                        }}>{t("reveil_heure")}</Text>
+                        <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "20%"}}>
+                            <Input
+                            placeholder={t("heure")} 
+                            type="number" 
+                            value={hour} 
+                            maxLength="2"
+                            onChangeText={(text) => setHour(text)} style={{width: "50%"}} /> 
+                            :
+                            <Input 
+                            placeholder={t("minute")} 
+                            type="number" 
+                            value={minute} 
+                            maxLength="2"
+                            onChangeText={(text) => setMinute(text)} style={{width: "50%"}} />  
+                        </View>
+                        <Button raised={true} onPress={() => {
+                            setTime(`${hour}:${minute}`)
+                            setShowTime(false)}} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                    </View>
+                </ModalWeb>
+
+                <ModalWeb
+                    animationType="slide"
+                    transparent={true}
+                    visible={showPhoneNumber} 
+                    style={styles.roomBoxView}
+                    onBackdropPress={() => setshowPhoneNumber(false)}>
+                        <View style={styles.modalRoom}>
+                        <Text style={{
+                            width: "100%", 
+                            marginBottom: 10, 
+                            fontSize: 20,
+                            paddingTop: 10, 
+                            paddingBottom: 10,
+                            borderRadius: 5,
+                            textAlign: "center", 
+                            backgroundColor: "lightblue"
+                            }}>{t("reveil_heure")}</Text>
+                            <Input 
+                            placeholder={t("entre_num_chbre")} 
+                            type="number" 
+                            value={phoneNumber} 
+                            onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                        <Button raised={true} onPress={() => setshowPhoneNumber(false)} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                        </View>
+                    </ModalWeb>
+
+                    <ModalWeb
+                    animationType="slide"
+                    transparent={true}
+                    visible={showDate} 
+                    style={styles.roomBoxView}
+                    onBackdropPress={() => setShowDate(false)}>
+                        <View style={styles.modalRoom}>
+                        <Text style={{
+                            width: "100%", 
+                            marginBottom: 10, 
+                            fontSize: 20,
+                            paddingTop: 10, 
+                            paddingBottom: 10,
+                            borderRadius: 5,
+                            textAlign: "center", 
+                            backgroundColor: "lightblue"
+                            }}>{t("reveil_heure")}</Text>
+                            <Calendar
+                            minDate={date} 
+                            theme={{arrowColor: "blue"}}
+                            pastScrollRange={0}
+                            onDayPress={(day) => {
+                                setDate(day)
+                                setShowDate(false)
+                            }}
+                                 />
+                        </View>
+                    </ModalWeb>
             
         </KeyboardAvoidingView>
     )
@@ -368,5 +429,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 55,
         backgroundColor: "white"
+      },
+      roomBoxView: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+      },
+      modalRoom: {
+          margin: 20,
+          marginTop: 265,
+          borderRadius: 10,
+          backgroundColor: 'white',
+          alignItems: 'center',
+          shadowColor: '#000',
+          shadowOffset: {
+              width: 0,
+              height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+          width: "90%"
       }
 })

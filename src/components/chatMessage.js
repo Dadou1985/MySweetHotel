@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Avatar } from "react-native-elements"
+import { Avatar } from "react-native-paper"
 import moment from 'moment'
 import 'moment/locale/fr';
 import { auth } from "../../firebase"
@@ -21,7 +21,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 maxWidth: "80%",
                 position: "relative"
             }}>
-                <Avatar
+                <Avatar.Image
                 position="absolute"
                 rounded
                 bottom={-15}
@@ -43,7 +43,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 maxWidth: "80%",
                 position: "relative"
             }}>
-                <Avatar
+                <Avatar.Image
                 position="absolute"
                 rounded
                 bottom={-15}
@@ -68,7 +68,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 maxWidth: "80%",
                 position: "relative"
             }}>
-                <Avatar
+                <Avatar.Image
                 position="absolute"
                 rounded
                 bottom={-15}
@@ -91,7 +91,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 maxWidth: "80%",
                 position: "relative",
             }}>
-                <Avatar
+                <Avatar.Image
                 position="absolute"
                 rounded
                 bottom={-15}

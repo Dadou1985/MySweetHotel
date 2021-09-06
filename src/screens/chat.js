@@ -293,7 +293,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         width: "100%",
-        padding: 15
+        padding: 15,
+        position: "fixed",
+        backgroundColor: "white",
+        bottom: 0
     }
 })
 
