@@ -360,36 +360,29 @@ const UserProfile = ({navigation}) => {
             return (
                 <ModalWeb 
                 animationType="slide"
-                visible={showDate} 
-                style={styles.datePickerModal}>
-                <View style={{
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    width: "100%",
-                    height: "100%"
-                }}>
-                    <View style={{
-                        flexDirection: "row", 
-                        width: 420, 
-                        alignItems: "center", 
-                        justifyContent: "center", 
-                        marginBottom: 10, 
-                        paddingTop: 10, 
-                        paddingBottom: 10, 
-                        backgroundColor: "lightblue"}}>
-                        <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
-                    </View>
+                isVisible={showDate} 
+                style={styles.roomBoxView}
+                transparent={true}
+                onBackdropPress={() => setShowDate(false)}>
+                <View style={styles.modalRoom}>
+                    <Text style={{
+                            width: "100%", 
+                            marginBottom: 10, 
+                            fontSize: 20,
+                            paddingTop: 10, 
+                            paddingBottom: 10,
+                            borderRadius: 5,
+                            textAlign: "center", 
+                            backgroundColor: "lightblue"
+                            }}>{t('date_checkout')}</Text>
                     <Calendar
-                        minDate={date} 
+                        minDate={new Date()} 
                         theme={{arrowColor: "blue"}}
                         pastScrollRange={0}
-                        onDayPress={(day) => setDate(day)} />
-                    <Button raised={true} onPress={() => {
-                        setUpdateCheckout(true)
-                        setShowDate(false)
-                    }} containerStyle={styles.datePickerButton} title={t('validation')} />
+                        onDayPress={(day) => {
+                          setDate(day)
+                          setUpdateCheckout(true)
+                        setShowDate(false)}} />
                 </View>
             </ModalWeb>
             )
@@ -546,47 +539,72 @@ if(isForegrounding) {
 
         <ModalWeb 
           animationType="slide" 
-          style={{backgroundColor: "white"}}
+          style={styles.roomBoxView}
           transparent={true} 
           isVisible={updateMail} 
           onBackdropPress={() => setUpdateMail(false)}>
-          <View style={{width: "100%", flexDirection: "column", alignItems: "center", padding: 10}}>
-            <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 20}}>{t('actualisation_email')}</Text>
+          <View style={styles.modalRoom}>
+            <Text style={{
+                  width: "100%", 
+                  marginBottom: 10, 
+                  fontSize: 20,
+                  paddingTop: 10, 
+                  paddingBottom: 10,
+                  borderRadius: 5,
+                  textAlign: "center", 
+                  backgroundColor: "lightblue"
+                  }}>{t('actualisation_email')}</Text>
             <View style={styles.inputContainer}>
-              <Text>{t('email')}</Text>
               <Input placeholder={t('email')} type="email" value={email} 
               onChangeText={(text) => setEmail(text)} />
             </View>
-            <Button title={t('actualiser')} containerStyle={styles.button} onPress={handleChangeEmail} />
+            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleChangeEmail} />
           </View>
         </ModalWeb>
 
         <ModalWeb 
           animationType="slide"
-          style={{backgroundColor: "white"}}                
+          style={styles.roomBoxView}                
           transparent={true} 
           isVisible={updateRoom} 
           onBackdropPress={() => setUpdateRoom(false)}>
-          <View style={{width: "100%", flexDirection: "column", alignItems: "center", padding: 10}}>
-            <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 20}}>{t('actualisation_chbre')}</Text>
+          <View style={styles.modalRoom}>
+          <Text style={{
+                  width: "100%", 
+                  marginBottom: 10, 
+                  fontSize: 20,
+                  paddingTop: 10, 
+                  paddingBottom: 10,
+                  borderRadius: 5,
+                  textAlign: "center", 
+                  backgroundColor: "lightblue"
+                  }}>{t('actualisation_chbre')}</Text>
             <View style={styles.inputContainer}>
-              <Text>{t('num_chbre')}</Text>
               <Input placeholder={t('num_chbre')} type="number" value={room} 
               onChangeText={(text) => setRoom(text)} />
             </View>
-            <Button title={t('actualiser')} containerStyle={styles.button} onPress={handleSubmit} />
+            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleSubmit} />
           </View>
         </ModalWeb>
 
         <ModalWeb 
           animationType="slide"
-          style={{backgroundColor: "white"}}                
+          style={styles.roomBoxView}                
           transparent={true} 
           isVisible={updatePhoto} 
           onBackdropPress={() => setUpdatePhoto(false)}>
-          <View style={{width: "80%"}}>
-            <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 18, marginBottom: 15}}>{t('message_confirmation_actualisation_photo')}</Text>
-            <Button title={t('confirmer')} style={{marginTop: 1, marginBottom: 1}} onPress={(event) => {
+          <View style={styles.modalRoom}>
+          <Text style={{
+                  width: "100%", 
+                  marginBottom: 10, 
+                  fontSize: 15,
+                  paddingTop: 10, 
+                  paddingBottom: 10,
+                  borderRadius: 5,
+                  textAlign: "center", 
+                  backgroundColor: "lightblue"
+                  }}>{t('message_confirmation_actualisation_photo')}</Text>
+            <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={(event) => {
               handleChangePhotoUrl(event)
               setUpdatePhoto(false)
               showMessage({
@@ -599,13 +617,22 @@ if(isForegrounding) {
 
         <ModalWeb 
           animationType="slide" 
-          style={{backgroundColor: "white"}}
+          style={styles.roomBoxView}
           transparent={true}  
           isVisible={updateCheckout} 
           onBackdropPress={() => setUpdateCheckout(false)}>
-          <View style={{width: "80%"}}>
-            <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 18, marginBottom: 15}}>{t('message_confirmation_actualisation_checkout')}</Text>
-            <Button title={t('confirmer')} style={{marginTop: 1, marginBottom: 1}} onPress={() => {
+          <View style={styles.modalRoom}>
+          <Text style={{
+                  width: "100%", 
+                  marginBottom: 10, 
+                  fontSize: 15,
+                  paddingTop: 10, 
+                  paddingBottom: 10,
+                  borderRadius: 5,
+                  textAlign: "center", 
+                  backgroundColor: "lightblue"
+                  }}>{t('message_confirmation_actualisation_checkout')}</Text>
+            <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
               handleCheckoutDateChange()
               setUpdateCheckout(false)
             }} />
@@ -637,7 +664,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   button: {
-    width: 200,
+    width: "100%",
     marginTop: 10,
     borderRadius: 3
   },
@@ -678,4 +705,24 @@ datePickerButton: {
     borderColor: "white",
     marginTop: 100
 },
+roomBoxView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "90%",
+},
+modalRoom: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: "100%",
+    borderRadius: 5
+}
 })

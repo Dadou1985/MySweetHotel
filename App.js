@@ -105,7 +105,7 @@ export default function App() {
       </>
   }else{
     return <Image id="flag" style={styles.container}
-    source={require('./assets/splash.png')} 
+    source={require('./assets/splash-screen.png')} 
     /> 
   }
     

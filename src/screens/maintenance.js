@@ -158,13 +158,13 @@ const Maintenance = ({ navigation }) => {
                 <Input placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
-            <View style={{marginBottom: 55}}>
+            <View style={{marginBottom: 55, marginTop: 25}}>
                 <TouchableOpacity style={{flexDirection: "row", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
                 <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
                 <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t('ajout_photo')}</Text>
                 </TouchableOpacity>
             </View>
-            <Button raised={true} onPress={(event) => {
+            <Button onPress={(event) => {
               if(img !== null) {
                 handleChangePhotoUrl(event)
                 showMessage({
@@ -187,7 +187,7 @@ export default Maintenance
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 2,
         alignItems: "center",
         justifyContent: "space-between",
     },
@@ -202,13 +202,13 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: "80%",
         marginTop: 100, 
-
     },
     button: {
-        width: 200,
+        width: "80%",
         marginTop: 10, 
         marginBottom: 90,
-        borderColor: "white" 
+        borderColor: "white",
+        borderRadius: 30
     },
     img: {
         width: 24,

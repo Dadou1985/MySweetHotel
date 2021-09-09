@@ -17,6 +17,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
+import * as WebBrowser from 'expo-web-browser';
 
 const Information = ({ navigation, route }) => {
     const { hotelLogo, currentHotelId } = route.params
@@ -150,8 +151,10 @@ const Information = ({ navigation, route }) => {
     }
 
     const handleLinkWebsite = async() => {
-        return Linking.openURL(userDB.website)
+        return WebBrowser.openBrowserAsync(userDB.website)
     }
+
+    const markedDay = date.dateString
 
     const handlePlatformDate = () => {
         if(Platform.OS === 'ios') {
@@ -221,10 +224,10 @@ const Information = ({ navigation, route }) => {
                     <ModalWeb 
                     animationType="slide"
                     visible={showDate} 
-                    style={styles.datePickerModal}>
+                    style={styles.datePickerModal}
+                    onBackdropPress={() => setShowModalRoom(false)}>
                     <View style={{
                         flexDirection: "column",
-                        justifyContent: "space-between",
                         alignItems: "center",
                         backgroundColor: "white",
                         width: "100%",
@@ -232,41 +235,43 @@ const Information = ({ navigation, route }) => {
                     }}>
                         <View style={{
                             flexDirection: "row", 
-                            width: 420, 
+                            width: 2000, 
                             alignItems: "center", 
                             justifyContent: "center", 
                             marginBottom: 10, 
                             paddingTop: 10, 
                             paddingBottom: 10, 
                             backgroundColor: "lightblue"}}>
-                            <Text style={{fontSize: 25}}>{t('date_checkout')}</Text>
+                            <Text style={{fontSize: 20}}>{t('date_checkout')}</Text>
                         </View>
                         <Calendar
-                            minDate={date} 
-                            theme={{arrowColor: "blue"}}
+                            minDate={new Date()} 
                             pastScrollRange={0}
-                            onDayPress={(day) => setDate(day)}
+                            renderArrow={(direction) => {
+                                if(direction === 'left') return <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                                if(direction === 'right') return <AntDesign name="right" size={24} color="black" style={{marginLeft: 5}} />
+                            }}
+                            markedDates={{[date.dateString]: {selected: true, marked: true, selectedColor: "#00adf5"}}}
+                            onDayPress={(day) => {
+                                setDate(day)
+                                info.map(hotel => {
+                                    setFormValue({
+                                        hotelId: hotelId,
+                                        departement: hotel.departement,
+                                        region: hotel.region,
+                                        city: hotel.city,
+                                        code_postal: hotel.code_postal,
+                                        country: hotel.country,
+                                        room: hotel.room,
+                                        standing: hotel.classement,
+                                        website: hotel.website,
+                                        phone: hotel.phone,
+                                        logo: hotel.logo
+                                    })
+                                    setHotelName(hotel.hotelName)
+                                    setUrl(hotel.website)})
+                                setShowModalRoom(true)}}
                              />
-                        <Button raised={true} onPress={() => {
-                            info.map(hotel => {
-                                setFormValue({
-                                    hotelId: hotelId,
-                                    departement: hotel.departement,
-                                    region: hotel.region,
-                                    city: hotel.city,
-                                    code_postal: hotel.code_postal,
-                                    country: hotel.country,
-                                    room: hotel.room,
-                                    standing: hotel.classement,
-                                    website: hotel.website,
-                                    phone: hotel.phone,
-                                    logo: hotel.logo
-                                })
-                                setHotelName(hotel.hotelName)
-                                setUrl(hotel.website)})
-                            setShowModalRoom(true)
-                            setShowDate(false)
-                        }} containerStyle={styles.datePickerButton} title={t('validation')} />
                     </View>
                 </ModalWeb>
                 )
@@ -280,8 +285,9 @@ const Information = ({ navigation, route }) => {
                 <ModalWeb
                 animationType="slide"
                 transparent={true}
-                visible={showModalRoom} 
-                style={styles.roomBoxView}>
+                isVisible={showModalRoom} 
+                style={styles.roomBoxView}
+                onBackdropPress={() => setShowModalRoom(false)} >
                     <View style={styles.modalRoom}>
                     <Text style={{
                         width: "100%", 
@@ -298,7 +304,9 @@ const Information = ({ navigation, route }) => {
                             type="number" 
                             value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
                             onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
-                        <Button raised={true} onPress={() => setShowModalRoom(false)} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                        <Button raised={true} onPress={() => {
+                            setShowModalRoom(false)
+                            setShowDate(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
                     </View>
                 </ModalWeb>
             )
@@ -358,20 +366,21 @@ const Information = ({ navigation, route }) => {
             <StatusBar style="light" />
             {userDB.checkoutDate !== "" ? <View style={styles.containerText}>
                         <View style={styles.containerImg}>
-                        <ImageBackground source={ require('../../img/booking11.png') } style={{
+                        <ImageBackground source={ require('../../img/booking-shadow.png') } style={{
                             resizeMode: "contain",
                             justifyContent: "center",
-                            width: 250,
-                            height: 400}}>
+                            width: 500,
+                            height: 450}}>
                         </ImageBackground>
-                            <View style={{
+                        </View>
+                        <View style={{
                                 position: "absolute",
                                 flexDirection: "column",
                                 alignItems: "center",
-                                width: "100%",
-                                top: "90%"}}>
+                                width: "80%",
+                                top: "80%"}}>
                                 <Button containerStyle={styles.button} type="clear" title={t("oui")} onPress={handleLinkWebsite} />
-                                <Button raised={true} containerStyle={styles.button} title={t("non")} onPress={async() => {
+                                <Button containerStyle={styles.button} title={t("non")} onPress={async() => {
                                     await handleUpdateLanguage()
                                     handleLoadUserDB()
                                     return setTimeout(() => {
@@ -382,14 +391,15 @@ const Information = ({ navigation, route }) => {
                                     }, 2000);
                                 }} />
                             </View>
-                        </View>
                     </View>
                 :  
                     <View style={styles.containerText}>
-                        {/*<View style={styles.containerImg}>
-                            <ImageBackground source={ require('../../img/qr_code.png') } style={{width: 700, height: 800}}>
+                        <View style={styles.containerImg}>
+                            <ImageBackground source={ require('../../img/certified.png') } style={{width: 250, height: 300}}>
                             </ImageBackground>
-                            </View>*/}
+                            <Text style={{fontSize: 18, marginBottom: 10}}>{t("chbre_num")} {currentRoom}</Text>
+                            <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date).format('L')}</Text>
+                        </View>
                         <View style={styles.buttonView}>
                             {/*{!hotelId && <Button 
                                 raised={true} 
@@ -399,7 +409,7 @@ const Information = ({ navigation, route }) => {
                             {hotelId && <Button 
                                 raised={true} 
                                 icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
-                            onPress={() => setCheckoutButton(true)} containerStyle={styles.button} title={hotelName} type="solid" />}*/}
+                            onPress={() => setCheckoutButton(true)} containerStyle={styles.button} title={hotelName} type="solid" />}
                                
                                 {checkoutButton &&
                                 <Button 
@@ -415,9 +425,14 @@ const Information = ({ navigation, route }) => {
                              icon={<Ionicons name="bed-sharp" size={25} color="black" style={{marginRight: 5}} />}
                              onPress={() => {
                                  setShowModalRoom(true)
-                                 }} containerStyle={styles.button} title={currentRoom !== "Numéro de chambre" ? `${t("chbre_num")} ${currentRoom}` : t("num_chbre")} type="outline" />}
-                            {currentRoom !== "Numéro de chambre" &&
-                            <Button raised={true} onPress={() => {
+                                 }} containerStyle={styles.button} title={currentRoom !== "Numéro de chambre" ? `${t("chbre_num")} ${currentRoom}` : t("num_chbre")} type="outline" />*/}
+                            
+                            <Button type="clear" onPress={() => {
+                                setShowDate(true)
+                            }} containerStyle={styles.button} title="Recommencer" />
+                            <Button
+                             icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
+                             onPress={() => {
                                 handleSubmit()
                                 setTimeout(() => {
                                     showMessage({
@@ -425,7 +440,7 @@ const Information = ({ navigation, route }) => {
                                         type: "info",
                                       })
                                 }, 3000);
-                            }} containerStyle={styles.button} title={t("accueil")} />}
+                            }} containerStyle={styles.button} title={t("accueil")} />
                         </View>
                     </View>
                 
@@ -521,7 +536,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     button: {
-        width: 350,
+        width: "80%",
         marginTop: 10,
         borderRadius: 30,
     },
@@ -542,6 +557,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: "90%",
+        position: "fixed",
+        bottom: 0
     },
     modalView: {
         marginTop: 55,
@@ -554,13 +572,10 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        height: "100%"
-
+        borderRadius: 5
     },
     modalRoom: {
-        margin: 20,
-        marginTop: 265,
-        borderRadius: 10,
+        marginTop: "100%",
         backgroundColor: 'white',
         alignItems: 'center',
         shadowColor: '#000',
@@ -571,7 +586,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        width: "90%"
+        width: "100%",
     },
     buttonView: {
         flexDirection: "column",

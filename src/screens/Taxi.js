@@ -267,7 +267,7 @@ const Taxi = ({ navigation }) => {
                 <Input placeholder={t('taxi_adresse_destination')}  type="text" value={adress} 
                 onChangeText={(text) => setAdress(text)} />
             </View>
-            <Button raised={true} onPress={() => {
+            <Button onPress={() => {
                 handleSubmit()
                 showMessage({
                     message: t('taxi_message_succes'),
@@ -281,11 +281,11 @@ const Taxi = ({ navigation }) => {
             <ModalWeb
                 animationType="slide"
                 transparent={true}
-                visible={showTime} 
+                isVisible={showTime} 
                 style={styles.roomBoxView}
                 onBackdropPress={() => setShowTime(false)}>
                     <View style={styles.modalRoom}>
-                    <Text style={{
+                        <Text style={{
                         width: "100%", 
                         marginBottom: 10, 
                         fontSize: 20,
@@ -294,32 +294,34 @@ const Taxi = ({ navigation }) => {
                         borderRadius: 5,
                         textAlign: "center", 
                         backgroundColor: "lightblue"
-                        }}>{t("reveil_heure")}</Text>
-                        <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "20%"}}>
+                        }}>{t("heure")}</Text>
+                        <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center", width: "90%"}}>
                             <Input
-                            placeholder={t("heure")} 
+                            placeholder="00" 
                             type="number" 
                             value={hour} 
                             maxLength="2"
-                            onChangeText={(text) => setHour(text)} style={{width: "50%"}} /> 
+                            onChangeText={(text) => setHour(text)}
+                            containerStyle={{width: "15%"}}/> 
                             :
                             <Input 
-                            placeholder={t("minute")} 
+                            placeholder="00" 
                             type="number" 
                             value={minute} 
                             maxLength="2"
-                            onChangeText={(text) => setMinute(text)} style={{width: "50%"}} />  
+                            onChangeText={(text) => setMinute(text)}
+                            containerStyle={{width: "15%"}}/> 
                         </View>
-                        <Button raised={true} onPress={() => {
+                        <Button onPress={() => {
                             setTime(`${hour}:${minute}`)
-                            setShowTime(false)}} containerStyle={{width: 300, borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                            setShowTime(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
                     </View>
                 </ModalWeb>
 
                 <ModalWeb
                     animationType="slide"
                     transparent={true}
-                    visible={showDate} 
+                    isVisible={showDate} 
                     style={styles.roomBoxView}
                     onBackdropPress={() => setShowDate(false)}>
                         <View style={styles.modalRoom}>
@@ -332,9 +334,9 @@ const Taxi = ({ navigation }) => {
                             borderRadius: 5,
                             textAlign: "center", 
                             backgroundColor: "lightblue"
-                            }}>{t("date_checkout")}</Text>
+                            }}>{t("jour")}</Text>
                             <Calendar
-                            minDate={date} 
+                            minDate={new Date()} 
                             theme={{arrowColor: "blue"}}
                             pastScrollRange={0}
                             onDayPress={(day) => {
@@ -382,10 +384,11 @@ const styles = StyleSheet.create({
         marginRight: 5 
     },
     button: {
-        width: 200,
+        width: "80%",
         marginTop: 10,
         marginBottom: 50, 
-        borderColor: "white" 
+        borderColor: "white",
+        borderRadius: 30,
     },
     datePickerButton: {
         width: 250,
@@ -437,7 +440,6 @@ const styles = StyleSheet.create({
       },
       modalRoom: {
           margin: 20,
-          marginTop: 265,
           borderRadius: 10,
           backgroundColor: 'white',
           alignItems: 'center',
