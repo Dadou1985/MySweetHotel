@@ -45,7 +45,7 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/appstore.png"
     },
     "description": "",
     "notification": {

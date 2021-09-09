@@ -253,7 +253,7 @@ const Timer = ({navigation}) => {
                 </View>
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                     <Text style={{fontSize: 15}}>{t('timer_num_tel')}</Text>
-                    <Button type="clear" title={phoneNumber !== "" ? phoneNumber : "Cliquez ici"}
+                    <Button type="clear" title={phoneNumber !== "" ? phoneNumber : t("clic")}
                         onPress={() => setshowPhoneNumber(true)} />
                 </View>
             </View> 
@@ -303,7 +303,7 @@ const Timer = ({navigation}) => {
                         </View>
                         <Button onPress={() => {
                             setTime(`${hour}:${minute}`)
-                            setShowTime(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                            setShowTime(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
                     </View>
                 </ModalWeb>
 

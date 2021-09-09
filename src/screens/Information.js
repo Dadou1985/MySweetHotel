@@ -397,7 +397,7 @@ const Information = ({ navigation, route }) => {
                         <View style={styles.containerImg}>
                             <ImageBackground source={ require('../../img/certified.png') } style={{width: 250, height: 300}}>
                             </ImageBackground>
-                            <Text style={{fontSize: 18, marginBottom: 10}}>{t("chbre_num")} {currentRoom}</Text>
+                            <Text style={{fontSize: 18, marginBottom: 10}}>{t("occupation_chbre")} {currentRoom}</Text>
                             <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date).format('L')}</Text>
                         </View>
                         <View style={styles.buttonView}>
@@ -429,7 +429,7 @@ const Information = ({ navigation, route }) => {
                             
                             <Button type="clear" onPress={() => {
                                 setShowDate(true)
-                            }} containerStyle={styles.button} title="Recommencer" />
+                            }} containerStyle={styles.button} title={t("recommencer")} />
                             <Button
                              icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
                              onPress={() => {
@@ -559,7 +559,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: "90%",
         position: "fixed",
-        bottom: 0
     },
     modalView: {
         marginTop: 55,
@@ -587,6 +586,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         width: "100%",
+        borderRadius: 5
     },
     buttonView: {
         flexDirection: "column",

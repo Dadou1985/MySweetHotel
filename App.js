@@ -17,6 +17,8 @@ import './src/i18next'
 import { UserContext } from './src/components/userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import { View } from 'react-native-web';
+import { AntDesign } from '@expo/vector-icons';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -104,12 +106,16 @@ export default function App() {
       <FlashMessage position="top" style={{zIndex: 10}} />
       </>
   }else{
-    return <Image id="flag" style={styles.container}
-    source={require('./assets/splash-screen.png')} 
-    /> 
+    return <View style={styles.container}>
+      <Image id="flag" style={{backgroundColor: "#fff", width: "90%", height: "90%"}}
+      source={require('./assets/splash.png')} 
+      />
+      <View style={{flexDirection: "row", alignItems: "center"}}>
+        <AntDesign name="copyright" size={10} color="black" style={{marginRight: 5}} />
+        <Text>My Sweet Hotel</Text>
+      </View>
+    </View> 
   }
-    
-  
 }
 
 const styles = StyleSheet.create({
