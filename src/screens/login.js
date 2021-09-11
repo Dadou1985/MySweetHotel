@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView, Platform } from 'react-native'
+import { KeyboardAvoidingView, Dimensions, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView, Platform } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'
 import { auth, db } from "../../firebase"
@@ -17,6 +17,9 @@ const Login = ({ navigation }) => {
     const [showModalLanguage, setShowModalLanguage] = useState(false)
 
     const { t } = useTranslation()
+
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
 
     const renderSwitchFlag = () => {
         switch(i18next.language) {
@@ -248,8 +251,8 @@ const Login = ({ navigation }) => {
                 onChangeText={(text) => setPassword(text)} />
             </View>
             <View style={{flex: 2}}>
-                <Button raised={true} onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
-                {userDB === null && <Button raised={true} onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
+                <Button onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
+                {userDB === null && <Button onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
             </View>
        
        {showModalLanguage && modalLanguage()}

@@ -45,7 +45,9 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/appstore.png"
+      "favicon": "./assets/appstore.png",
+      "display": "standalone",
+      "startUrl": "https://mysweethotel.eu/?url={url}&hotelId={hotelId}"
     },
     "description": "",
     "notification": {

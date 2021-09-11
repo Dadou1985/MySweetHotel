@@ -192,8 +192,8 @@ const Register = ({ navigation, route }) => {
                 <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t("ajout_photo_profil")}</Text>
                 </TouchableOpacity>
             </View>
-            <Button raised={true} onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
-            <Button raised={true} containerStyle={styles.button} title={t("creation_compte")} onPress={(event) => {
+            <Button onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
+            <Button containerStyle={styles.button} title={t("creation_compte")} onPress={(event) => {
               if(name !== "" && email !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword) {
                 if(img !== null) {
                   handleChangePhotoUrl(event)
