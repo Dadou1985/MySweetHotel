@@ -5,7 +5,7 @@
     "slug": "mySweatHotel",
     "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/appstore.png",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-screen.png",
       "resizeMode": "contain",
@@ -45,9 +45,10 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/appstore.png",
+      "favicon": "./assets/icon.png",
       "display": "standalone",
-      "startUrl": "https://mysweethotel.eu/?url={url}&hotelId={hotelId}"
+      "startUrl": "https://mysweethotel.eu/",
+      "themeColor": "#8ac8ff"
     },
     "description": "",
     "notification": {

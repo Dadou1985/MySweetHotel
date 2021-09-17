@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
@@ -17,10 +18,7 @@ const Login = ({ navigation }) => {
     const [showModalLanguage, setShowModalLanguage] = useState(false)
 
     const { t } = useTranslation()
-
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
-
+    
     const renderSwitchFlag = () => {
         switch(i18next.language) {
             case 'fr':
@@ -72,13 +70,14 @@ const Login = ({ navigation }) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => (
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <TouchableOpacity activeOpacity={0.5} onPress={() => setShowModalLanguage(true)}>
+            headerRight: null,
+                headerLeft: () => (
+                    <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <TouchableOpacity activeOpacity={0.5} onPress={() => setShowModalLanguage(true)} style={{marginLeft: 20}}>
                         {renderSwitchFlag()}
                     </TouchableOpacity>
-                </View>),
-                headerLeft: null,
+                </View>
+                    ),
         })
     }, [i18next.language])
 
@@ -120,8 +119,6 @@ const Login = ({ navigation }) => {
             }
         })
     }
-
-    console.log("userDB", userDB)
 
 
     const internationalization = [

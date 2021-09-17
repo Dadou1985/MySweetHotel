@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
+import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -68,7 +69,6 @@ export default function App() {
     setNotification(notification);
   });
 
-  
 
   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
@@ -127,3 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
+serviceWorkerRegistration.register();

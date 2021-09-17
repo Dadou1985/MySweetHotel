@@ -23,6 +23,7 @@
     "expo-constants": "^11.0.2",
     "expo-document-picker": "~8.4.1",
     "expo-font": "^9.2.1",
+    "expo-image-manipulator": "~9.1.0",
     "expo-image-picker": "~9.2.0",
     "expo-linking": "^2.2.1",
     "expo-notifications": "^0.11.3",
@@ -60,7 +61,22 @@
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6"
+    "@babel/core": "^7.9.6",
+    "@expo/webpack-config": "^0.15.0",
+    "serve": "^12.0.0",
+    "workbox-background-sync": "^6.1.5",
+    "workbox-broadcast-update": "^6.1.5",
+    "workbox-cacheable-response": "^6.1.5",
+    "workbox-core": "^6.1.5",
+    "workbox-expiration": "^6.1.5",
+    "workbox-google-analytics": "^6.1.5",
+    "workbox-navigation-preload": "^6.1.5",
+    "workbox-precaching": "^6.1.5",
+    "workbox-range-requests": "^6.1.5",
+    "workbox-routing": "^6.1.5",
+    "workbox-strategies": "^6.1.5",
+    "workbox-streams": "^6.1.5",
+    "workbox-webpack-plugin": "^6.1.5"
   },
   "private": true
 }
