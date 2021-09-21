@@ -390,6 +390,78 @@ const UserProfile = ({navigation}) => {
     }
 }
 
+useEffect(() => {
+  function determineAppServerKey() {
+    const vapidPublicKey =
+    "BPZOC6YBWQzG3iXJtgTCj0LABmAhZ0_B2GAS0n4hOVs0ZscLqe2C3f1iKSq9RY7iqhA2Uhbge0Bi-fvNzZsJN-A";
+      return urlBase64ToUint8Array(vapidPublicKey);
+  }
+  
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+  
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+  
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+  
+  function subscribeUser() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(function(reg) {
+  
+        reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: determineAppServerKey()
+        }).then(function(sub) {
+          console.log('Endpoint URL: ', sub.endpoint);
+        }).catch(function(e) {
+          if (Notification.permission === 'denied') {
+            console.warn('Permission for notifications was denied');
+          } else {
+            console.error('Unable to subscribe to push', e);
+          }
+        });
+      })
+    }
+  }
+  
+  Notification.requestPermission(function(status) {
+    console.log('Notification permission status:', status);
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+        console.log('Service Worker Registered!', reg);
+    
+        reg.pushManager.getSubscription().then(function(sub) {
+          if (sub === null) {
+            // Update UI to ask user to register for Push
+            console.log('Not subscribed to push service!');
+            subscribeUser()
+          } else {
+            // We have a subscription, update the database
+            console.log('Subscription object: ', sub.toJSON());
+            const subPush = sub.toJSON()
+            return db.collection("guestUsers")
+            .doc(user.uid)
+            .update({token: subPush})
+            .then(handleLoadUserDB())
+          }
+        });
+      })
+       .catch(function(err) {
+        console.log('Service Worker registration failed: ', err);
+      });
+    }
+  });
+}, [])
+
+
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
 }, [])

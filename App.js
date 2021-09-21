@@ -21,13 +21,13 @@ import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 
-Notifications.setNotificationHandler({
+{/*Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
-});
+});*/}
 
 const Stack = createStackNavigator();
 
@@ -35,6 +35,7 @@ const globalScreenOptions = {
   headerTitleStyle: {color: "black"},
   headerTintColor: "black"
 }
+
 
 export default function App() {
   const [userDB, setUserDB] = useState(null)
@@ -63,7 +64,9 @@ export default function App() {
         }, 3000);})
   }, [])
 
-  useEffect(() => {
+  
+
+  {/*useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
     setNotification(notification);
@@ -78,7 +81,7 @@ export default function App() {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     }
-  }, [])
+  }, [])*/}
 
 
   if(!isLoading) {
