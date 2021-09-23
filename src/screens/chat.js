@@ -127,6 +127,7 @@ const Chat = ({ navigation }) => {
           .doc(user.displayName)
           .update({
             status: true,
+            room: userDB.room,
             markup: Date.now()
         })      
       }

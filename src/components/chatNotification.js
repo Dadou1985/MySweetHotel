@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Text, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next'
+import webPush from "web-push"
 
-
-const ChatNotification = ({userToken}) => {
+const ChatNotification = ({userToken, icon}) => {
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -29,18 +29,17 @@ const ChatNotification = ({userToken}) => {
         appState.current = nextAppState;
         setAppStateVisible(appState.current);
         console.log('AppState', appState.current);
-      };*/}
+      };
 
       const sendPushNotification = async(token) => {
           const message = {
-            to: token,
             sound: 'default',
             title: `Chat ${t('reception')}`,
             body: t('notif_message'),
             data: { someData: 'goes here' },
           };
         
-          await fetch('https://exp.host/--/api/v2/push/send', {
+          await fetch('token.endpoint', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -49,11 +48,37 @@ const ChatNotification = ({userToken}) => {
             },
             body: JSON.stringify(message),
           });
+      }*/}
+
+      {/*const sendWebPush = (token) => {
+        const pushSubscription = token
+
+        const vapidPublicKey = "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk"
+
+        const vapidPrivateKey = "Pz_eIme7ErLghd0i14HoV9xtPPM-05iEEkQuGTmy7ns"
+
+        const payload = "test"
+
+        const options = {
+          gcmAPIKey: "AAAArcsD5Yk:APA91bFbvLMKJOajrLQQCwJG92E4M5hjciSmTtX7RCIqAiCTnOTaj43ODkq425tc6ECexVFLVcI38f8Mx82RZ0rqAqXokA465E3L_MLLbdHtZt3RZYa1Yw4Lg6FuLi2Hvz2Ee5trybnD",
+          vapidDetails: {
+            subject: 'mailto:david.simba1985@gmail.com',
+            publicKey: vapidPublicKey,
+            privateKey: vapidPrivateKey
+          },
+          TTL: 60,
+        }
+
+        return webPush.sendNotification(
+          pushSubscription,
+          payload,
+          options
+        );
       }
 
       useEffect(() => {
-        (() => sendPushNotification(userToken))()
-      }, [])
+        sendWebPush(userToken)
+      }, [])*/}
 
     return (
         <Text style={{fontWeight: "bold", color: "red", marginLeft: 5, fontSize: 20}}>!</Text>

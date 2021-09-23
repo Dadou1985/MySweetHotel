@@ -1,0 +1,41 @@
+{
+  "background_color": "#ffffff",
+  "description": "",
+  "display": "standalone",
+  "lang": "en",
+  "name": "My Sweet Hotel",
+  "short_name": "My Sweet Hotel",
+  "start_url": "https://mysweethotel.eu/",
+  "theme_color": "#8ac8ff",
+  "orientation": "portrait",
+  "gcm_sender_id": "746435372425",
+  "related_applications": [
+    {
+      "platform": "itunes",
+      "id": "com.dadou1885.mySweatHotel"
+    },
+    {
+      "platform": "play",
+      "url": "http://play.google.com/store/apps/details?id=com.dadou1885.mySweatHotel",
+      "id": "com.dadou1885.mySweatHotel"
+    }
+  ],
+  "prefer_related_applications": true,
+  "icons": [
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

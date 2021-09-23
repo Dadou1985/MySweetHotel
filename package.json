@@ -59,7 +59,8 @@
     "react-native-screens": "~2.15.2",
     "react-native-toast-message": "^1.4.9",
     "react-native-ui-lib": "^5.30.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

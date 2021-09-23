@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-import { auth, db, storage } from "../../firebase"
+import { auth, db, storage, functions } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
 import 'moment/locale/fr';
@@ -20,6 +20,8 @@ import Constants from 'expo-constants';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
+import webPush from "web-push"
+import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
 
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
@@ -43,6 +45,7 @@ const UserProfile = ({navigation}) => {
 
     const Logout = () => {
       auth.signOut()
+      serviceWorkerRegistration.unregister()
   }
 
   const { t } = useTranslation()
@@ -390,10 +393,12 @@ const UserProfile = ({navigation}) => {
     }
 }
 
+
 useEffect(() => {
+  
   function determineAppServerKey() {
     const vapidPublicKey =
-    "BPZOC6YBWQzG3iXJtgTCj0LABmAhZ0_B2GAS0n4hOVs0ZscLqe2C3f1iKSq9RY7iqhA2Uhbge0Bi-fvNzZsJN-A";
+    "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
       return urlBase64ToUint8Array(vapidPublicKey);
   }
   
@@ -421,6 +426,11 @@ useEffect(() => {
           applicationServerKey: determineAppServerKey()
         }).then(function(sub) {
           console.log('Endpoint URL: ', sub.endpoint);
+          const subPush = sub.toJSON()
+            return db.collection("guestUsers")
+            .doc(user.uid)
+            .update({token: subPush})
+            .then(handleLoadUserDB())
         }).catch(function(e) {
           if (Notification.permission === 'denied') {
             console.warn('Permission for notifications was denied');
@@ -432,35 +442,16 @@ useEffect(() => {
     }
   }
   
-  Notification.requestPermission(function(status) {
-    console.log('Notification permission status:', status);
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
-        console.log('Service Worker Registered!', reg);
-    
-        reg.pushManager.getSubscription().then(function(sub) {
-          if (sub === null) {
-            // Update UI to ask user to register for Push
-            console.log('Not subscribed to push service!');
-            subscribeUser()
-          } else {
-            // We have a subscription, update the database
-            console.log('Subscription object: ', sub.toJSON());
-            const subPush = sub.toJSON()
-            return db.collection("guestUsers")
-            .doc(user.uid)
-            .update({token: subPush})
-            .then(handleLoadUserDB())
-          }
-        });
-      })
-       .catch(function(err) {
-        console.log('Service Worker registration failed: ', err);
-      });
-    }
-  });
+  
 }, [])
 
+Notification.requestPermission(function(status) {
+  console.log('Notification permission status:', status);
+  const getToken = functions.httpsCallable('getToken')
+  if(status === 'granted'){
+    return getToken({userId: user.uid})
+  }
+});
 
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
@@ -534,7 +525,7 @@ const _handleAppStateChange = (nextAppState) => {
 
 const handleCloseConciergePanel = () => setConciergePanel(false)
 
-console.log("photoURL", reloadPhotoURLIos)
+console.log("userDB", userDB)
    
 if(isForegrounding) {
   return <View style={{width: '100%', height: '100%', flex: 1, flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
@@ -586,7 +577,7 @@ if(isForegrounding) {
               <Entypo name="chat" size={40} color="black" /> 
               {chatResponse.map(response => {
                 if(response.hotelResponding) {
-                  return <ChatNotification userToken={userDB.token} />
+                  return <ChatNotification userToken={userDB.token} icon={userDB.logo} />
                 } 
               })}                   
           </TouchableOpacity>
