@@ -20,6 +20,7 @@ import * as Notifications from 'expo-notifications';
 import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
+import {messaging} from "./firebase"
 
 {/*Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -56,6 +57,14 @@ export default function App() {
         alert(err)
     }
 }
+
+useEffect(() => {
+  messaging.requestPermission().then(()=>{
+       return messaging.getToken();
+     }).then((data)=>{
+       console.log("token",data)
+     })
+}, [])
 
   useEffect(() => {
       load().then(() => {
