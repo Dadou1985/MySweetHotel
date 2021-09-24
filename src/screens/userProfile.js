@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-import { auth, db, storage, functions } from "../../firebase"
+import { auth, db, storage, functions, messaging } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
 import 'moment/locale/fr';
@@ -394,7 +394,7 @@ const UserProfile = ({navigation}) => {
 }
 
 
-useEffect(() => {
+{/*useEffect(() => {
   
   function determineAppServerKey() {
     const vapidPublicKey =
@@ -451,7 +451,32 @@ Notification.requestPermission(function(status) {
   if(status === 'granted'){
     return getToken({userId: user.uid})
   }
-});
+});*/}
+
+const getToken = () => {
+  messaging.getToken({vapidKey: "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk"}).then((data)=>{
+    console.log(data)
+    return db.collection("guestUsers")
+         .doc(user.uid)
+         .update({token: data})
+         .then(handleLoadUserDB())
+  })
+}
+
+useEffect(() => {
+  Notification.requestPermission(function(status) {
+    if(status === 'granted') {
+      if(userDB.token) {
+       console.log("token", userDB.token)
+      }else{
+        return getToken()
+      }
+    }else{
+      console.log("Notification permission request refused !")
+    }
+  })
+      
+}, [])
 
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()

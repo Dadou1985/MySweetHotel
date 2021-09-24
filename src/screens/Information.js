@@ -19,6 +19,7 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import * as WebBrowser from 'expo-web-browser';
 
+
 const Information = ({ navigation, route }) => {
     const { hotelLogo, currentHotelId } = route.params
     
@@ -636,3 +637,4 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 })
+
