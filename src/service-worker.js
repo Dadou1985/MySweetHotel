@@ -76,9 +76,9 @@ self.addEventListener("message", (event) => {
 self.addEventListener('push', function(e) {
 
   const options = {
-    //title: `Chat ${t('reception')}`,
+    title: "Chat Reception",
     body: "Vous avez un nouveau message",
-    icon: "../web-build/favion-32.png",
+    icon: "https://i.postimg.cc/g0tYTRpD/bates-Motel-Icon.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),

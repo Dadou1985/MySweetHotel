@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Text, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next'
+import { functions  } from '../../firebase';
 import webPush from "web-push"
 
 const ChatNotification = ({userToken, icon}) => {
@@ -79,6 +80,13 @@ const ChatNotification = ({userToken, icon}) => {
       useEffect(() => {
         sendWebPush(userToken)
       }, [])*/}
+
+      useEffect(() => {
+        if(userToken) {
+          const sendPushNotification = functions.httpsCallable('sendPushNotification')
+        return sendPushNotification({token: userToken, icon: icon, body: "Vous avez un nouveau message !", title: "Chat Reception"})
+        }
+      }, [])
 
     return (
         <Text style={{fontWeight: "bold", color: "red", marginLeft: 5, fontSize: 20}}>!</Text>

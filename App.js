@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, Suspense, useEffect, useRef } from 'react';
-import { StyleSheet, Text, Image } from 'react-native';
+import { StyleSheet, Text, Image, Alert } from 'react-native';
 import { NavigationContainer, NavigationAction } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/screens/login'
@@ -20,6 +20,7 @@ import * as Notifications from 'expo-notifications';
 import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
+//import { messaging } from "./firebase"
 
 {/*Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -64,6 +65,41 @@ export default function App() {
         }, 3000);})
   }, [])
 
+
+  {/*useEffect(() => {
+    messaging.onMessage((payload) => {
+      console.log("Message received. ", payload);
+      const { title, ...options } = payload.notification;
+      navigator.serviceWorker.register("firebase-messaging-sw.js");
+      function showNotification() {
+        Notification.requestPermission(function (result) {
+          if (result === "granted") {
+            navigator.serviceWorker.ready.then(function (registration) {
+              registration.showNotification(payload.notification.title, {
+                body: payload.notification.body,
+                tag: payload.notification.tag,
+              });
+            });
+          }
+        });
+      }
+      showNotification();
+    });
+  }, [])*/}
+
+
+  {/*useEffect(() => {
+    messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+    });
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = messaging.onMessage(async remoteMessage => {
+      Alert.alert('Vous avez un nouveau message !', JSON.stringify(remoteMessage))
+    })
+    return unsubscribe()
+  }, [])*/}
   
 
   {/*useEffect(() => {

@@ -394,7 +394,7 @@ const UserProfile = ({navigation}) => {
 }
 
 
-{/*useEffect(() => {
+useEffect(() => {
   
   function determineAppServerKey() {
     const vapidPublicKey =
@@ -441,19 +441,20 @@ const UserProfile = ({navigation}) => {
       })
     }
   }
+
+
+Notification.requestPermission(function(status) {
+  console.log('Notification permission status:', status);
+  if(status === 'granted'){
+    return subscribeUser()
+  }
+});
   
   
 }, [])
 
-Notification.requestPermission(function(status) {
-  console.log('Notification permission status:', status);
-  const getToken = functions.httpsCallable('getToken')
-  if(status === 'granted'){
-    return getToken({userId: user.uid})
-  }
-});*/}
 
-const getToken = () => {
+{/*const getToken = () => {
   messaging.getToken({vapidKey: "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk"}).then((data)=>{
     console.log(data)
     return db.collection("guestUsers")
@@ -476,7 +477,7 @@ useEffect(() => {
     }
   })
       
-}, [])
+}, [])*/}
 
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
