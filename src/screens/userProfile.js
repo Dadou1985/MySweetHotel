@@ -42,6 +42,7 @@ const UserProfile = ({navigation}) => {
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
     const [isForegrounding, setIsForegrounding] = useState(false)
     const [conciergePanel, setConciergePanel] = useState(false)
+    const [isIOS, setIsIOS] = useState(false)
 
     const Logout = () => {
       auth.signOut()
@@ -49,6 +50,11 @@ const UserProfile = ({navigation}) => {
   }
 
   const { t } = useTranslation()
+
+  const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent &&
+                    navigator.userAgent.indexOf('CriOS') == -1 &&
+                    navigator.userAgent.indexOf('FxiOS') == -1;
 
   LocaleConfig.locales[i18next.language] = {
     monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
@@ -394,63 +400,65 @@ const UserProfile = ({navigation}) => {
 }
 
 
-useEffect(() => {
+if(!isSafari) {
+  useEffect(() => {
   
-  function determineAppServerKey() {
-    const vapidPublicKey =
-    "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
-      return urlBase64ToUint8Array(vapidPublicKey);
-  }
-  
-  function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-  
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-  
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
+    function determineAppServerKey() {
+      const vapidPublicKey =
+      "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
+        return urlBase64ToUint8Array(vapidPublicKey);
     }
-    return outputArray;
-  }
-  
-  function subscribeUser() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(function(reg) {
-        reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: determineAppServerKey()
-        }).then(function(sub) {
-          console.log('Endpoint URL: ', sub.endpoint);
-          const subPush = sub.toJSON()
-            return db.collection("guestUsers")
-            .doc(user.uid)
-            .update({token: subPush})
-            .then(handleLoadUserDB())
-        }).catch(function(e) {
-          if (Notification.permission === 'denied') {
-            console.warn('Permission for notifications was denied');
-          } else {
-            console.error('Unable to subscribe to push', e);
-          }
-        });
-      })
+    
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+    
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+    
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
     }
-  }
-
-
-Notification.requestPermission(function(status) {
-  console.log('Notification permission status:', status);
-  if(status === 'granted'){
-    return subscribeUser()
-  }
-});
+    
+    function subscribeUser() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(function(reg) {
+          reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: determineAppServerKey()
+          }).then(function(sub) {
+            console.log('Endpoint URL: ', sub.endpoint);
+            const subPush = sub.toJSON()
+              return db.collection("guestUsers")
+              .doc(user.uid)
+              .update({token: subPush})
+              .then(handleLoadUserDB())
+          }).catch(function(e) {
+            if (Notification.permission === 'denied') {
+              console.warn('Permission for notifications was denied');
+            } else {
+              console.error('Unable to subscribe to push', e);
+            }
+          });
+        })
+      }
+    }
   
   
-}, [])
+  Notification.requestPermission(function(status) {
+    console.log('Notification permission status:', status);
+    if(status === 'granted'){
+      return subscribeUser()
+    }
+  });
+    
+    
+  }, [])
+} 
 
 
 {/*const getToken = () => {

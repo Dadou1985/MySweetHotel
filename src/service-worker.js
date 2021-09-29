@@ -12,10 +12,7 @@ import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
-import i18next from 'i18next'
-import { useTranslation } from 'react-i18next'
 
-const { t } = useTranslation()
 
 clientsClaim();
 
@@ -77,11 +74,12 @@ self.addEventListener("message", (event) => {
 // Any other custom service worker logic can go here.
 
 self.addEventListener('push', function(e) {
+  const data = e.data.json()
+  console.log("========>", data)
 
   const options = {
-    title: "Chat Reception",
-    body: "Vous avez un nouveau message",
-    icon: "https://i.postimg.cc/g0tYTRpD/bates-Motel-Icon.png",
+    body: data.body,
+    icon: data.icon,
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -90,7 +88,7 @@ self.addEventListener('push', function(e) {
   }
 
   e.waitUntil(
-    self.registration.showNotification('Push Notification', options)
+    self.registration.showNotification(data.title, options)
   );
 });
 
