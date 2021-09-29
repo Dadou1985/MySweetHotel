@@ -45,7 +45,7 @@ const UserProfile = ({navigation}) => {
 
     const Logout = () => {
       auth.signOut()
-      serviceWorkerRegistration.unregister()
+      //serviceWorkerRegistration.unregister()
   }
 
   const { t } = useTranslation()
@@ -420,7 +420,6 @@ useEffect(() => {
   function subscribeUser() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then(function(reg) {
-  
         reg.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: determineAppServerKey()
@@ -603,7 +602,7 @@ if(isForegrounding) {
               <Entypo name="chat" size={40} color="black" /> 
               {chatResponse.map(response => {
                 if(response.hotelResponding) {
-                  return <ChatNotification userToken={userDB.token} icon={userDB.logo} />
+                  return <ChatNotification />
                 } 
               })}                   
           </TouchableOpacity>
