@@ -15,7 +15,7 @@ import { YellowBox } from 'react-native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -24,6 +24,12 @@ console.warn = message => {
     _console.warn(message);
   }
 };
+
+const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent &&
+                    navigator.userAgent.indexOf('CriOS') == -1 &&
+                    navigator.userAgent.indexOf('FxiOS') == -1;
+
 
 const Chat = ({ navigation }) => {
     const [input, setInput] = useState("")
@@ -50,6 +56,18 @@ const Chat = ({ navigation }) => {
                 handleUpdateHotelResponse()
                 navigation.navigate("My Sweet Hotel")}}>
                     <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity onPress={() => {pushNotificationSubscription()}}>
+                    {userDB.notificationStatus === "denied" ? 
+                    <Ionicons 
+                        name="notifications-off-circle" 
+                        size={24} 
+                        color="black" 
+                        style={{marginRight: 20}}
+                         /> : null
+                    }
                 </TouchableOpacity>
             )
         })
@@ -156,6 +174,86 @@ const Chat = ({ navigation }) => {
             console.error(error)
           })
     }
+
+    const handleLoadUserDB = () => {
+        return db.collection('guestUsers')
+        .doc(user.uid)
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+            setUserDB(doc.data())
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        })
+    }
+
+    const pushNotificationSubscription = () => {
+        if(!isSafari) {
+        
+          function determineAppServerKey() {
+            const vapidPublicKey =
+            "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
+              return urlBase64ToUint8Array(vapidPublicKey);
+          }
+          
+          function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+              .replace(/\-/g, '+')
+              .replace(/_/g, '/');
+          
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+          
+            for (let i = 0; i < rawData.length; ++i) {
+              outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+          }
+          
+          function subscribeUser() {
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.ready.then(function(reg) {
+                reg.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: determineAppServerKey()
+                }).then(function(sub) {
+                  console.log('Endpoint URL: ', sub.endpoint);
+                  const subPush = sub.toJSON()
+                    return db.collection("guestUsers")
+                    .doc(user.uid)
+                    .update({
+                      token: subPush,
+                      notificationStatus: "granted"
+                    })
+                    .then(handleLoadUserDB())
+                    .then(navigation.navigate('Chat'))
+                }).catch(function(e) {
+                  if (Notification.permission === 'denied') {
+                    console.warn('Permission for notifications was denied');
+                  } else {
+                    console.error('Unable to subscribe to push', e);
+                  }
+                });
+              })
+            }
+          }
+        
+          return Notification.requestPermission(function(status) {
+            console.log('Notification permission status:', status);
+            if(status === 'granted'){
+              return subscribeUser()
+            }else{
+              return db.collection("guestUsers")
+              .doc(user.uid)
+              .update({notificationStatus: "denied"})
+            }
+          });
+              
+        } 
+      }
 
     console.log(chatRoom)
 

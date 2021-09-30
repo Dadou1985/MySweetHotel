@@ -55,7 +55,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
 
     return (
         <Animated.View style={[styles.fadingContainer, {bottom: fadeAnim}]}>
-                <View style={{flexDirection: "row", justifyContent: "flex-end", mawWidth: "90%", alignItems: "center"}}>
+                <View style={{flexDirection: "row", justifyContent: "flex-end", maxWidth: "90%", alignItems: "center"}}>
                     <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 120}}>{t('conciergerie')}</Text>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => {
                         fadeOut()
@@ -171,20 +171,28 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                 <ModalWeb 
                 animationType="slide"
                 transparent={true}
-                visible={showModal} 
+                isVisible={showModal} 
                 style={styles.centeredView}>
                     <View style={styles.modal}>
+                        <View style={{flexDirection: "row", justifyContent: "flex-end", width: "90%", alignItems: "center", marginBottom: 10}}>
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                setShowModal(false)}} style={{marginLeft: 100}}>
+                                <AntDesign name="closecircle" size={15} color="black" />
+                            </TouchableOpacity>
+                        </View>
                         <Text style={{
-                            width: 375, 
+                            width: "100%", 
                             fontSize: 15,
                             paddingBottom: 10,
                             textAlign: "center",
-                            fontWeight: "bold" 
+                            fontWeight: "bold",
+                            borderTopColor: "grey",
+                            borderTopWidth: 1,
+                            paddingTop: 10,
+                            paddingBottom: 10
                             }}><AntDesign name="infocirlce" size={15} color="black" style={{marginRight: 15}} />
                             {t('conciergerie_conditions_titre')}</Text>
                             <Text style={{textAlign: "center"}}>{t('conciergerie_conditions_para1')}</Text>
-                            <Text style={{textAlign: "center"}}>{t('conciergerie_conditions_para2')}</Text>
-                            <Text style={{textAlign: "right", marginTop: 10, width: 300, fontWeight: "bold"}} onPress={() => setShowModal(false)}>{t('fermer')}</Text>
                     </View>
                 </ModalWeb>
         </Animated.View>

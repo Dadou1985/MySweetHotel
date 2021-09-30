@@ -91,12 +91,12 @@ const Information = ({ navigation, route }) => {
         setShowDate(Platform.OS === 'ios');
         setInputRoom(true)
         setDate(currentDate);
-        setTimeout(() => {
-            showMessage({
-                message: t("message_checkout_valide"),
-                type: "info",
-            })
-        }, 2000);
+        //setTimeout(() => {
+            //showMessage({
+                //message: t("message_checkout_valide"),
+                //type: "info",
+            //})
+        //}, 2000);
       };
     
     const handleLoadUserDB = () => {
@@ -146,7 +146,8 @@ const Information = ({ navigation, route }) => {
             website: formValue.website,
             phone: formValue.phone,
             language: i18next.language,
-            logo: formValue.logo
+            logo: formValue.logo,
+            notificationStatus: "default"
             })
         return handleLoadUserDB()
     }

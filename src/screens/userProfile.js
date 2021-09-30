@@ -42,7 +42,7 @@ const UserProfile = ({navigation}) => {
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
     const [isForegrounding, setIsForegrounding] = useState(false)
     const [conciergePanel, setConciergePanel] = useState(false)
-    const [isIOS, setIsIOS] = useState(false)
+    const [showModalNotification, setShowModalNotification] = useState(false)
 
     const Logout = () => {
       auth.signOut()
@@ -399,9 +399,8 @@ const UserProfile = ({navigation}) => {
     }
 }
 
-
-if(!isSafari) {
-  useEffect(() => {
+const pushNotificationSubscription = () => {
+  if(!isSafari) {
   
     function determineAppServerKey() {
       const vapidPublicKey =
@@ -435,8 +434,12 @@ if(!isSafari) {
             const subPush = sub.toJSON()
               return db.collection("guestUsers")
               .doc(user.uid)
-              .update({token: subPush})
+              .update({
+                token: subPush,
+                notificationStatus: "granted"
+              })
               .then(handleLoadUserDB())
+              .then(navigation.navigate('Chat'))
           }).catch(function(e) {
             if (Notification.permission === 'denied') {
               console.warn('Permission for notifications was denied');
@@ -448,43 +451,19 @@ if(!isSafari) {
       }
     }
   
-  
-  Notification.requestPermission(function(status) {
-    console.log('Notification permission status:', status);
-    if(status === 'granted'){
-      return subscribeUser()
-    }
-  });
-    
-    
-  }, [])
-} 
-
-
-{/*const getToken = () => {
-  messaging.getToken({vapidKey: "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk"}).then((data)=>{
-    console.log(data)
-    return db.collection("guestUsers")
-         .doc(user.uid)
-         .update({token: data})
-         .then(handleLoadUserDB())
-  })
-}
-
-useEffect(() => {
-  Notification.requestPermission(function(status) {
-    if(status === 'granted') {
-      if(userDB.token) {
-       console.log("token", userDB.token)
+    return Notification.requestPermission(function(status) {
+      console.log('Notification permission status:', status);
+      if(status === 'granted'){
+        return subscribeUser()
       }else{
-        return getToken()
+        return db.collection("guestUsers")
+        .doc(user.uid)
+        .update({notificationStatus: "denied"})
       }
-    }else{
-      console.log("Notification permission request refused !")
-    }
-  })
-      
-}, [])*/}
+    });
+        
+  } 
+}
 
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
@@ -536,7 +515,7 @@ const registerForPushNotificationsAsync = async() => {
   return () => {
     AppState.removeEventListener('change', _handleAppStateChange);
   };
-}, []);*/}
+}, []);
 
 const _handleAppStateChange = (nextAppState) => {
   if (
@@ -554,7 +533,7 @@ const _handleAppStateChange = (nextAppState) => {
   appState.current = nextAppState;
   setAppStateVisible(appState.current);
   console.log('AppState', appState.current);
-};
+};*/}
 
 const handleCloseConciergePanel = () => setConciergePanel(false)
 
@@ -605,8 +584,13 @@ if(isForegrounding) {
           </View>
           <View style={{flexDirection: "row", justifyContent: "space-around", width: "100%", marginTop: 25, marginBottom: 40}}>
             <TouchableOpacity style={{flexDirection: "row"}} activeOpacity={0.5} onPress={() => {
-              navigation.navigate('Chat')
-              updateAdminSpeakStatus()}}>
+              if(userDB.notificationStatus === "default" && !isSafari) {
+                setShowModalNotification(true)
+              }else{
+                navigation.navigate('Chat')
+                updateAdminSpeakStatus()
+              }
+              }}>
               <Entypo name="chat" size={40} color="black" /> 
               {chatResponse.map(response => {
                 if(response.hotelResponding) {
@@ -737,6 +721,28 @@ if(isForegrounding) {
 
         {showDate && handlePlatformDate()}
 
+        <ModalWeb 
+          animationType="slide"
+          transparent={true}
+          isVisible={showModalNotification} 
+          style={styles.roomBoxView}
+          onBackdropPress={() => {
+            setShowModalNotification(false)
+            pushNotificationSubscription()}}>
+              <View style={styles.modalRoom2}>
+                  <Text style={{
+                      width: "100%", 
+                      fontSize: 15,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      paddingTop: 10,
+                      }}><AntDesign name="infocirlce" size={15} color="black" style={{marginRight: 15}} />
+                      {t('chat_push_notification')}</Text>
+                      <Text style={{textAlign: "center", marginBottom: 10}}>{t('message_push_notification')}</Text>
+              </View>
+          </ModalWeb>
+
     </KeyboardAvoidingView>
   )
 }
@@ -820,5 +826,18 @@ modalRoom: {
     elevation: 5,
     width: "100%",
     borderRadius: 5
+},
+modalRoom2: {
+  padding: 10,
+  borderRadius: 10,
+  backgroundColor: 'white',
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+      width: 0,
+      height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
 }
 })
