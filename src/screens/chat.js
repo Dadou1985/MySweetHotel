@@ -54,6 +54,7 @@ const Chat = ({ navigation }) => {
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 handleUpdateHotelResponse()
+                outChat()
                 navigation.navigate("My Sweet Hotel")}}>
                     <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
                 </TouchableOpacity>
@@ -105,6 +106,14 @@ const Chat = ({ navigation }) => {
             .update({
                 hotelResponding: false
         })
+    }
+
+    const outChat = async() => {
+      await db.collection('guestUsers')
+             .doc(user.uid)
+             .update({isChatting: false})
+            
+      return handleLoadUserDB() 
     }
 
     const getChatRoom = () => {

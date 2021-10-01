@@ -16,8 +16,15 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState("")
     const {userDB, setUserDB} = useContext(UserContext)
     const [showModalLanguage, setShowModalLanguage] = useState(false)
+    const [showModalAdd2Screen, setshowModalAdd2Screen] = useState(false)
 
     const { t } = useTranslation()
+
+    const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent &&
+                    navigator.userAgent.indexOf('CriOS') == -1 &&
+                    navigator.userAgent.indexOf('FxiOS') == -1;
+
     
     const renderSwitchFlag = () => {
         switch(i18next.language) {
@@ -52,6 +59,46 @@ const Login = ({ navigation }) => {
         }
     }
 
+    const renderAdd2ScreenPictures = () => {
+        switch(i18next.language) {
+            case 'fr':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/fr-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/fr-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            case 'en':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/en-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/en-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            case 'es':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/es-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/es-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            case 'de':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/de-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/de-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            case 'it':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/it-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/it-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            case 'pt':
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/pt-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/pt-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+            default:
+                return <View style={{flexDirection: "column", alignItems: "center", width: "100%", marginTop: 15}}>
+                <Image source={require('../../img/add2homeScreen/fr-msh-screen.png')} style={styles.img} />
+                <Image source={require('../../img/add2homeScreen/fr-msh-add2homeScreen.png')} style={styles.img} />
+            </View>
+        }
+    }
+
     const handleLoadUserDB = (userId) => {
         return db.collection('guestUsers')
         .doc(userId)
@@ -68,9 +115,82 @@ const Login = ({ navigation }) => {
         })
     }
 
+    const addToHomeScreen = () => {
+        if(isSafari) {
+            return (<ModalWeb 
+                animationType="slide"
+                transparent={true}
+                isVisible={showModalAdd2Screen} 
+                style={styles.centeredView}>
+                    <ScrollView contentContainerStyle={styles.modal}>
+                        <View style={{flexDirection: "row", justifyContent: "flex-end", width: "90%", alignItems: "center", marginBottom: 10}}>
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                setshowModalAdd2Screen(false)}} style={{marginLeft: 100}}>
+                                <AntDesign name="closecircle" size={15} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={{
+                            width: "100%", 
+                            fontSize: 15,
+                            paddingBottom: 10,
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            borderTopColor: "grey",
+                            borderTopWidth: 1,
+                            paddingTop: 10,
+                            paddingBottom: 10
+                            }}>
+                            {t('add2homeScreen')}
+                        </Text>
+                        <Text style={{textAlign: "center"}}>{t('ios_add2homeScreen')}</Text>
+                        <View style={{marginTop: 25}}>
+                            <Text style={{fontWeight: "bold", fontSize: 15, marginBottom: 10}}>Iphone</Text>
+                            <View>
+                                <Image source={require('../../img/ios-add2homeScreen/ios-add2HomeScreen.png')} style={{width: 300, height:30, marginBottom: 10}} />
+                                <Image source={require('../../img/ios-add2homeScreen/ios-add2homeScreen2.png')} style={{width: 300, height: 400}} />
+                            </View>
+                        </View>
+                        <View style={{marginTop: 25}}>
+                            <Text style={{fontWeight: "bold", fontSize: 15, marginBottom: 10}}>Ipad</Text>
+                            <Image source={require('../../img/ios-add2homeScreen/ipad-add2homeScreen.png')} style={{width: 300, height: 400}} />
+                        </View>
+                    </ScrollView>
+                </ModalWeb>)
+        }else{
+            return (<ModalWeb 
+                    animationType="slide"
+                    transparent={true}
+                    isVisible={showModalAdd2Screen} 
+                    style={styles.centeredView}>
+                        <ScrollView contentContainerStyle={styles.modal}>
+                            <View style={{flexDirection: "row", justifyContent: "flex-end", width: "90%", alignItems: "center", marginBottom: 10}}>
+                                <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                    setshowModalAdd2Screen(false)}} style={{marginLeft: 100}}>
+                                    <AntDesign name="closecircle" size={15} color="black" />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={{
+                                width: "100%", 
+                                fontSize: 15,
+                                paddingBottom: 10,
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                borderTopColor: "grey",
+                                borderTopWidth: 1,
+                                paddingTop: 10,
+                                paddingBottom: 10
+                                }}>
+                                {t('add2homeScreen')}
+                            </Text>
+                            <Text style={{textAlign: "center"}}>{t('android_add2homeScreen')}</Text>
+                            {renderAdd2ScreenPictures()}
+                        </ScrollView>
+                    </ModalWeb>)
+        }
+    }
+
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: null,
                 headerLeft: () => (
                     <View style={{flexDirection: "row", alignItems: "center"}}>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => setShowModalLanguage(true)} style={{marginLeft: 20}}>
@@ -78,6 +198,12 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                     ),
+                headerRight: () => (
+                <TouchableOpacity style={{marginRight: 20}} onPress={() => setshowModalAdd2Screen(true)}>
+                    {window.navigator.standalone || window.navigator.standalone ? null : <MaterialIcons name="add-to-home-screen" size={24} color="black" />}
+                </TouchableOpacity>
+                )
+                
         })
     }, [i18next.language])
 
@@ -253,6 +379,7 @@ const Login = ({ navigation }) => {
             </View>
        
        {showModalLanguage && modalLanguage()}
+       {showModalAdd2Screen && addToHomeScreen()}
             
         </KeyboardAvoidingView>
     )
@@ -305,5 +432,32 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-    }
+    },
+    modal: {
+        padding: 10,
+        margin: 20,
+        borderRadius: 10,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    img: {
+        marginBottom: 25,
+        width: 200,
+        height: 370,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
 })

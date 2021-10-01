@@ -147,7 +147,8 @@ const Information = ({ navigation, route }) => {
             phone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
-            notificationStatus: "default"
+            notificationStatus: "default",
+            isChatting: false
             })
         return handleLoadUserDB()
     }

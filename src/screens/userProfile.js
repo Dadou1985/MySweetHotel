@@ -300,6 +300,14 @@ const UserProfile = ({navigation}) => {
           })      
   }
 
+  const inChat = async() => {
+    await db.collection('guestUsers')
+           .doc(user.uid)
+           .update({isChatting: true})
+          
+    return handleLoadUserDB() 
+  }
+
   const tomorrow = Date.now() + 86400000
 
   const handlePlatformDate = () => {
@@ -586,9 +594,11 @@ if(isForegrounding) {
             <TouchableOpacity style={{flexDirection: "row"}} activeOpacity={0.5} onPress={() => {
               if(userDB.notificationStatus === "default" && !isSafari) {
                 setShowModalNotification(true)
+                inChat()
               }else{
                 navigation.navigate('Chat')
                 updateAdminSpeakStatus()
+                inChat()
               }
               }}>
               <Entypo name="chat" size={40} color="black" /> 

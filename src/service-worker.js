@@ -75,7 +75,10 @@ self.addEventListener("message", (event) => {
 
 self.addEventListener('push', function(e) {
   const data = e.data.json()
-  console.log("========>", data)
+  const logo = data.icon
+  const hotelId = data.hotelId
+  const hotelName = data.title
+  const guestStatus = data.guestStatus
 
   const options = {
     body: data.body,
@@ -83,13 +86,16 @@ self.addEventListener('push', function(e) {
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1
+      primaryKey: 1,
+      appURL: `https://mysweethotel.eu/?url=${logo}&hotelId=${hotelId}&hotelName=${hotelName}`
     }
   }
 
-  e.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+  if(!guestStatus) {
+    e.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  }
 });
 
 self.addEventListener('notificationclose', function(e) {
@@ -97,4 +103,26 @@ self.addEventListener('notificationclose', function(e) {
   var primaryKey = notification.data.primaryKey;
 
   console.log('Closed notification: ' + primaryKey);
+});
+
+self.addEventListener('notificationclick', function(event) {
+  let url = event.notification.data.appURL
+  console.log("==============>", url)
+  event.notification.close(); // Android needs explicit close.
+  event.waitUntil(
+      clients.matchAll({includeUncontrolled: true, type: 'window'}).then(function(windowClients) {
+          // Check if there is already a window/tab open with the target URL
+          for (var i = 0; i < windowClients.length; i++) {
+              var client = windowClients[i];
+              // If so, just focus it.
+              if (client.url === url && 'focus' in client) {
+                  return client.focus();
+              }
+          }
+          // If not, then open the target URL in a new window/tab.
+          if (clients.openWindow) {
+              return clients.openWindow(url);
+          }
+      })
+  );
 });
