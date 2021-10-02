@@ -10,7 +10,7 @@ import 'moment/locale/fr';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
@@ -46,8 +46,8 @@ const Taxi = ({ navigation }) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Image source={{uri: "https://cdn2.iconfinder.com/data/icons/car-11/100/taxi3-512.png"}} style={styles.img} />
-                    <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('taxi_titre')}</Text>
+                    <FontAwesome5 name="taxi" size={24} color="black" />
+                    <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('taxi_titre')}</Text>
                 </View>
             ),
             headerLeft: () => (

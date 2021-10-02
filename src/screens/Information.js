@@ -42,6 +42,7 @@ const Information = ({ navigation, route }) => {
     const [hotelId, setHotelId] = useState(currentHotelId)
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [recap, setRecap] = useState(false)
 
     const { t } = useTranslation()
 
@@ -226,7 +227,7 @@ const Information = ({ navigation, route }) => {
                 return (
                     <ModalWeb 
                     animationType="slide"
-                    visible={showDate} 
+                    isVisible={showDate} 
                     style={styles.datePickerModal}
                     onBackdropPress={() => setShowModalRoom(false)}>
                     <View style={{
@@ -309,7 +310,8 @@ const Information = ({ navigation, route }) => {
                             onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
                         <Button raised={true} onPress={() => {
                             setShowModalRoom(false)
-                            setShowDate(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                            setShowDate(false)
+                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
                     </View>
                 </ModalWeb>
             )
@@ -397,11 +399,12 @@ const Information = ({ navigation, route }) => {
                     </View>
                 :  
                     <View style={styles.containerText}>
+                        {recap && <>
                         <View style={styles.containerImg}>
                             <ImageBackground source={ require('../../img/certified.png') } style={{width: 250, height: 300}}>
                             </ImageBackground>
                             <Text style={{fontSize: 18, marginBottom: 10}}>{t("occupation_chbre")} {currentRoom}</Text>
-                            <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date).format('L')}</Text>
+                            <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date.timestamp).format('L')}</Text>
                         </View>
                         <View style={styles.buttonView}>
                             {/*{!hotelId && <Button 
@@ -432,6 +435,7 @@ const Information = ({ navigation, route }) => {
                             
                             <Button type="clear" onPress={() => {
                                 setShowDate(true)
+                                setRecap(false)
                             }} containerStyle={styles.button} title={t("recommencer")} />
                             <Button
                              icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
@@ -445,6 +449,7 @@ const Information = ({ navigation, route }) => {
                                 }, 3000);
                             }} containerStyle={styles.button} title={t("accueil")} />
                         </View>
+                        </>}
                     </View>
                 
             }

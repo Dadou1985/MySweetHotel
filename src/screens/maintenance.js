@@ -9,7 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Octicons } from '@expo/vector-icons';
 
 const Maintenance = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -28,8 +28,8 @@ const Maintenance = ({ navigation }) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                  <Image source={{uri: "https://static.thenounproject.com/png/41655-200.png"}} style={styles.img} />
-                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('maintenance')}</Text>
+                  <Octicons name="tools" size={20} color="black" />
+                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('maintenance')}</Text>
               </View>
           ),
           headerLeft: () => (
@@ -201,12 +201,12 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: "80%",
-        marginTop: 100, 
+        marginTop: 70, 
     },
     button: {
         width: "80%",
         marginTop: 10, 
-        marginBottom: 90,
+        marginBottom: 50,
         borderColor: "white",
         borderRadius: 30
     },

@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: "80%",
-        marginTop: 100, 
+        marginTop: 70, 
 
     },
     button: {
         width: "80%",
         marginTop: 10, 
-        marginBottom: 90,
+        marginBottom: 50,
         borderColor: "white",
         borderRadius: 30,
     },

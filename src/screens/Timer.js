@@ -10,7 +10,7 @@ import 'moment/locale/fr';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
@@ -45,8 +45,8 @@ const Timer = ({navigation}) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Image source={{uri: "https://image.flaticon.com/icons/png/512/62/62834.png"}} style={styles.img} />
-                    <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('reveil_titre')}</Text>
+                    <Ionicons name="alarm" size={24} color="black" />
+                    <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('reveil_titre')}</Text>
                 </View>
             ),
             headerLeft: () => (
@@ -239,17 +239,19 @@ const Timer = ({navigation}) => {
                 width: "100%"}}>
                 </ImageBackground>
             </View>
-            <View style={{width: 300, marginTop: 60}}>
-                <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
-                    <Text style={{fontSize: 15}}>{t('jour')}</Text>
-                    {date.timestamp ? <Button type="clear" title={moment(date.timestamp).format('L')}
-                        onPress={handleShowDate} /> : <Button type="clear" title={moment(date).format('L')}
-                        onPress={handleShowDate} />}
-                </View>
-                <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
-                    <Text style={{fontSize: 15}}>{t('heure')}</Text>
-                    <Button type="clear" title={time !== "" ? time : moment(new Date()).format('LT')}
-                        onPress={handleShowTime} />
+            <View style={{width: 300, marginTop: 90, marginBottom: 20}}>
+                <View style={{flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
+                    <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+                        <Text style={{fontSize: 15}}>{t('jour')}</Text>
+                        {date.timestamp ? <Button type="clear" title={moment(date.timestamp).format('L')}
+                            onPress={handleShowDate} /> : <Button type="clear" title={moment(date).format('L')}
+                            onPress={handleShowDate} />}
+                    </View>
+                    <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+                        <Text style={{fontSize: 15}}>{t('heure')}</Text>
+                        <Button type="clear" title={time !== "" ? time : moment(new Date()).format('LT')}
+                            onPress={handleShowTime} />
+                    </View>
                 </View>
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                     <Text style={{fontSize: 15}}>{t('timer_num_tel')}</Text>
@@ -323,7 +325,7 @@ const Timer = ({navigation}) => {
                             borderRadius: 5,
                             textAlign: "center", 
                             backgroundColor: "lightblue"
-                            }}>{t("reveil_heure")}</Text>
+                            }}>{t('timer_num_tel')}</Text>
                             <Input 
                             placeholder={t("phone")} 
                             type="number" 
@@ -392,7 +394,7 @@ const styles = StyleSheet.create({
     button: {
         width: "80%",
         marginTop: 50, 
-        marginBottom: 90,
+        marginBottom: 50,
         borderColor: "white",
         borderRadius: 30,
     },

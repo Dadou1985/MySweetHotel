@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { auth, db, storage, functions, messaging } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
@@ -612,13 +612,13 @@ if(isForegrounding) {
                 <MaterialIcons name="room-preferences" size={45} color="black" />                
             </TouchableOpacity>            
             <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Maintenance')}>
-                <Image source={{uri: "https://static.thenounproject.com/png/41655-200.png"}} style={styles.img} />
+            <Octicons name="tools" size={35} color="black" />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Réveil')}>
-                <Image source={{uri: "https://image.flaticon.com/icons/png/512/62/62834.png"}} style={styles.img} />
+            <Ionicons name="alarm" size={45} color="black" />
             </TouchableOpacity>           
             <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Taxi')}>
-                <Image source={{uri: "https://cdn2.iconfinder.com/data/icons/car-11/100/taxi3-512.png"}} style={styles.img} />
+            <FontAwesome5 name="taxi" size={45} color="black" />
             </TouchableOpacity>
           </View>
           <Button raised={true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0}} onPress={() => {
