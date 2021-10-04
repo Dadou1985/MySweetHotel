@@ -467,6 +467,8 @@ const pushNotificationSubscription = () => {
         return db.collection("guestUsers")
         .doc(user.uid)
         .update({notificationStatus: "denied"})
+        .then(handleLoadUserDB())
+        .then(navigation.navigate('Chat'))
       }
     });
         

@@ -60,7 +60,7 @@ const Chat = ({ navigation }) => {
                 </TouchableOpacity>
             ),
             headerRight: () => (
-                <TouchableOpacity onPress={() => {pushNotificationSubscription()}}>
+                <TouchableOpacity onPress={() => pushNotificationSubscription()}>
                     {userDB.notificationStatus === "denied" ? 
                     <Ionicons 
                         name="notifications-off-circle" 
@@ -200,68 +200,10 @@ const Chat = ({ navigation }) => {
 
     const pushNotificationSubscription = () => {
         if(!isSafari) {
-        
-          function determineAppServerKey() {
-            const vapidPublicKey =
-            "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
-              return urlBase64ToUint8Array(vapidPublicKey);
-          }
-          
-          function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding)
-              .replace(/\-/g, '+')
-              .replace(/_/g, '/');
-          
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-          
-            for (let i = 0; i < rawData.length; ++i) {
-              outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-          }
-          
-          function subscribeUser() {
-            if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.ready.then(function(reg) {
-                reg.pushManager.subscribe({
-                  userVisibleOnly: true,
-                  applicationServerKey: determineAppServerKey()
-                }).then(function(sub) {
-                  console.log('Endpoint URL: ', sub.endpoint);
-                  const subPush = sub.toJSON()
-                    return db.collection("guestUsers")
-                    .doc(user.uid)
-                    .update({
-                      token: subPush,
-                      notificationStatus: "granted"
-                    })
-                    .then(handleLoadUserDB())
-                    .then(navigation.navigate('Chat'))
-                }).catch(function(e) {
-                  if (Notification.permission === 'denied') {
-                    console.warn('Permission for notifications was denied');
-                  } else {
-                    console.error('Unable to subscribe to push', e);
-                  }
-                });
-              })
-            }
-          }
-        
-          return Notification.requestPermission(function(status) {
-            console.log('Notification permission status:', status);
-            if(status === 'granted'){
-              return subscribeUser()
-            }else{
-              return db.collection("guestUsers")
-              .doc(user.uid)
-              .update({notificationStatus: "denied"})
-            }
-          });
-              
-        } 
+          return db.collection("guestUsers")
+          .doc(user.uid)
+          .update({notificationStatus: "denied"})
+        }
       }
 
     console.log(chatRoom)
