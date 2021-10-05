@@ -20,6 +20,7 @@ import * as Notifications from 'expo-notifications';
 import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
+import * as Sentry from 'sentry-expo';
 //import { messaging } from "./firebase"
 
 {/*Notifications.setNotificationHandler({
@@ -36,6 +37,12 @@ const globalScreenOptions = {
   headerTitleStyle: {color: "black"},
   headerTintColor: "black"
 }
+
+Sentry.init({
+  dsn: 'https://01e8968dd6a54aa7b199c617f99f0d9a@o1024943.ingest.sentry.io/5990835',
+  enableInExpoDevelopment: false,
+  debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+});
 
 
 export default function App() {

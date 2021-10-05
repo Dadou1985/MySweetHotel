@@ -56,6 +56,19 @@
       "color": "#ffffff",
       "androidMode": "default",
       "iosDisplayInForeground": false
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "my-sweet-hotel",
+            "project": "My Sweet Hotel",
+            "authToken": "d704b1d25d7943418be5ff0169ebbcb44b10d436efa34338b31d24bbc40e30be",
+            "setCommits": true
+          }
+        }
+      ]
     }
   }
 }
