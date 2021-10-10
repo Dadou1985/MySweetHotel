@@ -61,7 +61,8 @@ const Register = ({ navigation, route }) => {
           localLanguage: i18next.language,
           checkoutDate: "",
           gender: gender,
-          guestCategory: guestCategory
+          guestCategory: guestCategory,
+          notificationStatus: "default"
         })  
       }
 

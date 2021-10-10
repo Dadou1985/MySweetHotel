@@ -73,7 +73,7 @@ const Information = ({ navigation, route }) => {
 
     useEffect(() => {
         if(hotelId !== null){
-            return db.collection("hotel")
+            return db.collection("hotels")
                 .doc(hotelId)
                 .onSnapshot((doc) => {
             const snapInfo = []
@@ -148,8 +148,6 @@ const Information = ({ navigation, route }) => {
             phone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
-            notificationStatus: "default",
-            isChatting: false
             })
         return handleLoadUserDB()
     }

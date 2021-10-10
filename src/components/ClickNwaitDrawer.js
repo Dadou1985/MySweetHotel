@@ -16,7 +16,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
     const { t } = useTranslation()
 
     const handleClickAndWait = (item) => {
-        return db.collection("hotel")
+        return db.collection("hotels")
         .doc(userDB.hotelId)
         .collection('housekeeping')
         .doc("item")

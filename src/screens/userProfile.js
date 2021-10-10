@@ -270,7 +270,7 @@ const UserProfile = ({navigation}) => {
 
     useEffect(() => {
       const toolOnAir = () => {
-        return db.collection('hotel')
+        return db.collection('hotels')
           .doc(userDB.hotelId)
           .collection("chat")
           .where("title", "==", user.displayName)
@@ -291,7 +291,7 @@ const UserProfile = ({navigation}) => {
    },[])
 
    const updateAdminSpeakStatus = () => {
-    return db.collection('hotel')
+    return db.collection('hotels')
           .doc(userDB.hotelId)
           .collection('chat')
           .doc(user.displayName)
@@ -300,12 +300,12 @@ const UserProfile = ({navigation}) => {
           })      
   }
 
-  const inChat = async() => {
-    await db.collection('guestUsers')
-           .doc(user.uid)
-           .update({isChatting: true})
-          
-    return handleLoadUserDB() 
+  const inChat = () => {
+    return db.collection("hotels")
+          .doc(userDB.hotelId)
+          .collection('chat')
+          .doc(user.displayName)
+          .update({isChatting: true})  
   }
 
   const tomorrow = Date.now() + 86400000
@@ -596,7 +596,6 @@ if(isForegrounding) {
             <TouchableOpacity style={{flexDirection: "row"}} activeOpacity={0.5} onPress={() => {
               if(userDB.notificationStatus === "default" && !isSafari) {
                 setShowModalNotification(true)
-                inChat()
               }else{
                 navigation.navigate('Chat')
                 updateAdminSpeakStatus()

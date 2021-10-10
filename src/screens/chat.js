@@ -53,7 +53,6 @@ const Chat = ({ navigation }) => {
             ),
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
-                handleUpdateHotelResponse()
                 outChat()
                 navigation.navigate("My Sweet Hotel")}}>
                     <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
@@ -76,12 +75,13 @@ const Chat = ({ navigation }) => {
 
     useEffect(() => {
         const getMessages = () => {
-            return db.collection("hotel")
+            return db.collection("hotels")
             .doc(userDB.hotelId)
             .collection('chat')
             .doc(user.displayName)
             .collection("chatRoom")
             .orderBy("markup", "desc")
+            .limit(50)
         }
 
         let unsubscribe = getMessages().onSnapshot(function(snapshot) {
@@ -98,26 +98,19 @@ const Chat = ({ navigation }) => {
         return unsubscribe
     }, [])
 
-    const handleUpdateHotelResponse = () => {
-        return db.collection("hotel")
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(user.displayName)
-            .update({
-                hotelResponding: false
+    const outChat = () => {
+      return db.collection("hotels")
+        .doc(userDB.hotelId)
+        .collection('chat')
+        .doc(user.displayName)
+        .update({
+            hotelResponding: false,
+            isChatting: false
         })
     }
 
-    const outChat = async() => {
-      await db.collection('guestUsers')
-             .doc(user.uid)
-             .update({isChatting: false})
-            
-      return handleLoadUserDB() 
-    }
-
     const getChatRoom = () => {
-        return db.collection('hotel')
+        return db.collection('hotels')
         .doc(userDB.hotelId)
         .collection('chat')
         .doc(user.displayName)
@@ -133,22 +126,42 @@ const Chat = ({ navigation }) => {
     }
 
     const createRoomnameSubmit = () => {
-        return db.collection('hotel')
-          .doc(userDB.hotelId)
-          .collection('chat')
-          .doc(user.displayName)
-          .set({
-            title: user.displayName,
-            room: userDB.room,
-            userId: user.uid,
-            markup: Date.now(),
-            status: true, 
-            guestLanguage: userDB.language
-        })      
+        if(userDB.token) {
+            return db.collection('hotels')
+            .doc(userDB.hotelId)
+            .collection('chat')
+            .doc(user.displayName)
+            .set({
+                title: user.displayName,
+                room: userDB.room,
+                userId: user.uid,
+                markup: Date.now(),
+                status: true, 
+                guestLanguage: userDB.language,
+                hotelLogo: userDB.logo,
+                isChatting: true,
+                token: userDB.token
+            })     
+        }else{
+            return db.collection('hotels')
+            .doc(userDB.hotelId)
+            .collection('chat')
+            .doc(user.displayName)
+            .set({
+                title: user.displayName,
+                room: userDB.room,
+                userId: user.uid,
+                markup: Date.now(),
+                status: true, 
+                guestLanguage: userDB.language,
+                hotelLogo: userDB.logo,
+                isChatting: true
+            })     
+        }
       }
 
     const updateRoomnameSubmit = () => {
-        return db.collection('hotel')
+        return db.collection('hotels')
           .doc(userDB.hotelId)
           .collection('chat')
           .doc(user.displayName)
@@ -163,7 +176,7 @@ const Chat = ({ navigation }) => {
         Keyboard.dismiss()
         setInput("")
 
-        return db.collection("hotel")
+        return db.collection("hotels")
         .doc(userDB.hotelId)
         .collection('chat')
         .doc(user.displayName)
@@ -184,19 +197,6 @@ const Chat = ({ navigation }) => {
           })
     }
 
-    const handleLoadUserDB = () => {
-        return db.collection('guestUsers')
-        .doc(user.uid)
-        .get()
-        .then((doc) => {
-            if (doc.exists) {
-            setUserDB(doc.data())
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        })
-    }
 
     const pushNotificationSubscription = () => {
         if(!isSafari) {

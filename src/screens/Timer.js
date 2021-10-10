@@ -81,7 +81,7 @@ const Timer = ({navigation}) => {
     const handleSubmit = () => {
         setPhoneNumber("")
         
-        return db.collection("hotel")
+        return db.collection("hotels")
         .doc(userDB.hotelId)
         .collection('clock')
         .add({
