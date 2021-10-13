@@ -58,7 +58,7 @@ const Information = ({ navigation, route }) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>
+                    {recap && <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>}
                 </View>
             ),
             headerLeft: null
@@ -130,7 +130,7 @@ const Information = ({ navigation, route }) => {
             blanket: true,
             iron: true,
             babyBed: true, 
-            website: formValue.website,
+            website: formValue.website !== undefined ? formValue.website : "none",
             phone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
@@ -207,6 +207,7 @@ const Information = ({ navigation, route }) => {
                 return (
                     <ModalWeb 
                     animationType="slide"
+                    transparent={true}
                     isVisible={showDate} 
                     style={styles.datePickerModal}>
                     <View style={{
@@ -254,7 +255,9 @@ const Information = ({ navigation, route }) => {
                                 setHotelName(hotel.hotelName)
                                 setUrl(hotel.website)})
                             setShowModalRoom(true)
-                            setShowDate(false)
+                            setTimeout(() => {
+                                setShowDate(false)
+                            }, 500);
                         }} />
                     </View>
                 </ModalWeb>
@@ -446,9 +449,98 @@ const Information = ({ navigation, route }) => {
                 </ScrollView>
                     </Modal>*/}
 
-            {showModalRoom && roomModal()}
+            {/*showModalRoom && roomModal()*/}
 
-            {showDate && handlePlatformDate()}
+            {/*showDate && handlePlatformDate()*/}
+
+            <ModalWeb 
+                    animationType="slide"
+                    transparent={true}
+                    isVisible={showDate} 
+                    style={styles.datePickerModal}>
+                    <View style={{
+                        flexDirection: "column",
+                        alignItems: "center",
+                        backgroundColor: "white",
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: 5
+                    }}>
+                        <View style={{
+                            flexDirection: "row", 
+                            width: "100%", 
+                            alignItems: "center", 
+                            justifyContent: "center", 
+                            marginBottom: 10, 
+                            paddingTop: 10, 
+                            paddingBottom: 10, 
+                            backgroundColor: "lightblue",
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5}}>
+                            <Text style={{fontSize: 20}}>{t('date_checkout')}</Text>
+                        </View>
+                        <Calendar
+                            minDate={new Date()} 
+                            pastScrollRange={0}
+                            renderArrow={(direction) => {
+                                if(direction === 'left') return <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                                if(direction === 'right') return <AntDesign name="right" size={24} color="black" style={{marginLeft: 5}} />
+                            }}
+                            markedDates={{[date.dateString]: {selected: true, marked: true, selectedColor: "#00adf5"}}}
+                            onDayPress={(day) => {
+                                setDate(day)
+                                info.map(hotel => {
+                                    setFormValue({
+                                        hotelId: hotelId,
+                                        departement: hotel.departement,
+                                        region: hotel.region,
+                                        city: hotel.city,
+                                        code_postal: hotel.code_postal,
+                                        country: hotel.country,
+                                        room: hotel.room,
+                                        standing: hotel.classement,
+                                        website: hotel.website,
+                                        phone: hotel.phone,
+                                        logo: hotel.logo
+                                    })
+                                setHotelName(hotel.hotelName)
+                                setUrl(hotel.website)})
+                            setShowModalRoom(true)
+                            setTimeout(() => {
+                                setShowDate(false)
+                            }, 500);
+                        }} />
+                    </View>
+                </ModalWeb>
+
+                <ModalWeb
+                animationType="slide"
+                transparent={true}
+                isVisible={showModalRoom} 
+                style={styles.roomBoxView}
+                onBackdropPress={() => setShowModalRoom(false)} >
+                    <View style={styles.modalRoom}>
+                    <Text style={{
+                        width: "100%", 
+                        marginBottom: 10, 
+                        fontSize: 20,
+                        paddingTop: 10, 
+                        paddingBottom: 10,
+                        borderRadius: 5,
+                        textAlign: "center", 
+                        backgroundColor: "lightblue"
+                        }}>{t("num_chbre")}</Text>
+                        <Input 
+                            placeholder={t("entre_num_chbre")} 
+                            type="number" 
+                            value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
+                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                        <Button raised={true} onPress={() => {
+                            setShowModalRoom(false)
+                            setShowDate(false)
+                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                    </View>
+                </ModalWeb>
            
         </KeyboardAvoidingView>
     )
@@ -571,7 +663,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 60,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        borderRadius: 5
       },
     datePickerButton: {
         width: 250,

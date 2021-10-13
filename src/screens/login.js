@@ -107,7 +107,13 @@ const Login = ({ navigation }) => {
             if (doc.exists) {
                 setUserDB(doc.data())
                 if(doc.data().checkoutDate !== "") {
-                    return navigation.replace('My Sweet Hotel')
+                    navigation.replace('My Sweet Hotel')
+                    return setTimeout(() => {
+                        showMessage({
+                            message: t("succes_connection"),
+                            type: "info",
+                        })
+                    }, 1000);
                 }else{
                     return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId:hotelId })
                 }
@@ -225,12 +231,6 @@ const Login = ({ navigation }) => {
                 handleUpdateLanguage(user.uid)
                 .then(() => {
                     handleLoadUserDB(user.uid)
-                    setTimeout(() => {
-                        showMessage({
-                            message: t("succes_connection"),
-                            type: "info",
-                        })
-                    }, 1000);
                 })
             } 
           });

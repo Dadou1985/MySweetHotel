@@ -414,7 +414,7 @@ const handleLinkWebsite = async() => {
   return WebBrowser.openBrowserAsync(userDB.website)
 }
 
-if(userDB.newConnection) {
+if(userDB.newConnection && userDB.website !== "none") {
   useEffect(() => {
     setShowWebsite(true)
   }, [])
@@ -598,8 +598,8 @@ if(isForegrounding) {
               <Ionicons name="pencil-outline" size={24} color="black" />
             </TouchableOpacity>
           </View>
-          <Text style={{fontSize: 15}}>{userDB.hotelName}</Text>
-          {userDB.website && <TouchableOpacity onPress={handleLinkWebsite}>
+          <Text style={{fontSize: 15, marginBottom: userDB.website !== "none" ? 0 : 30}}>{userDB.hotelName}</Text>
+          {userDB.website !== "none" ? <TouchableOpacity onPress={handleLinkWebsite}>
             <Text style={{
                     width: "100%", 
                     fontSize: 12,
@@ -610,7 +610,7 @@ if(isForegrounding) {
                       <Fontisto name="world" size={15} color="black" style={{marginRight: 5}} />
                       {t("website")}
             </Text>
-          </TouchableOpacity>}
+          </TouchableOpacity> : <></>}
           <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
           <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
