@@ -105,13 +105,24 @@ const Login = ({ navigation }) => {
         .get()
         .then((doc) => {
             if (doc.exists) {
-            setUserDB(doc.data())
+                setUserDB(doc.data())
+                if(doc.data().checkoutDate !== "") {
+                    return navigation.replace('My Sweet Hotel')
+                }else{
+                    return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId:hotelId })
+                }
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-        }).then(() => {
-            return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId:hotelId })
+        })
+    }
+
+    const handleUpdateLanguage = (userId) => {
+        return db.collection('guestUsers')
+        .doc(userId)
+        .update({
+            language: i18next.language
         })
     }
 
@@ -211,13 +222,16 @@ const Login = ({ navigation }) => {
         
         let unsubscribe = auth.onAuthStateChanged(function(user) {
             if (user) {
-                handleLoadUserDB(user.uid)
-                setTimeout(() => {
-                    showMessage({
-                        message: t("succes_connection"),
-                        type: "info",
-                    })
-                }, 1000);
+                handleUpdateLanguage(user.uid)
+                .then(() => {
+                    handleLoadUserDB(user.uid)
+                    setTimeout(() => {
+                        showMessage({
+                            message: t("succes_connection"),
+                            type: "info",
+                        })
+                    }, 1000);
+                })
             } 
           });
         return unsubscribe

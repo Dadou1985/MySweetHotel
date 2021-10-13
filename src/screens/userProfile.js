@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons } from '@expo/vector-icons';
+import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons, Fontisto } from '@expo/vector-icons';
 import { auth, db, storage, functions, messaging } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
@@ -22,6 +22,8 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import webPush from "web-push"
 import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
+import * as WebBrowser from 'expo-web-browser';
+
 
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
@@ -43,6 +45,7 @@ const UserProfile = ({navigation}) => {
     const [isForegrounding, setIsForegrounding] = useState(false)
     const [conciergePanel, setConciergePanel] = useState(false)
     const [showModalNotification, setShowModalNotification] = useState(false)
+    const [showWebsite, setShowWebsite] = useState(false)
 
     const Logout = () => {
       auth.signOut()
@@ -407,6 +410,22 @@ const UserProfile = ({navigation}) => {
     }
 }
 
+const handleLinkWebsite = async() => {
+  return WebBrowser.openBrowserAsync(userDB.website)
+}
+
+if(userDB.newConnection) {
+  useEffect(() => {
+    setShowWebsite(true)
+  }, [])
+}
+
+const handleNewwConnection = () => {
+  return db.collection("guestUsers")
+         .doc(user.uid)
+         .update({newConnection: false})
+}
+
 const pushNotificationSubscription = () => {
   if(!isSafari) {
   
@@ -579,7 +598,19 @@ if(isForegrounding) {
               <Ionicons name="pencil-outline" size={24} color="black" />
             </TouchableOpacity>
           </View>
-          <Text style={{fontSize: 20, marginBottom: 20}}>{userDB.hotelName}</Text>
+          <Text style={{fontSize: 15}}>{userDB.hotelName}</Text>
+          {userDB.website && <TouchableOpacity onPress={handleLinkWebsite}>
+            <Text style={{
+                    width: "100%", 
+                    fontSize: 12,
+                    marginBottom: 20,
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    }}>
+                      <Fontisto name="world" size={15} color="black" style={{marginRight: 5}} />
+                      {t("website")}
+            </Text>
+          </TouchableOpacity>}
           <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
           <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
@@ -743,7 +774,7 @@ if(isForegrounding) {
               <View style={styles.modalRoom2}>
                   <Text style={{
                       width: "100%", 
-                      fontSize: 15,
+                      fontSize: 20,
                       paddingBottom: 10,
                       textAlign: "center",
                       fontWeight: "bold",
@@ -751,6 +782,47 @@ if(isForegrounding) {
                       }}><AntDesign name="infocirlce" size={15} color="black" style={{marginRight: 15}} />
                       {t('chat_push_notification')}</Text>
                       <Text style={{textAlign: "center", marginBottom: 10}}>{t('message_push_notification')}</Text>
+              </View>
+          </ModalWeb>
+
+          <ModalWeb 
+          animationType="slide"
+          transparent={true}
+          isVisible={showWebsite} 
+          style={styles.roomBoxView}>
+              <View style={styles.modalRoom2}>
+                  <Text style={{
+                      width: "100%", 
+                      fontSize: 20,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      paddingTop: 10,
+                      }}><Fontisto name="world" size={15} color="black" style={{marginRight: 15}} />
+                      {t('website')}</Text>
+                      <View style={{width: "90%", alignItems: "center"}}>
+                        <ImageBackground source={ require('../../img/booking-shadow.png') } style={{
+                            resizeMode: "contain",
+                            width: 300,
+                            height: 300}}>
+                        </ImageBackground>
+                        <Text style={{textAlign: "center", marginBottom: 10, width: "90%"}}>{t("website_message")}</Text>
+                        </View>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: "80%",
+                            marginBottom: 20}}>
+                            <Button containerStyle={styles.button2} type="clear" title={t("oui")} onPress={() => {
+                              handleLinkWebsite()
+                              setShowWebsite(false)
+                              handleNewwConnection()
+                            }} />
+                            <Button containerStyle={styles.button2} title={t("non")} onPress={() => {
+                              setShowWebsite(false)
+                              handleNewwConnection()}} />
+                        </View>
               </View>
           </ModalWeb>
 
@@ -779,7 +851,11 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     marginTop: 10,
-    borderRadius: 3
+  },
+  button2: {
+    width: "100%",
+    marginTop: 10,
+    borderRadius: 30
   },
   inputContainer: {
     width: 300

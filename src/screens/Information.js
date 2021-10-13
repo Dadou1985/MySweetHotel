@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Modal, ScrollView, ImageBackground, Platform } from 'react-native';
-import { Button, Input, Image } from 'react-native-elements';
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Modal, ImageBackground, Platform } from 'react-native';
+import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { auth, db } from "../../firebase"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
 import 'moment/locale/fr';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import * as Linking from 'expo-linking';
 import { AntDesign } from '@expo/vector-icons';
-import { Ionicons, Feather } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
-import * as WebBrowser from 'expo-web-browser';
 
 
 const Information = ({ navigation, route }) => {
@@ -28,8 +25,6 @@ const Information = ({ navigation, route }) => {
     const [date, setDate] = useState(new Date())
     const [showDate, setShowDate] = useState(true)
     const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: "", logo: ""})
-    const [filter, setFilter] = useState("")
-    const [initialFilter, setInitialFilter] = useState("")
     const [hotelName, setHotelName] = useState("Lancer la recherche")
     const [hideAll, setHideAll] = useState(false)
     const [user, setUser] = useState(auth.currentUser)
@@ -63,8 +58,7 @@ const Information = ({ navigation, route }) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    {userDB.checkoutDate !== "" ? 
-                     <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t("prochain_sejour")}</Text> : <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>}
+                    <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>
                 </View>
             ),
             headerLeft: null
@@ -116,14 +110,6 @@ const Information = ({ navigation, route }) => {
         })
     }
 
-    const handleUpdateLanguage = () => {
-        return db.collection('guestUsers')
-        .doc(user.uid)
-        .update({
-            language: i18next.language
-        })
-    }
-
     const handleSubmit = async () => {
         await db.collection('guestUsers')
         .doc(user.uid)
@@ -148,15 +134,11 @@ const Information = ({ navigation, route }) => {
             phone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
+            newConnection: true
             })
         return handleLoadUserDB()
     }
 
-    const handleLinkWebsite = async() => {
-        return WebBrowser.openBrowserAsync(userDB.website)
-    }
-
-    const markedDay = date.dateString
 
     const handlePlatformDate = () => {
         if(Platform.OS === 'ios') {
@@ -226,8 +208,7 @@ const Information = ({ navigation, route }) => {
                     <ModalWeb 
                     animationType="slide"
                     isVisible={showDate} 
-                    style={styles.datePickerModal}
-                    onBackdropPress={() => setShowModalRoom(false)}>
+                    style={styles.datePickerModal}>
                     <View style={{
                         flexDirection: "column",
                         alignItems: "center",
@@ -270,10 +251,11 @@ const Information = ({ navigation, route }) => {
                                         phone: hotel.phone,
                                         logo: hotel.logo
                                     })
-                                    setHotelName(hotel.hotelName)
-                                    setUrl(hotel.website)})
-                                setShowModalRoom(true)}}
-                             />
+                                setHotelName(hotel.hotelName)
+                                setUrl(hotel.website)})
+                            setShowModalRoom(true)
+                            setShowDate(false)
+                        }} />
                     </View>
                 </ModalWeb>
                 )
@@ -367,35 +349,6 @@ const Information = ({ navigation, route }) => {
     return (
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar style="light" />
-            {userDB.checkoutDate !== "" ? <View style={styles.containerText}>
-                        <View style={styles.containerImg}>
-                        <ImageBackground source={ require('../../img/booking-shadow.png') } style={{
-                            resizeMode: "contain",
-                            justifyContent: "center",
-                            width: 500,
-                            height: 450}}>
-                        </ImageBackground>
-                        </View>
-                        <View style={{
-                                position: "absolute",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                width: "80%",
-                                top: "80%"}}>
-                                <Button containerStyle={styles.button} type="clear" title={t("oui")} onPress={handleLinkWebsite} />
-                                <Button containerStyle={styles.button} title={t("non")} onPress={async() => {
-                                    await handleUpdateLanguage()
-                                    handleLoadUserDB()
-                                    return setTimeout(() => {
-                                        showMessage({
-                                            message: `${t("message_bienvenue")} ${user.displayName}`,
-                                            type: "info",
-                                          })
-                                    }, 2000);
-                                }} />
-                            </View>
-                    </View>
-                :  
                     <View style={styles.containerText}>
                         {recap && <>
                         <View style={styles.containerImg}>
@@ -439,18 +392,10 @@ const Information = ({ navigation, route }) => {
                              icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
                              onPress={() => {
                                 handleSubmit()
-                                setTimeout(() => {
-                                    showMessage({
-                                        message: `${t("message_bienvenue")} ${user.displayName}`,
-                                        type: "info",
-                                      })
-                                }, 3000);
                             }} containerStyle={styles.button} title={t("accueil")} />
                         </View>
                         </>}
                     </View>
-                
-            }
 
             {/*<Modal 
             animationType="slide"
@@ -503,7 +448,7 @@ const Information = ({ navigation, route }) => {
 
             {showModalRoom && roomModal()}
 
-            {userDB.checkoutDate === "" && showDate && handlePlatformDate()}
+            {showDate && handlePlatformDate()}
            
         </KeyboardAvoidingView>
     )
@@ -580,7 +525,7 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     modalRoom: {
-        marginTop: "100%",
+        marginTop: "60%",
         backgroundColor: 'white',
         alignItems: 'center',
         shadowColor: '#000',
