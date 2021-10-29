@@ -48,7 +48,7 @@ const Register = ({ navigation, route }) => {
       })
   }, [navigation])
 
-    const freeRegister = (userId) => {
+    const freeRegister = (userId, photo) => {
         return db.collection('guestUsers')
         .doc(userId)
         .set({
@@ -62,7 +62,8 @@ const Register = ({ navigation, route }) => {
           checkoutDate: "",
           gender: gender,
           guestCategory: guestCategory,
-          notificationStatus: "default"
+          notificationStatus: "default",
+          photo: photo ? photo : null
         })  
       }
 
@@ -110,6 +111,10 @@ const Register = ({ navigation, route }) => {
   
       if (!result.cancelled) {
         setImg(result.uri);
+        showMessage({
+          message: t('photo_selectionnee_message'),
+          type: "info",
+        })
       }
     };
 
@@ -136,7 +141,7 @@ const Register = ({ navigation, route }) => {
                                 photoURL: url,
                                 displayName: name
                             })
-                          freeRegister(authUser.user.uid)
+                          freeRegister(authUser.user.uid, url)
                         })
                 }
                   return setUrl(url, uploadTask())})
@@ -160,7 +165,7 @@ const Register = ({ navigation, route }) => {
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar style="light" />
             <View style={styles.containerText}>
-                <Image source={{uri: hotelLogo}} style={{width: 150, height: 100}} />
+                <Image source={{uri: hotelLogo}} style={{width: 150, height: 100, marginBottom: 20}} />
                 <Text style={styles.text}>{t("creation_compte")}</Text>
             </View>    
             <View style={styles.inputContainer}>
@@ -187,14 +192,14 @@ const Register = ({ navigation, route }) => {
                   </View>
                 </View>
             </View>
-            <View style={{marginBottom: 45}}>
-                <TouchableOpacity style={{flexDirection: "row", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
+            <View style={{marginBottom: 35}}>
+                <TouchableOpacity style={{flexDirection: "row wrap", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
                 <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
                 <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t("ajout_photo_profil")}</Text>
                 </TouchableOpacity>
             </View>
             <Button onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
-            <Button containerStyle={styles.button} title={t("creation_compte")} onPress={(event) => {
+            <Button containerStyle={styles.button2} title={t("creation_compte")} onPress={(event) => {
               if(name !== "" && email !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword) {
                 if(img !== null) {
                   handleChangePhotoUrl(event)
@@ -233,7 +238,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     containerText: {
-        marginBottom: 30,
+        marginBottom: 20,
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
@@ -248,8 +253,13 @@ const styles = StyleSheet.create({
     button: {
         width: 200,
         marginTop: 10,
-        borderRadius: 30
-
+        borderRadius: 30,
+    },
+    button2: {
+        width: 200,
+        marginTop: 10,
+        borderRadius: 30,
+        marginBottom: 30
     },
     typeButton: {
       width: 125,

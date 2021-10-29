@@ -369,9 +369,7 @@ const Login = ({ navigation }) => {
             <View style={styles.containerText}>
                 <ImageBackground source={{uri: hotelLogo}} style={{
                 flex: 1,
-                resizeMode: "contain",
-                justifyContent: "center",
-                width: "100%"}}></ImageBackground>
+                resizeMode:"center"}}></ImageBackground>
             </View> :
             <View style={styles.containerText}>
                 <Image source={require('../../img/new-logo-msh.png')} style={{

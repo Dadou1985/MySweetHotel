@@ -133,7 +133,7 @@ const Chat = ({ navigation }) => {
             .doc(user.displayName)
             .set({
                 title: user.displayName,
-                room: userDB.room,
+                room: userDB.room ? userDB.room : "Pre-checkin",
                 userId: user.uid,
                 markup: Date.now(),
                 status: true, 
@@ -149,7 +149,7 @@ const Chat = ({ navigation }) => {
             .doc(user.displayName)
             .set({
                 title: user.displayName,
-                room: userDB.room,
+                room: userDB.room ? userDB.room : "Pre-checkin",
                 userId: user.uid,
                 markup: Date.now(),
                 status: true, 
@@ -167,7 +167,7 @@ const Chat = ({ navigation }) => {
           .doc(user.displayName)
           .update({
             status: true,
-            room: userDB.room,
+            room: userDB.room ? userDB.room : "Pre-checkin",
             markup: Date.now()
         })      
       }
@@ -184,7 +184,7 @@ const Chat = ({ navigation }) => {
         .add({
             author: user.displayName,
             date: new Date(),
-            room: userDB.room,
+            room: userDB.room ? userDB.room : "Pre-checkin",
             email: user.email,
             photo: user.photoURL,
             text: input,

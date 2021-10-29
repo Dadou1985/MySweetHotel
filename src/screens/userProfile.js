@@ -611,11 +611,11 @@ if(isForegrounding) {
                       {t("website")}
             </Text>
           </TouchableOpacity> : <></>}
-          <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
-          <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
+          <View style={{flexDirection: "row", justifyContent: userDB.room ? "space-around" : "center", mawWidth: "90%"}}>
+          {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 15, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center"}}>Cliquez ici pour entrer mon numéro de Chambre</Text></TouchableOpacity>}
+            {userDB.room ? <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
               <Ionicons name="pencil-outline" size={24} color="black" />
-            </TouchableOpacity>
+            </TouchableOpacity> : null}
           </View>
           <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
             <Text style={{fontSize: 14, marginBottom: 20}}>{t('checkout_prevu')} {userDB.checkoutDate}</Text>

@@ -21,7 +21,7 @@ const Information = ({ navigation, route }) => {
     const { hotelLogo, currentHotelId } = route.params
     
     const [info, setInfo] = useState([])
-    const [currentRoom, setCurrentRoom] = useState("Numéro de chambre")
+    const [currentRoom, setCurrentRoom] = useState(null)
     const [date, setDate] = useState(new Date())
     const [showDate, setShowDate] = useState(true)
     const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: "", logo: ""})
@@ -131,7 +131,7 @@ const Information = ({ navigation, route }) => {
             iron: true,
             babyBed: true, 
             website: formValue.website !== undefined ? formValue.website : "none",
-            phone: formValue.phone,
+            hotelPhone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
             newConnection: true
@@ -357,7 +357,7 @@ const Information = ({ navigation, route }) => {
                         <View style={styles.containerImg}>
                             <ImageBackground source={ require('../../img/certified.png') } style={{width: 250, height: 300}}>
                             </ImageBackground>
-                            <Text style={{fontSize: 18, marginBottom: 10}}>{t("occupation_chbre")} {currentRoom}</Text>
+                            {currentRoom && <Text style={{fontSize: 18, marginBottom: 10}}>{t("occupation_chbre")} {currentRoom}</Text>}
                             <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date.timestamp).format('L')}</Text>
                         </View>
                         <View style={styles.buttonView}>
@@ -539,6 +539,10 @@ const Information = ({ navigation, route }) => {
                             setShowModalRoom(false)
                             setShowDate(false)
                             setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
+                        <Button raised={true} type="clear" onPress={() => {
+                            setShowModalRoom(false)
+                            setShowDate(false)
+                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title="Je n'ai pas encore de chambre" />
                     </View>
                 </ModalWeb>
            
