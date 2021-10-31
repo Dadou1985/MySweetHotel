@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState, useContext } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, Animated, Modal } from 'react-native';
+import React, { useState, useContext } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Modal } from 'react-native';
 import { auth, db } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import { showMessage } from "react-native-flash-message";
@@ -158,7 +158,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                             type: "success",
                           })
                     }}>
-                        <Image source={{uri: "https://www.pngkey.com/png/full/548-5481965_baby-bed-with-a-mobile-toy-with-hanging.png"}} style={styles.img} />    
+                        <Image source={require('../../img/baby-crib.png')} style={styles.img} />    
                     </TouchableOpacity> } 
                     {!userDB.towel && !userDB.toiletPaper && !userDB.soap && !userDB.hairDryer && !userDB.pillow && !userDB.blanket && !userDB.iron && !userDB.babyBed && 
                         <TouchableOpacity style={{flexDirection: "column", alignItems: "center"}} activeOpacity={0.5} onPress={() => {

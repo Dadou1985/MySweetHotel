@@ -185,7 +185,7 @@ const UserProfile = ({navigation}) => {
         })
 
       await showMessage({
-        messsage: t('message_actualisation_email'),
+        message: t('message_actualisation_email'),
         type: "success"
       })
 
@@ -204,7 +204,7 @@ const UserProfile = ({navigation}) => {
         })
 
       await showMessage({
-        messsage: t('message_actualisation_chbre'),
+        message: t('message_actualisation_chbre'),
         type: "success"
       })
 
@@ -311,6 +311,17 @@ const UserProfile = ({navigation}) => {
           .update({isChatting: true})  
   }
 
+  const handleNavigate = (feature) => {
+    if(userDB.room) {
+      return navigation.navigate(feature)
+    }else{
+      return showMessage({
+        message: "Vous devez renseigner votre numéro de chambre pour accéder à cette fonctionnalité.",
+        type: "danger"
+      })
+    }
+  }
+
   const tomorrow = Date.now() + 86400000
 
   const handlePlatformDate = () => {
@@ -414,11 +425,12 @@ const handleLinkWebsite = async() => {
   return WebBrowser.openBrowserAsync(userDB.website)
 }
 
-if(userDB.newConnection && userDB.website !== "none") {
-  useEffect(() => {
+useEffect(() => {
+  if(userDB.newConnection && userDB.website !== "none") {
     setShowWebsite(true)
-  }, [])
-}
+  }
+}, [])
+
 
 const handleNewwConnection = () => {
   return db.collection("guestUsers")
@@ -592,13 +604,13 @@ if(isForegrounding) {
         </View>
         <View style={{flexDirection: "column", width: "100%", padding: 10, alignItems: "center"}}>
           <Text style={{fontSize: 30, fontWeight: "bold"}}>{user.displayName}</Text>
-          <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%", marginBottom: 20}}>
+          <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "black", borderBottomWidth: 1, paddingBottom: 10}}>
             <Text style={{fontSize: 15, fontWeight: "bold"}}>{userDB.email}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateMail(true)}>
-              <Ionicons name="pencil-outline" size={24} color="black" />
+              <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
-          <Text style={{fontSize: 15, marginBottom: userDB.website !== "none" ? 0 : 30}}>{userDB.hotelName}</Text>
+          <Text style={{fontSize: 15, marginBottom: userDB.website !== "none" ? 0 : 30, fontWeight: "bolder"}}>{userDB.hotelName}</Text>
           {userDB.website !== "none" ? <TouchableOpacity onPress={handleLinkWebsite}>
             <Text style={{
                     width: "100%", 
@@ -614,13 +626,13 @@ if(isForegrounding) {
           <View style={{flexDirection: "row", justifyContent: userDB.room ? "space-around" : "center", mawWidth: "90%"}}>
           {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 15, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center"}}>Cliquez ici pour entrer mon numéro de Chambre</Text></TouchableOpacity>}
             {userDB.room ? <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
-              <Ionicons name="pencil-outline" size={24} color="black" />
+              <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity> : null}
           </View>
           <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
             <Text style={{fontSize: 14, marginBottom: 20}}>{t('checkout_prevu')} {userDB.checkoutDate}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => {setShowDate(true)}}>
-              <Ionicons name="pencil-outline" size={24} color="black" />
+              <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
           <View style={{flexDirection: "row", justifyContent: "space-around", width: "100%", marginTop: 25, marginBottom: 40}}>
@@ -640,18 +652,18 @@ if(isForegrounding) {
                 } 
               })}                   
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Délogement')}>
-                <MaterialIcons name="room-preferences" size={45} color="black" />                
-            </TouchableOpacity>            
-            <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Maintenance')}>
-            <Octicons name="tools" size={35} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Réveil')}>
-            <Ionicons name="alarm" size={45} color="black" />
-            </TouchableOpacity>           
-            <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('Taxi')}>
-            <FontAwesome5 name="taxi" size={45} color="black" />
-            </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Délogement')}>
+              <MaterialIcons name="room-preferences" size={45} color={userDB.room ? "black" : "grey"} />                
+          </TouchableOpacity>            
+          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Maintenance')}>
+            <Octicons name="tools" size={35} color={userDB.room ? "black" : "grey"} />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Réveil')}>
+            <Ionicons name="alarm" size={45} color={userDB.room ? "black" : "grey"} />
+          </TouchableOpacity>           
+          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Taxi')}>
+            <FontAwesome5 name="taxi" size={45} color={userDB.room ? "black" : "grey"} />
+          </TouchableOpacity>
           </View>
           <Button raised={true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0}} onPress={() => {
             setConciergePanel(true)
@@ -664,7 +676,9 @@ if(isForegrounding) {
           style={styles.roomBoxView}
           transparent={true} 
           isVisible={updateMail} 
-          onBackdropPress={() => setUpdateMail(false)}>
+          onBackdropPress={() => {
+            setUpdateMail(false)
+            setEmail(null)}}>
           <View style={styles.modalRoom}>
             <Text style={{
                   width: "100%", 
@@ -677,7 +691,7 @@ if(isForegrounding) {
                   backgroundColor: "lightblue"
                   }}>{t('actualisation_email')}</Text>
             <View style={styles.inputContainer}>
-              <Input placeholder={t('email')} type="email" value={email} 
+              <Input placeholder={t('email')} type="email" value={email} style={{textAlign: "center"}}
               onChangeText={(text) => setEmail(text)} />
             </View>
             <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleChangeEmail} />
@@ -689,7 +703,9 @@ if(isForegrounding) {
           style={styles.roomBoxView}                
           transparent={true} 
           isVisible={updateRoom} 
-          onBackdropPress={() => setUpdateRoom(false)}>
+          onBackdropPress={() => {
+            setUpdateRoom(false)
+            setRoom(null)}}>
           <View style={styles.modalRoom}>
           <Text style={{
                   width: "100%", 
@@ -702,7 +718,7 @@ if(isForegrounding) {
                   backgroundColor: "lightblue"
                   }}>{t('actualisation_chbre')}</Text>
             <View style={styles.inputContainer}>
-              <Input placeholder={t('num_chbre')} type="number" value={room} 
+              <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center"}} 
               onChangeText={(text) => setRoom(text)} />
             </View>
             <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleSubmit} />
@@ -858,7 +874,8 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   inputContainer: {
-    width: 300
+    width: 300,
+    textAlign: "center"
   },
   img: {
       width: 40,

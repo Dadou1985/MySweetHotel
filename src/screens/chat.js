@@ -126,38 +126,23 @@ const Chat = ({ navigation }) => {
     }
 
     const createRoomnameSubmit = () => {
-        if(userDB.token) {
-            return db.collection('hotels')
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(user.displayName)
-            .set({
-                title: user.displayName,
-                room: userDB.room ? userDB.room : "Pre-checkin",
-                userId: user.uid,
-                markup: Date.now(),
-                status: true, 
-                guestLanguage: userDB.language,
-                hotelLogo: userDB.logo,
-                isChatting: true,
-                token: userDB.token
-            })     
-        }else{
-            return db.collection('hotels')
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(user.displayName)
-            .set({
-                title: user.displayName,
-                room: userDB.room ? userDB.room : "Pre-checkin",
-                userId: user.uid,
-                markup: Date.now(),
-                status: true, 
-                guestLanguage: userDB.language,
-                hotelLogo: userDB.logo,
-                isChatting: true
-            })     
-        }
+        return db.collection('hotels')
+        .doc(userDB.hotelId)
+        .collection('chat')
+        .doc(user.displayName)
+        .set({
+            title: user.displayName,
+            room: userDB.room ? userDB.room : "Pre-checkin",
+            userId: user.uid,
+            markup: Date.now(),
+            status: true, 
+            guestLanguage: userDB.language,
+            hotelLogo: userDB.logo,
+            isChatting: true,
+            token: userDB.token ? userDB.token : null,
+            email: userDB.email,
+            userPhone: userDB.userPhone ? userDB.userPhone : null
+        })     
       }
 
     const updateRoomnameSubmit = () => {

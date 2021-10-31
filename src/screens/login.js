@@ -404,6 +404,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
+        backgroundColor: "white"
     },
     containerText: {
         flex: 3,

@@ -508,7 +508,7 @@ const Information = ({ navigation, route }) => {
                             setShowModalRoom(true)
                             setTimeout(() => {
                                 setShowDate(false)
-                            }, 500);
+                            }, 100);
                         }} />
                     </View>
                 </ModalWeb>
