@@ -154,7 +154,7 @@ export default function App() {
   }else{
     return <View style={styles.container}>
       <Image id="flag" style={{backgroundColor: "#fff", width: "90%", height: "90%"}}
-      source={require('./assets/splash.png')} 
+      source={require('./assets/msh-splashScreen.png')} 
       />
       <View style={{flexDirection: "row", alignItems: "center"}}>
         <AntDesign name="copyright" size={10} color="black" style={{marginRight: 5}} />

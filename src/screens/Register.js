@@ -23,8 +23,8 @@ const Register = ({ navigation, route }) => {
     const [img, setImg] = useState(null)
     const [url, setUrl] = useState("")
     const [language, setLanguage] = useState(i18next.language)
-    const [gender, setGender] = useState(t("male"))
-    const [guestCategory, setGuestCategory] = useState(t("tourisme"))
+    const [gender, setGender] = useState("male")
+    const [guestCategory, setGuestCategory] = useState("tourisme")
 
     const { hotelLogo } = route.params
   
@@ -171,8 +171,8 @@ const Register = ({ navigation, route }) => {
             <View style={styles.inputContainer}>
             <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                 <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginTop: 15}}>
-                    <Button containerStyle={styles.typeButton} title={t("male")} type={gender === t("male") ? "solid" : "clear"} raised={true} onPress={() => setGender(t("male"))} />
-                    <Button containerStyle={styles.typeButton} title={t("female")} type={gender === t("female") ? "solid" : "clear"} raised={true} onPress={() => setGender(t("female"))} />
+                    <Button containerStyle={styles.typeButton} title={t("male")} type={gender === "male" ? "solid" : "clear"} raised={true} onPress={() => setGender("male")} />
+                    <Button containerStyle={styles.typeButton} title={t("female")} type={gender === "female" ? "solid" : "clear"} raised={true} onPress={() => setGender("female")} />
                 </View>
               </View>
                 <Input placeholder={t("nom") + "*"} autofocus type="text" value={name} 
@@ -185,9 +185,9 @@ const Register = ({ navigation, route }) => {
                 onChangeText={(text) => setConfirmPassword(text)}  />
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                   <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 25}}>
-                      <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === t("tourisme") ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory(t("tourisme"))}
+                      <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory("tourisme")}
                   onSubmitEditing={freeRegister} />
-                      <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === t("business") ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory(t("business"))}
+                      <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory("business")}
                   onSubmitEditing={freeRegister} />
                   </View>
                 </View>

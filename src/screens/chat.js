@@ -137,11 +137,15 @@ const Chat = ({ navigation }) => {
             markup: Date.now(),
             status: true, 
             guestLanguage: userDB.language,
-            hotelLogo: userDB.logo,
             isChatting: true,
             token: userDB.token ? userDB.token : null,
             email: userDB.email,
-            userPhone: userDB.userPhone ? userDB.userPhone : null
+            userPhone: userDB.userPhone ? userDB.userPhone : null,
+            checkoutDate: userDB.checkoutDate,
+            firstTimeConnected: Date.now(),
+            gender: userDB.gender,
+            category: userDB.guestCategory,
+            photo: userDB.photo ? userDB.photo : null
         })     
       }
 
@@ -153,7 +157,9 @@ const Chat = ({ navigation }) => {
           .update({
             status: true,
             room: userDB.room ? userDB.room : "Pre-checkin",
-            markup: Date.now()
+            markup: Date.now(),
+            checkoutDate: userDB.checkoutDate,
+            email: userDB.email
         })      
       }
 

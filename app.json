@@ -5,9 +5,9 @@
     "slug": "mySweatHotel",
     "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/msh-newLogo.png",
     "splash": {
-      "image": "./assets/splash-screen.png",
+      "image": "./assets/msh-splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -37,7 +37,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/msh-newLogo-transparent.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.dadou1885.mySweatHotel",
@@ -45,7 +45,7 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/icon.png",
+      "favicon": "./assets/msh-newLogo.png",
       "display": "standalone",
       "startUrl": "https://mysweethotel.eu/",
       "themeColor": "#8ac8ff"

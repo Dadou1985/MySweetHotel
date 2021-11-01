@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
@@ -380,10 +380,16 @@ const Login = ({ navigation }) => {
                 marginLeft: 50}} />
             </View>}
             <View style={styles.inputContainer}>
-                <Input placeholder={t('email')} autofocus type="email" value={email} 
-                onChangeText={(text) => setEmail(text)} />
-                <Input placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
-                onChangeText={(text) => setPassword(text)} />
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <MaterialIcons name="email" size={24} color="gray" />
+                    <Input placeholder={t('email')} autofocus type="email" value={email} 
+                    onChangeText={(text) => setEmail(text)} />
+                </View>
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <FontAwesome name="lock" size={24} color="gray" style={{marginLeft: 5, marginRight: 5}} />
+                    <Input placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
+                    onChangeText={(text) => setPassword(text)} />
+                </View>
             </View>
             <View style={{flex: 2}}>
                 <Button onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
