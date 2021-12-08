@@ -276,7 +276,7 @@ const Taxi = ({ navigation }) => {
                 }} containerStyle={styles.button} title={t('taxi_bouton')} />
             
             {/*showDate && handlePlatformDate()*/}
-            {showTime && handlePlatformTime()}
+            {/*showTime && handlePlatformTime()*/}
 
             <ModalWeb
                 animationType="slide"
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         flexDirection: "column",
-
+        backgroundColor: "white"
     },
     containerText: {
         flex: 2,

@@ -269,7 +269,7 @@ const Timer = ({navigation}) => {
                 }} containerStyle={styles.button} title={t('reveil_bouton')} />
             
             {/*showDate && handlePlatformDate()*/}
-            {showTime && handlePlatformTime()}
+            {/*showTime && handlePlatformTime()*/}
 
             <ModalWeb
                 animationType="slide"
@@ -375,6 +375,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "space-between",
+        backgroundColor: "white"
     },
     containerText: {
         flex: 2,

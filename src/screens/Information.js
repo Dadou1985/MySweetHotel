@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Modal, ImageBackground, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
-import { auth, db } from "../../firebase"
+import { auth, db, specialFirestoreOptions } from "../../firebase"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
@@ -134,7 +134,8 @@ const Information = ({ navigation, route }) => {
             hotelPhone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
-            newConnection: true
+            newConnection: true,
+            hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId)
             })
         return handleLoadUserDB()
     }

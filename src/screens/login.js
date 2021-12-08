@@ -362,14 +362,17 @@ const Login = ({ navigation }) => {
     const hotelLogo = urlParams.get('url')
     const hotelId = urlParams.get('hotelId')
 
+    console.log("++++++++", hotelLogo)
+
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <StatusBar style="light" />
-            {queryString ? 
+            {hotelLogo !== null ? 
             <View style={styles.containerText}>
-                <ImageBackground source={{uri: hotelLogo}} style={{
+                <Image source={{uri: hotelLogo}} style={{
                 flex: 1,
-                resizeMode:"center"}}></ImageBackground>
+                resizeMode:"cover",
+                borderRadius: 5}}></Image>
             </View> :
             <View style={styles.containerText}>
                 <Image source={require('../../img/new-logo-msh.png')} style={{

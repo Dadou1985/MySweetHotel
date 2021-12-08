@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
         flex: 2,
         alignItems: "center",
         justifyContent: "space-between",
+        backgroundColor: "white"
     },
     containerText: {
         flex: 2,

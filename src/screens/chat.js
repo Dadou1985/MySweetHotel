@@ -16,6 +16,8 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+import DefaultAvatar from "../../img/avatar-client.png"
+
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -138,14 +140,7 @@ const Chat = ({ navigation }) => {
             status: true, 
             guestLanguage: userDB.language,
             isChatting: true,
-            token: userDB.token ? userDB.token : null,
-            email: userDB.email,
-            userPhone: userDB.userPhone ? userDB.userPhone : null,
-            checkoutDate: userDB.checkoutDate,
-            firstTimeConnected: Date.now(),
-            gender: userDB.gender,
-            category: userDB.guestCategory,
-            photo: userDB.photo ? userDB.photo : null
+            token: userDB.token ? userDB.token : null
         })     
       }
 
@@ -158,8 +153,7 @@ const Chat = ({ navigation }) => {
             status: true,
             room: userDB.room ? userDB.room : "Pre-checkin",
             markup: Date.now(),
-            checkoutDate: userDB.checkoutDate,
-            email: userDB.email
+            token: userDB.token ? userDB.token : null
         })      
       }
 
@@ -197,7 +191,7 @@ const Chat = ({ navigation }) => {
         }
       }
 
-    console.log(chatRoom)
+    console.log("Chatroom-----", chatRoom)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
@@ -218,49 +212,49 @@ const Chat = ({ navigation }) => {
                                 case 'en':
                                     return <ChatMessage 
                                         author={message.author}
-                                        photo={message.photo}
+                                        photo={message.photo ? message.photo : DefaultAvatar}
                                         translation={message.translated.en}
                                         markup={message.markup}
                                     />
                                 case 'de':
                                     return <ChatMessage 
                                         author={message.author}
-                                        photo={message.photo}
+                                        photo={message.photo ? message.photo : DefaultAvatar}
                                         translation={message.translated.de}
                                         markup={message.markup}
                                 />
                                 case 'it':
                                 return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.it}
                                     markup={message.markup}
                                 />
                                 case 'pt':
                                 return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.pt}
                                     markup={message.markup}
                                 />
                                 case 'es':
                                 return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.es}
                                     markup={message.markup}
                                 />
                                 case 'fr':
                                 return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.fr}
                                     markup={message.markup}
                                 />
                                 default:
                                 return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.fr}
                                     markup={message.markup}
                                 />
@@ -270,7 +264,7 @@ const Chat = ({ navigation }) => {
                         if(userDB.localLanguage === userDB.language) {
                             return <ChatMessage 
                                     author={message.author}
-                                    photo={message.photo}
+                                    photo={message.photo ? message.photo : DefaultAvatar}
                                     text={message.text}
                                     markup={message.markup}
                                 />

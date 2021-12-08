@@ -75,7 +75,7 @@ const UserProfile = ({navigation}) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                {userDB.logo ? <ImageBackground source={{uri: userDB.logo}} style={{width: 100, height: 50}}></ImageBackground> : <Image source={require('../../img/new-mini-logo-msh.png')} style={{width: 80, height: 60, marginTop: 15}} />}
+                {userDB.logo ? <Image source={{uri: userDB.logo}} style={{width: 100, height: 70, resizeMode:"contain"}}></Image> : <Image source={require('../../img/msh-newLogo-transparent.png')} style={{width: 80, height: 60}} />}
               </View>
           ),
           headerLeft: null,
@@ -394,7 +394,8 @@ const UserProfile = ({navigation}) => {
                 isVisible={showDate} 
                 style={styles.roomBoxView}
                 transparent={true}
-                onBackdropPress={() => setShowDate(false)}>
+                onBackdropPress={() => setShowDate(false)}
+                >
                 <View style={styles.modalRoom}>
                     <Text style={{
                             width: "100%", 
@@ -605,7 +606,7 @@ if(isForegrounding) {
         <View style={{flexDirection: "column", width: "100%", padding: 10, alignItems: "center"}}>
           <Text style={{fontSize: 30, fontWeight: "bold"}}>{user.displayName}</Text>
           <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "black", borderBottomWidth: 1, paddingBottom: 10}}>
-            <Text style={{fontSize: 15, fontWeight: "bold"}}>{userDB.email}</Text>
+            <Text style={{fontSize: 15, fontWeight: "bold", color: "gray"}}>{userDB.email}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateMail(true)}>
               <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity>
@@ -665,7 +666,7 @@ if(isForegrounding) {
             <FontAwesome5 name="taxi" size={45} color={userDB.room ? "black" : "grey"} />
           </TouchableOpacity>
           </View>
-          <Button raised={true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0}} onPress={() => {
+          <Button raised={true} disabled={userDB.room ? false : true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0, borderRadius: 0}} onPress={() => {
             setConciergePanel(true)
             fadeIn()}} /> 
           {conciergePanel && <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} closePanel={handleCloseConciergePanel} navigation={navigation} />}
@@ -855,6 +856,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white"
   },
   image: {
     flex: 1,
@@ -862,7 +864,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: "row",
     justifyContent: "flex-end",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   button: {
     width: "100%",
