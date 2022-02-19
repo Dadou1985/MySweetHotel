@@ -135,8 +135,9 @@ const Information = ({ navigation, route }) => {
             language: i18next.language,
             logo: formValue.logo,
             newConnection: true,
-            hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId)
+            hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId),
             })
+
         return handleLoadUserDB()
     }
 
@@ -543,7 +544,7 @@ const Information = ({ navigation, route }) => {
                         <Button raised={true} type="clear" onPress={() => {
                             setShowModalRoom(false)
                             setShowDate(false)
-                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title="Je n'ai pas encore de chambre" />
+                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t('no_room')} />
                     </View>
                 </ModalWeb>
            

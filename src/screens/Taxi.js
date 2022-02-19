@@ -2,7 +2,7 @@ import React, { useState,useContext, useLayoutEffect } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, ImageBackground, TouchableOpacity, Modal, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
-import { auth, db } from "../../firebase"
+import { auth, db, specialFirestoreOptions } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
@@ -103,6 +103,22 @@ const Taxi = ({ navigation }) => {
           }).catch(function(error) {
             console.error(error)
           })
+    }
+
+    const handleItemToJourney = () => {
+        return db.collection("guestUsers")
+        .doc(user.uid)
+        .collection('journey')
+        .doc(userDB.journeyId)
+        .update({
+            cab: specialFirestoreOptions.arrayUnion({
+                hour: time,
+                carType: type,
+                destination: adress,
+                pax: passenger,
+                markup: Date.now()
+            })
+        })
     }
 
     const handlePlatformDate = () => {
@@ -269,6 +285,7 @@ const Taxi = ({ navigation }) => {
             </View>
             <Button onPress={() => {
                 handleSubmit()
+                handleItemToJourney()
                 showMessage({
                     message: t('taxi_message_succes'),
                     type: "success",

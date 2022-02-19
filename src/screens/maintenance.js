@@ -4,7 +4,7 @@ import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { UserContext } from '../components/userContext'
-import { auth, db, storage } from "../../firebase"
+import { auth, db, storage, specialFirestoreOptions } from "../../firebase"
 import * as ImagePicker from 'expo-image-picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
@@ -140,6 +140,21 @@ const Maintenance = ({ navigation }) => {
                 })
       } 
 
+      const handleItemToJourney = () => {
+        return db.collection("guestUsers")
+        .doc(user.uid)
+        .collection('journey')
+        .doc(userDB.journeyId)
+        .update({
+            maintenace: specialFirestoreOptions.arrayUnion({
+              reason: type,
+              details: details,
+              url: url,
+              markup: Date.now()
+            })
+        })
+    }
+
 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -167,12 +182,14 @@ const Maintenance = ({ navigation }) => {
             <Button onPress={(event) => {
               if(img !== null) {
                 handleChangePhotoUrl(event)
+                handleItemToJourney()
                 showMessage({
                   message: t('maintenance_message_succes'),
                   type: "success"
               })
               }else{
                 handleSubmit(event)
+                handleItemToJourney()
                 showMessage({
                   message: t('ajout_photo'),
                   type: "success"

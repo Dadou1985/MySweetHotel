@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons, Fontisto } from '@expo/vector-icons';
+import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
 import { auth, db, storage, functions, messaging } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
@@ -23,6 +23,7 @@ import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calenda
 import webPush from "web-push"
 import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
 import * as WebBrowser from 'expo-web-browser';
+import Filter from 'react-css-filter'
 
 
 const UserProfile = ({navigation}) => {
@@ -507,6 +508,39 @@ const pushNotificationSubscription = () => {
   } 
 }
 
+useEffect(() => {  
+  const newJourneyId = `${userDB.hotelId}${Date.now()}`
+
+  const journeySttings = async() => {
+    await db.collection("guestUsers")
+    .doc(user.uid)
+    .collection('journey')
+    .doc(newJourneyId)
+    .set({
+        markup: Date.now(),
+        date: moment(new Date()).format('LL'),
+        housekeeping: [],
+        cab: [],
+        roomChange: [],
+        maintenance: [],
+        clock: [],
+        hotelId: userDB.hotelId
+    })
+
+    return db.collection('guestUsers')
+        .doc(user.uid)
+        .update({
+          journeyId: newJourneyId
+        })
+  }
+     
+  if(userDB.journeyId === "") {
+    journeySttings()
+  }
+
+}, [userDB.journeyId])
+
+
 {/*useEffect(() => {
   (() => registerForPushNotificationsAsync())()
 }, [])
@@ -605,7 +639,7 @@ if(isForegrounding) {
         </View>
         <View style={{flexDirection: "column", width: "100%", padding: 10, alignItems: "center"}}>
           <Text style={{fontSize: 30, fontWeight: "bold"}}>{user.displayName}</Text>
-          <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "black", borderBottomWidth: 1, paddingBottom: 10}}>
+          <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "lightgray", borderBottomWidth: 1, paddingBottom: 10}}>
             <Text style={{fontSize: 15, fontWeight: "bold", color: "gray"}}>{userDB.email}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateMail(true)}>
               <Ionicons name="pencil-outline" size={20} color="black" />
@@ -630,45 +664,62 @@ if(isForegrounding) {
               <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity> : null}
           </View>
-          <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%"}}>
+          <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%", marginBottom: "5%"}}>
             <Text style={{fontSize: 14, marginBottom: 20}}>{t('checkout_prevu')} {userDB.checkoutDate}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => {setShowDate(true)}}>
               <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
-          <View style={{flexDirection: "row", justifyContent: "space-around", width: "100%", marginTop: 25, marginBottom: 40}}>
-            <TouchableOpacity style={{flexDirection: "row"}} activeOpacity={0.5} onPress={() => {
-              if(userDB.notificationStatus === "default" && !isSafari) {
-                setShowModalNotification(true)
-              }else{
-                navigation.navigate('Chat')
-                updateAdminSpeakStatus()
-                inChat()
-              }
-              }}>
-              <Entypo name="chat" size={40} color="black" /> 
-              {chatResponse.map(response => {
-                if(response.hotelResponding) {
-                  return <ChatNotification />
-                } 
-              })}                   
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Délogement')}>
-              <MaterialIcons name="room-preferences" size={45} color={userDB.room ? "black" : "grey"} />                
-          </TouchableOpacity>            
-          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Maintenance')}>
-            <Octicons name="tools" size={35} color={userDB.room ? "black" : "grey"} />
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Réveil')}>
-            <Ionicons name="alarm" size={45} color={userDB.room ? "black" : "grey"} />
-          </TouchableOpacity>           
-          <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Taxi')}>
-            <FontAwesome5 name="taxi" size={45} color={userDB.room ? "black" : "grey"} />
-          </TouchableOpacity>
-          </View>
-          <Button raised={true} disabled={userDB.room ? false : true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0, borderRadius: 0}} onPress={() => {
+          <Filter effects={{"drop-shadow": "1px 2px 3px"}} style={{width: "100%"}}>
+            <View style={{
+              flexDirection: "row", 
+              alignItems: "center",
+              justifyContent: "space-around", 
+              width: "100%", 
+              borderColor: "transparent", 
+              backgroundColor: "whitesmoke",
+              borderWidth: "1px",
+              borderRadius: 30,
+              padding: "2%",
+              marginBottom: "5%"}}>
+              <TouchableOpacity style={{flexDirection: "row"}} activeOpacity={0.5} onPress={() => {
+                if(userDB.notificationStatus === "default" && !isSafari) {
+                  setShowModalNotification(true)
+                }else{
+                  navigation.navigate('Chat')
+                  updateAdminSpeakStatus()
+                  inChat()
+                }
+                }}>
+                <Entypo name="chat" size={30} color="black" /> 
+                {chatResponse.map(response => {
+                  if(response.hotelResponding) {
+                    return <ChatNotification />
+                  } 
+                })}                   
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Délogement')}>
+                <MaterialIcons name="room-preferences" size={35} color={userDB.room ? "black" : "gray"} />                
+            </TouchableOpacity>            
+            <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Maintenance')}>
+              <Octicons name="tools" size={25} color={userDB.room ? "black" : "gray"} />
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Réveil')}>
+              <Ionicons name="alarm" size={35} color={userDB.room ? "black" : "gray"} />
+            </TouchableOpacity>           
+            <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Taxi')}>
+              <FontAwesome5 name="taxi" size={35} color={userDB.room ? "black" : "gray"} />
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.5}  onPress={() => {
+              setConciergePanel(true)
+              fadeIn()}}>
+              <MaterialCommunityIcons name="broom" size={35} color={userDB.room ? "black" : "gray"} />
+            </TouchableOpacity>
+            </View>
+          </Filter>
+         {/* <Button raised={true} disabled={userDB.room ? false : true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0, borderRadius: 0}} onPress={() => {
             setConciergePanel(true)
-            fadeIn()}} /> 
+         fadeIn()}} />*/} 
           {conciergePanel && <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} closePanel={handleCloseConciergePanel} navigation={navigation} />}
         </View>
 
@@ -856,7 +907,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white"
+    backgroundColor: "white", 
   },
   image: {
     flex: 1,

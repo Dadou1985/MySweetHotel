@@ -217,7 +217,7 @@ const Login = ({ navigation }) => {
                     ),
                 headerRight: () => (
                 <TouchableOpacity style={{marginRight: 20}} onPress={() => setshowModalAdd2Screen(true)}>
-                    {window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches ? null : <MaterialIcons name="add-to-home-screen" size={24} color="black" />}
+                    {/*window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches ? null : <MaterialIcons name="add-to-home-screen" size={24} color="black" />*/}
                 </TouchableOpacity>
                 )
                 

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Modal } from 'react-native';
-import { auth, db } from "../../firebase"
+import { auth, db, specialFirestoreOptions } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import { showMessage } from "react-native-flash-message";
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -53,6 +53,16 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
         })
     }
 
+    const handleItemToJourney = (item) => {
+        return db.collection("guestUsers")
+        .doc(user.uid)
+        .collection('journey')
+        .doc(userDB.journeyId)
+        .update({
+            housekeeping: specialFirestoreOptions.arrayUnion(item)
+        })
+    }
+
     return (
         <Animated.View style={[styles.fadingContainer, {bottom: fadeAnim}]}>
                 <View style={{flexDirection: "row", justifyContent: "flex-end", maxWidth: "90%", alignItems: "center"}}>
@@ -74,6 +84,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("towel")
                         handleDeleteItemChoosen({towel: false})
+                        handleItemToJourney("towel")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -85,6 +96,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                             <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("soap")
                         handleDeleteItemChoosen({soap: false})
+                        handleItemToJourney("soap")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -96,6 +108,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("toiletPaper")
                         handleDeleteItemChoosen({toiletPaper: false})
+                        handleItemToJourney("toiletPaper")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -107,6 +120,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("hairDryer")
                         handleDeleteItemChoosen({hairDryer: false})
+                        handleItemToJourney("hairDryer")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -120,6 +134,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("pillow")
                         handleDeleteItemChoosen({pillow: false})
+                        handleItemToJourney("pillow")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -131,6 +146,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("blanket")
                         handleDeleteItemChoosen({blanket: false})
+                        handleItemToJourney('blanket')
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -142,6 +158,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("iron")
                         handleDeleteItemChoosen({iron: false})
+                        handleItemToJourney("iron")
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -153,6 +170,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity activeOpacity={0.5} style={styles.button} onPress={() => {
                         handleClickAndWait("babyBed")
                         handleDeleteItemChoosen({babyBed: false})
+                        handleItemToJourney('babyBed')
                         showMessage({
                             message: t('conciergerie_message_succes'),
                             type: "success",
@@ -220,7 +238,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         bottom: 0, 
         padding: 20,
-        marginBottom: 50,
         width: "100%"
     },
     cncContainer: {

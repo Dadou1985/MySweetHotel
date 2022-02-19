@@ -98,8 +98,8 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                     borderRadius: 10,
                     width: "100%"
                 }}>
-                    <Text style={{marginBottom: 5}}>{translation ? translation : text}</Text>
-                    <Text style={styles.time}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={{marginBottom: 5, color: "white"}}>{translation ? translation : text}</Text>
+                    <Text style={styles.time2}>{moment(markup).startOf('hour').fromNow()}</Text>
                 </View>
             </View>
         }else{
@@ -128,8 +128,8 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 borderRadius: 10,
                 width: "100%"
                 }}>
-                    <Text style={{marginBottom: 5}}>{translation ? translation : text}</Text>
-                    <Text style={styles.time}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={{marginBottom: 5, color: "white"}}>{translation ? translation : text}</Text>
+                    <Text style={styles.time2}>{moment(markup).startOf('hour').fromNow()}</Text>
                 </View>
             </View>
         }
@@ -141,6 +141,12 @@ export default ChatMessage
 const styles = StyleSheet.create({
     time: {
         color: "black",
+        fontSize: 10,
+        flexDirection: "row",
+        justifyContent: "flex-end"
+    },
+    time2: {
+        color: "lightgray",
         fontSize: 10,
         flexDirection: "row",
         justifyContent: "flex-end"

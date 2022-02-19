@@ -21,6 +21,7 @@ import { View } from 'react-native-web';
 import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 import * as Sentry from 'sentry-expo';
+import { withTrans } from './i18n/withTrans'
 //import { messaging } from "./firebase"
 
 {/*Notifications.setNotificationHandler({
@@ -45,7 +46,7 @@ Sentry.init({
 });
 
 
-export default function App() {
+const App = () => {
   const [userDB, setUserDB] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const notificationListener = useRef();
@@ -163,6 +164,8 @@ export default function App() {
     </View> 
   }
 }
+
+export default withTrans(App)
 
 const styles = StyleSheet.create({
   container: {

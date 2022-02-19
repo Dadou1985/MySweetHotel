@@ -1,0 +1,672 @@
+{
+    "msh_general": {
+        "g_button": {
+            "b_next_step": "Weiter",
+            "b_delete": "Löschen",
+            "b_send": "Speichern",
+            "b_back": "Zurück",
+            "b_reset": "Zurücksetzen",
+            "b_update": "Jetzt aktualisieren",
+            "b_upload": "Hochladen",
+            "b_add_photo": "Foto hinzufügen",
+            "b_user": "Nutzer"
+        },
+        "g_table": {
+            "t_client": "Kunde",
+            "t_room": "Raum",
+            "t_date": "Datum",
+            "t_time": "Stunde",
+            "t_passenger": "Passagiere",
+            "t_pax": "pax",
+            "t_type_of_car": "Fahrzeug",
+            "t_destination": "Ziel",
+            "t_statut": "Status",
+            "t_from": "Anfangsraum",
+            "t_to": "Endkammer",
+            "t_reason": "Grund",
+            "t_state": "Zustand",
+            "t_details": "Details",
+            "t_photo": "Foto",
+            "t_coworker": "Mitarbeiter",
+            "t_phone": "Telefonnummer",
+            "t_category": "Kategorie",
+            "t_description": "Beschreibung",
+            "t_place": "Ort",
+            "t_origin": "Nationalität",
+            "t_connexion": "Verbindung",
+            "t_value": "Wert",
+            "t_quantity": "Menge",
+            "t_amount": "Betrag",
+            "t_rolls": "Münzrollen",
+            "t_total": "Gesamt",
+            "t_total_qty": "Gesamtmenge",
+            "t_shift": "Shift",
+            "t_username": "Name",
+            "t_administrator": "Administrator"
+        }
+
+    },
+    "msh_dashboard": {
+        "d_title": "Dashboard",
+        "d_chat_room": "Aktive Chats",
+        "d_doughnut_chart": {
+            "d_title": "Dislokationsrate",
+            "d_subtitle": "In den letzten 7 Tagen"
+        },
+        "d_pie_chart": {
+             "p_title": "Technische Trefferquote",
+             "p_subtitle": "In den letzten 7 Tagen"
+        },
+        "d_no_data": "Keine Daten",
+        "d_rate": "Rate",
+        "d_data_modal": {
+            "d_period_title": "Perioden",
+            "d_period": {
+                "p_week": "letzte 7 Tage",
+                "p_month": "letzte 4 Wochen",
+                "p_semester": "letzte 6 Monate",
+                "p_year": "letzten 4 Quartale"
+            }
+        },
+        "room_change_data": {
+            "d_noise": "Rauschen",
+            "d_temperature": "Temperatur",
+            "d_maintenance": "Technische Wartung",
+            "d_cleaning": "Reinigung",
+            "d_others": "Andere"
+        },
+        "maintenance_data": {
+         "d_paint": "Malen",
+         "d_electricity": "Strom",
+         "d_plumbery": "Sanitär",
+         "d_cleaning": "Reinigung",
+         "d_others": "Andere"
+         },
+         "d_time_period": {
+             "t_day": "Tag",
+             "t_week": "Woche",
+             "t_month": "Monat",
+             "t_trimester": "Quartal",
+             "t_semester": "Semester",
+             "t_year": "Jahr"
+         }
+     },
+    "msh_connexion": {
+        "c_email_maj": "E-Mail",
+        "c_email": "E-Mail",
+        "c_password": "Passwort",
+        "c_connexion": "Verbinden",
+        "c_warning": "Ihre Zugangsdaten sind falsch!"
+    },
+    "msh_chat": {
+        "c_chat_title": "Kundenchat",
+        "c_room": "Raum",
+        "c_room_maj": "Raum",
+        "c_input_placeholder": "Auf Kunden antworten ...",
+        "c_send_button": "Senden",
+        "c_notification": "Ihre Nachricht wurde gesendet!",
+        "c_alert": "Sie müssen zuerst eine Konversation auswählen!",
+        "c_guest_present": "Bleiben",
+        "c_guest_arrival": "Bei der Ankunft",
+        "c_chat_room": "Noch keine Gespräche"
+    },
+    "msh_messenger": {
+        "m_note_big_title": "Anweisungen",
+        "m_note_circle_tooltip": "Einem Team zuweisen",
+        "m_notification": "Ihre Notiz wurde gespeichert für",
+        "m_add_note": "Notiz hinzufügen",
+        "m_note_title": "Schreibe ein Memo",
+        "m_note_title_placeholder": "Geben Sie der Notiz einen Titel ...",
+        "m_note_body_placeholder": "Schreib eine Notiz ...",
+        "m_calendar_title": "Das heutige Datum",
+        "m_team_choice": "Teamzuordnung",
+        "m_general_team": "Allgemein",
+        "m_reception_team": "Empfang",
+        "m_housekeeping_team": "Haushalt",
+        "m_technical_team": "Technik",
+        "m_drawer_title": "Schreibe ein Memo",
+        "m_drawer_note_title": "Titel notieren",
+        "m_notif": "Ihre Notiz wurde gespeichert für die",
+        "m_calendar": "Wählen Sie ein Datum im Kalender aus"
+    },
+    "msh_memo": {
+        "m_title":"Die Wand",
+        "m_subtitle": "Für die kleinen Worte",
+        "m_create_sticker": {
+            "s_tooltip": "Schreibe ein Wort",
+            "s_title": "Einen Titel geben",
+            "s_body": "Schreibe ein Wort...",
+            "s_stick_button": "Stift",
+            "s_close_button": "Nah dran"
+        },
+        "m_post_it": {
+            "p_remove_button": "Werfen"
+        }
+    },
+    "msh_toolbar": {
+        "tooltip_conciergerie": "Portier",
+        "tooltip_cab": "Taxi",
+        "tooltip_room_change": "Umzug",
+        "tooltip_alarm": "Wecker",
+        "tooltip_technical": "Technische Wartung",
+        "tooltip_lost_found": "Objekte gefunden"
+    },
+    "msh_coolbar": {
+        "tooltip_check_list": "Checkliste",
+        "tooltip_phone_book": "Verzeichnis",
+        "tooltip_safe": "Zur Kasse",
+        "tooltip_support": "Technische Unterstützung"
+    },
+    "msh_navigation": {
+        "tooltip_admin_board": "Administrator",
+        "tooltip_feedbackbox": "Feedbackbox",
+        "tooltip_user_profile": "Benutzerprofil",
+        "tooltip_deconnection": "Verbindung trennen",
+        "deconnexion_modal_title": "Möchten Sie die Anwendung beenden?",
+        "modal_button_disconnection": "Beenden"
+    },
+    "msh_drawer": {
+        "d_menu": "Speisekarte"
+    },
+    "msh_cab": {
+        "c_title": "Taxi-Reservierung",
+        "c_table_title": "Liste der Reservierungen",
+        "c_calendar_title": "Datum und Uhrzeit der Reservierung",
+        "c_client": "Kundenname",
+        "c_room": "Raumnummer",
+        "c_pax": "Anzahl der Passagiere",
+        "c_vehicule": {
+            "v_label": "Fahrzeugtyp",
+            "v_limousin": "Berlin",
+            "v_van": "Van"
+        },
+        "c_destination": {
+            "d_label": "Zieladresse",
+            "d_placeholder": "ex: 16 avenue Paul Cézanne, 78990 Elancourt"
+        },
+        "c_notif": "Sie haben gerade eine Taxireservierungsanfrage zur Liste hinzugefügt!",
+        "c_phone_button": {
+            "b_show_modal": "Taxi buchen",
+            "b_validation": "Jetzt reservieren"
+        }
+    },
+    "msh_housekeeping": {
+        "h_title": "Portier",
+        "h_towel": "Handtuch",
+        "h_soap": "Seife",
+        "h_toilet_paper": "Toilettenpapier",
+        "h_blanket": "Abdeckung",
+        "h_pillow": "Kissen",
+        "h_hair_dryer": "Haartrockner",
+        "h_iron": "Eisen",
+        "h_baby_bed": "Kinderbett"
+    },
+    "msh_room_change": {
+        "r_title": "Kundenentfernung",
+        "r_client": "Kundenname",
+        "r_from": "Aus dem Schlafzimmer ...",
+        "r_to": "... ins Schlafzimmer",
+        "r_reason": {
+            "r_label": "Aus welchem ​​Grund?",
+            "r_paint": "Malerei",
+            "r_plumbery": "Sanitär",
+            "r_electricity": "Elektrizität",
+            "r_cleaning": "Haushalt",
+            "r_other": "Andere"
+        },
+        "r_state": {
+            "s_label": "Raumstatus",
+            "s_dirty": "Verkauf",
+            "s_clean": "Sauber"
+        },
+        "r_action": {
+            "a_attribute": "Zu Attribut",
+            "a_attribute_room": "Raumnummer zuweisen",
+            "a_check": "Zu überprüfen",
+            "a_input": "Geben Sie eine Zimmernummer ein"
+        },
+        "r_photo_state": "keine",
+        "r_details": "Weitere Details",
+        "r_phone_button": {
+            "b_show_modal": "Kunden abmelden",
+            "b_validation": "Jetzt entladen"
+        },
+        "r_notif": "Sie haben soeben eine Dislokationsanfrage zur Liste hinzugefügt!"
+    },
+    "msh_alarm": {
+        "a_title": "Wecker programmieren",
+        "a_first_tab_title": "Planen Sie einen Wecker",
+        "a_second_tab_title": "Liste der Wecker",
+        "a_calendar_title": "Datum und Uhrzeit der Programmierung",
+        "a_client": "Kundenname",
+        "a_room": "Zimmernummer",
+        "a_phone_button": {
+            "b_show_modal": "Planen Sie einen Weckruf",
+            "b_validation": "Jetzt programmieren"
+        },
+        "a_notif": "Sie haben gerade eine Weckanfrage hinzugefügt!"
+    },
+    "msh_maintenance": {
+        "m_title": "Technische Wartung",
+        "m_first_tab_title": "Ein technisches Problem melden",
+        "m_second_tab_title": "Liste der technischen Probleme",
+        "m_client": "Kundenname",
+        "m_room": "Raumnummer",
+        "m_typ": {
+            "t_label": "Art des Problems",
+            "t_paint": "Malerei",
+            "t_plumbery": "Sanitär",
+            "t_electricity": "Elektrizität",
+            "t_cleaning": "Haushalt",
+            "t_other": "Andere"
+        },
+        "m_photo_state": "keine",
+        "m_details": "Weitere Details",
+        "m_phone_button": {
+            "b_show_modal": "Ein Problem melden",
+            "b_validation": "Jetzt melden"
+        },
+        "m_notif": "Sie haben soeben einen technischen Bericht zur Liste hinzugefügt!"
+    },
+    "msh_lost_found": {
+        "l_title": "Gefundene Objekte",
+        "l_first_tab_title": "Hightech",
+        "l_second_tab_title": "Offizielle Dokumente",
+        "l_third_tab_title": "Kleidung",
+        "l_fourth_tab_title": "Andere",
+        "l_type": {
+            "t_label": "Welche Art von Objekt?",
+            "t_tech": "Hightech",
+            "t_paper": "Offizielle Dokumente",
+            "t_clothes": "Kleidung",
+            "t_other": "Andere"
+        },
+        "l_place": {
+            "p_label": "Standort?",
+            "p_hall": "Halle",
+            "p_restaurant": "Restaurant",
+            "p_parking": "Parken",
+            "p_floors": "Etagen",
+            "p_toilet": "Toiletten",
+            "p_other": "Andere"
+        },
+        "l_description": {
+            "d_label": "Beschreibung des Objekts",
+            "d_placeholder": "Beispiel: ein schwarzes iPhone"
+        },
+        "l_details": "Weitere Details",
+        "l_sheet": {
+            "s_title": "Auf ein Element des Arrays klicken",
+            "s_subtitle": "Weitere Artikeldetails werden hier angezeigt!"
+        },
+        "l_button": {
+            "b_add": "Ein Objekt hinzufügen",
+            "b_send": "Eigentümer kontaktieren",
+            "b_show_modal": "Gefundenes Objekt speichern",
+            "b_validation": "Jetzt registrieren"
+        },
+        "l_notif": "Sie haben gerade ein gefundenes Objekt in den Warenkorb gelegt!"
+    },
+    "msh_crm": {
+        "c_title": "Kundendatenbank",
+        "c_checbox_mail_label": "Mail senden",
+        "c_sheet": {
+            "s_title": "Kundenprofil",
+            "s_subtitle": "Klicken Sie auf ein Element in der Tabelle, um weitere Details zum Kunden anzuzeigen!"
+        },
+        "c_modal_title": "Kunden hinzufügen",
+        "c_gender": {
+            "g_man": "Männlich",
+            "g_female": "Frau"
+        },
+        "c_client": "Kundenname",
+        "c_email": "E-Mail des Kunden",
+        "c_phone": "Telefonnummer des Kunden",
+        "c_origin": {
+            "o_label": "Herkunft des Kunden"
+        },
+        "c_kategorie": {
+            "c_label": "Kundenkategorie",
+            "c_tourisim": "Tourismus",
+            "c_business": "Geschäft"
+        },
+        "c_chat_title": "Diskussionsthread",
+        "c_button": {
+            "b_add": "Kunde hinzufügen",
+            "b_send_mail": "Willkommens-E-Mail senden",
+            "b_contact": "Kunden kontaktieren",
+            "b_chat": "Chat anzeigen",
+            "b_cancel": "Abbrechen",
+            "b_send_em_all": "E-Mails senden",
+            "b_check_chat": "Chat prüfen"
+        },
+        "c_chat_modal_title": "",
+        "c_notif": "Sie haben gerade einen Kunden zur Datenbank hinzugefügt!",
+        "c_notif_mails": "E-Mails erfolgreich versendet!",
+        "c_guest_line": {
+            "g_title": "Aufenthaltsliste",
+            "g_services": "Dienste",
+            "g_event": "Ereignisse"
+        }
+    },
+    "msh_check_list": {
+        "c_title": "Check-Liste",
+        "c_input_placeholder": "Aufgabe hinzufügen",
+        "c_button": {
+            "b_uncheck_all": "Alle abwählen",
+            "b_morning_shift": "Morgen",
+            "b_afternoon_shift ":" Abend",
+            "b_night_shift": "Nacht",
+            "b_validate": "Validieren"
+        }
+    },
+    "msh_phone_book": {
+        "p_title": "Kontaktverzeichnis",
+        "p_first_tab_title": "Verzeichnis",
+        "p_second_tab_title": "Kontakt hinzufügen",
+        "p_contact": "Kontaktname",
+        "p_mobile": "Mobilnummer",
+        "p_local": "Feste Nummer",
+        "p_notif": "Sie haben dem Verzeichnis gerade einen neuen Namen hinzugefügt!"
+    },
+    "msh_safe": {
+        "s_title": "Kassenzettel",
+        "s_first_tab_title": "Kasse verschieben",
+        "s_second_tab_title": "Kasse",
+        "s_select": {
+            "s_label": "Shift",
+            "s_morning_shift": "Morgen",
+            "s_afternoon_shift": "Abend",
+            "s_night_shift": "Nacht"
+        },
+        "s_currency": "Euro",
+        "s_notif": "Sie haben gerade einen Kassenbericht erstellt!"
+    },
+    "msh_support": {
+        "s_title": "Technischer Support",
+        "s_input_placeholder": "Schreib eine Nachricht ..."
+    },
+    "msh_admin_board": {
+        "a_title": "Administratorschnittstelle",
+        "a_first_tab_title": "Benutzer erstellen",
+        "a_second_tab_title": "Einen Benutzer löschen",
+        "a_cowoker": "Vor- und Nachname des Mitarbeiters",
+        "a_email": "E-Mail des Mitarbeiters",
+        "a_phone_title": "Liste der Mitarbeiter",
+        "a_phone_button": {
+            "b_show_modal": "Mitwirkenden hinzufügen",
+            "b_validation": "Jetzt Konto erstellen"
+        },
+        "a_notif": "Sie haben gerade ein Mitarbeiterkonto erstellt!"
+    },
+    "msh_feedback_box": {
+        "f_title": "Feedback-Box",
+        "f_subtitle": "Für eine bessere Benutzererfahrung",
+        "f_comment": {
+            "c_improvement": "Verbesserungen",
+            "c_satisfaction": "Zufriedenheit"
+        },
+        "f_input_textarea": "Geben Sie uns Feedback zu Ihren Erfahrungen ...",
+        "f_phone_button": "Jetzt senden",
+        "f_notif": "Das MSH-Team bedankt sich für Ihren Beitrag!"
+    },
+    "msh_user_panel": {
+        "u_section": {
+            "s_email": {
+                "e_label": "Meine E-Mail-Adresse ändern",
+                "e_input_placeholder": "Geben Sie eine neue E-Mail-Adresse ein",
+                "e_notif": "Die Änderung Ihrer E-Mail-Adresse wurde erfolgreich gespeichert!"
+            },
+            "s_password": {
+                "p_label": "Mein Passwort ändern",
+                "p_input_placeholder": "Geben Sie ein neues Passwort ein",
+                "p_notif": "Ihre Passwortänderung wurde erfolgreich gespeichert!"
+            },
+            "s_visuals": {
+                "v_label": "Meine Kommunikationsvisualisierung generieren",
+                "v_sticker": {
+                    "s_title": "Erzeuge einen Sticker",
+                    "s_message": {
+                        "part_one": "Alle unsere Dienstleistungen in",
+                        "part_two": "nur eine App"
+                    }
+                },
+                "v_flyer": {
+                    "f_title": "Erzeuge einen Flyer",
+                    "f_message": {
+                        "part_one": "Kontaktieren Sie uns",
+                        "part_two": "mit einem Klick",
+                        "part_three": "Entdecken Sie unsere Webanwendung und nutzen Sie unsere Dienste",
+                        "part_four": "von einem Smartphone oder Tablet",
+                        "part_five": "Scanne den obigen QR-Code"
+                    }
+                },
+                "v_band": {
+                    "b_title": "Erzeuge ein Banner",
+                    "b_message": {
+                        "part_one": "Kontaktieren Sie uns",
+                        "part_two": "mit einem Klick",
+                        "part_three": "Entdecken Sie unsere Webanwendung und nutzen Sie unsere Dienste",
+                        "part_four": "von einem Smartphone oder Tablet",
+                        "part_five": "Scanne den obigen QR-Code"
+                    }
+                }
+            },
+            "s_logo": {
+                "l_label": "Mein Logo hochladen",
+                "l_alert": {
+                    "a_success": "Ihr Logo wurde erfolgreich hochgeladen!",
+                    "a_danger": "Sie müssen ein Bild hochladen, bevor Sie das Formular validieren!"
+                },
+                "l_button_confirmation": "Hochladen bestätigen"
+            }
+        },
+        "u_update_photo": {
+            "u_tooltip": "Ihr Profilbild hinzufügen / ändern",
+            "u_modal": {
+                "m_title": "Sind Sie sicher, dass Sie Ihr Profilbild hinzufügen oder ändern möchten?",
+                "m_button": {
+                    "b_yes": "Ja",
+                    "b_no": "Nein"
+                }
+            }
+        }
+    },
+    "msh_register_form": {
+        "r_title": "Anmeldeformular",
+        "r_button": {
+            "b_next": "Gehe zu Schritt",
+            "b_back": "Vorheriger Schritt",
+            "b_find": "Finde",
+            "b_create": "Ich kann mein Hotel nicht finden",
+            "b_search": "Mein Hotel mit der Postleitzahl finden",
+            "b_validation_form": "Mein Formular validieren",
+            "b_phone_validation": "Validieren"
+        },
+        "r_or": "oder",
+        "r_schritt": {
+            "s_first": {
+                "f_title": "Erster Schritt",
+                "f_subtitle": "Erstelle ein Administratorkonto",
+                "f_first_name": "Vorname",
+                "f_last_name": "Name",
+                "f_email": "E-Mail",
+                "f_password": "Passwort",
+                "f_confirmation": "Passwort bestätigen",
+                "f_alert": "Achtung! Bitte bestätigen Sie Ihr Passwort noch einmal!"
+            },
+            "s_second": {
+                "s_title": "Zweiter Schritt",
+                "s_subtitle": {
+                    "s_find": "Geben Sie die Postleitzahl Ihres Unternehmens ein",
+                    "s_create": "Meine Einrichtung registrieren"
+                },
+                "s_eingabe": {
+                    "i_find_placeholder": "Postleitzahl",
+                    "i_hote_name": "Hotelname",
+                    "i_region": "Region",
+                    "i_district": "Abteilung",
+                    "i_city": "Stadt",
+                    "i_code_postal": "Postleitzahl",
+                    "i_standing": "Rangliste",
+                    "i_capacity": "Anzahl der Zimmer",
+                    "i_address": "Hoteladresse",
+                    "i_phone": "Telefonnummer",
+                    "i_web": "Website"
+                },
+                "s_alert": {
+                    "a_isRegitrated": "Dieser Betrieb profitiert bereits von unseren Dienstleistungen! Für weitere Informationen wenden Sie sich bitte an den Betriebsleiter Ihres Teams.",
+                    "a_action_required": "Sie müssen eine Einrichtung auswählen oder registrieren!"
+                },
+                "s_drawer_list_hotel": "Liste der gefundenen Hotels"
+            },
+            "s_dritter": {
+                "t_title": "Dritter Schritt",               
+                "t_subtitle": "Hier Ihr Hotellogo hochladen",
+                "t_skip_button": "Das mache ich später",
+                "t_modal": {
+                    "m_title": "Sind Sie sicher, dass Sie dieses Bild auswählen möchten?",
+                    "m_button": {
+                        "b_yes": "Ja",
+                        "b_no": "Nein"
+                    }
+                },
+                "t_alert": {
+                    "a_success": "Ihr Logo wurde erfolgreich hochgeladen!",
+                    "a_danger": "Sie müssen ein Bild hochladen, bevor Sie das Formular validieren!"
+                }
+            },
+            "s_vierter": {
+                "f_title": "Zusammenfassung",
+                "f_subtitle": "Zusammenfassung",
+                "f_step_back_button": "Zu diesem Schritt zurückgehen",
+                "f_section": {
+                    "s_first": {
+                        "f_title": "Hotelbetrieb",
+                        "f_name": "Name",
+                        "f_address": "Adresse",
+                        "f_region": "Region",
+                        "f_district": "Abteilung",
+                        "f_city": "Stadt",
+                        "f_code_postal": "Postleitzahl",
+                        "f_stehend": {
+                            "s_label": "Rang",
+                            "s_suffix": "Sterne"
+                        },
+                        "f_capacity": {
+                            "c_label": "Kapazität",
+                            "c_suffix": "Räume"
+                        }
+                    },
+                    "s_second": {
+                        "s_name": "Name",
+                        "s_email": "E-Mail"
+                    }
+                },
+                "f_alert": "Sie haben nicht alle Felder des Formulars ausgefüllt!"
+            },
+            "s_final": {
+                "f_title": "Willkommen in der Smart Hospitality",
+                "f_subtitle": {
+                    "part_one": "Herzlichen Glückwunsch!",
+                    "part_two": "Du hast der Konkurrenz gerade 2 Jahre voraus!"
+                },
+                "f_message": {
+                    "first_paragraph": "Ab sofort können Sie unsere Services während der Pre-Launch-Phase bis Mai 2022 kostenlos nutzen.",
+                    "second_paragraph": "Sie erhalten eine Willkommens-E-Mail mit Ihren Zugangscodes sowie dem Link zur Bewerbung (Wenn Sie die E-Mail nicht in Ihrem Haupt-E-Mail-Tab sehen, denken Sie daran, Spam zu überprüfen).",
+                    "dritter_Absatz": {
+                        "part_one": "Visuals wurden entwickelt, um den Kunden die Kommunikation rund um die Lösung zu erleichtern.",
+                        "part_two": "Nur von einem Computer (Laptop oder Desktop) herunterladbar, Sie finden sie im Abschnitt \nProfil\n der Webanwendung, indem Sie auf das folgende Symbol klicken",
+                        "part_three ":" befindet sich in der Navigationsleiste. "
+                    },
+                    "fourth_paragraph": "Das gesamte My Sweet Hotel Team bedankt sich für Ihr Vertrauen!",
+                    "hidden_paragraph": "Komm zurück zur Seite"
+                }
+            }
+        }
+    },
+    "no_room": "Ich habe noch kein Zimmer",
+    "website_message": "Holen Sie sich alle Informationen, die Sie benötigen, von der Hotel-Website",
+    "website": "Besuchen Sie unsere Website",
+    "add2homeScreen": "Zum Startbildschirm hinzufügen",
+    "ios_add2homeScreen": "Tippen Sie auf das Symbol mit einem nach oben zeigenden Pfeil, der aus einem Feld oben im Safari-Fenster kommt, um ein Dropdown-Menü zu öffnen, und tippen Sie dann auf \"Zum Startbildschirm hinzufügen\"." ,
+    "android_add2homeScreen": "Tippen Sie auf das Menüsymbol (3 Punkte in der oberen rechten Ecke) und tippen Sie auf Zum Startbildschirm hinzufügen.",
+    "message_push_notification": "Um Ihren Austausch mit dem Hotelpersonal zu optimieren, empfehlen wir Ihnen, die Option zum Empfangen von Benachrichtigungen im angezeigten Popup zu aktivieren.",
+    "chat_push_notification": "Für eine bessere Kommunikation",
+    "click": "hier klicken",
+    "recommencer": "von vorne beginnen",
+    "timer_num_tel": "Telefonnummer",
+    "business": "Geschäft",
+    "tourisme": "Tourismus",
+    "female": "Frau",
+    "male": "Herr",
+    "notif_message": "Du hast eine neue Nachricht!",
+    "conf_mdp_error": "Hoppla, sieht so aus, als hätten Sie Ihr Passwort nicht richtig bestätigt!",
+    "inscription_titre": "Registrierung",
+    "register_error": "Hoppla, sieht so aus, als hätten Sie nicht alle Formularfelder ausgefüllt!",
+    "login_error": "Hoppla, sieht so aus, als hätten Sie die falschen Zugangsdaten eingegeben!",
+    "taxi_message_succes": "Ihre Taxireservierungsanfrage wurde an die Rezeption gesendet!",
+    "maintenance_bouton": "Jetzt melden",
+    "maintenance": "Technische Wartung",
+    "chbre_num": "Zimmer Nr",
+    "deconnexion_information": "Trennen",
+    "deconnexion": "Sie haben sich gerade abgemeldet!",
+    "taxi_bouton": "Jetzt buchen",
+    "taxi_adresse_destination": "Zieladresse",
+    "passager": "Anzahl der Passagiere",
+    "van": "van",
+    "berline": "Limousine",
+    "taxi_type": "Fahrzeugtyp",
+    "taxi_titre": "Buchen Sie ein Taxi",
+    "reveil_message_succes": "Ihr Weckwunsch wurde an die Rezeption gesendet!",
+    "reveil_bouton": "Jetzt planen",
+    "heure": "Wählen Sie eine Zeit",
+    "jour": "Wählen Sie einen Tag aus",
+    "reveil_titre": "Plane einen Wecker",
+    "maintenance_message_succes": "Ihr Bericht wurde an die Wartungsabteilung gesendet!",
+    "maintenance_type": "Problemtyp",
+    "delogement_message_succes": "Ihre Umzugsanfrage wurde an die Rezeption gesendet!",
+    "photo_selectionnee_message": "Ihr Foto wurde ausgewählt!",
+    "delogement_bouton": "Jetzt fragen",
+    "ajout_photo": "Foto hinzufügen",
+    "details": "Weitere Details",
+    "motif_delogement": "Grund der Anfrage",
+    "delogement": "Umzug",
+    "envoi_message": "Nachricht senden",
+    "reception": "Empfangen",
+    "conciergerie_message_fin": "Kontaktieren Sie die Rezeption für weitere Dienstleistungen",
+    "conciergerie_message_succes": "Ihre Anfrage wurde an die Rezeption gesendet!",
+    "conciergerie_conditions_para1": "Vorbehaltlich der Verfügbarkeit und Verfügbarkeit der von Ihrem Gastbetrieb angebotenen Produkte. Für weitere Informationen wenden Sie sich an Ihr Hotelpersonal.",
+    "conciergerie_conditions_titre": "Dienstleistung unter Bedingungen",
+    "besoins": "Drücken Sie Ihre Bedürfnisse mit einem Klick",
+    "conciergerie": "Hausmeister",
+    "message_actualisation_photo": "Ihr Profilbild wurde erfolgreich aktualisiert!",
+    "message_confirmation_actualisation_photo": "Sind Sie sicher, dass Sie Ihr Profilfoto ändern möchten?",
+    "message_actualisation_checkout": "Ihr Checkout-Datum wurde erfolgreich aktualisiert!",
+    "confirmer": "Bestätigen",
+    "message_confirmation_actualisation_checkout": "Sind Sie sicher, dass Sie das Datum Ihres Check-outs ändern möchten?",
+    "message_actualisation_chbre": "Ihre Zimmernummer wurde erfolgreich aktualisiert!",
+    "actualisation_chbre": "Aktualisiere deinen Raum",
+    "message_actualisation_email": "Ihre E-Mail wurde erfolgreich aktualisiert!",
+    "actualiser": "Jetzt aktualisieren",
+    "actualisation_email": "Aktualisiere deine E-Mail",
+    "checkout_prevu": "Kasse geplant am",
+    "occupation_chbre": "Sie bewohnen den Raum",
+    "non": "Auf Homepage bleiben",
+    "oui": "Zugriff auf das Site-Portal",
+    "accueil": "Zur Startseite gehen",
+    "validation": "Validieren",
+    "entre_num_chbre": "Geben Sie Ihre Zimmernummer ein",
+    "num_chbre": "Zimmernummer",
+    "date_checkout": "Datum des Aufenthaltsendes",
+    "ajout_photo_profil": "Profilfoto hinzufügen",
+    "confirmation_mdp": "Passwortbestätigung",
+    "prenom": "Vorname",
+    "nom": "Name",
+    "selection_langue": "Sprache wählen",
+    "success_connection": "Sie sind verbunden!",
+    "creation_compte": "Konto erstellen",
+    "mot_de_passe": "Passwort",
+    "email": "Email",
+    "connection": "Verbindung"
+}

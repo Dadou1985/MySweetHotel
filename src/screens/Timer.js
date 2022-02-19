@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, ImageBa
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { UserContext } from '../components/userContext'
-import { auth, db } from "../../firebase"
+import { auth, db, specialFirestoreOptions } from "../../firebase"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import 'moment/locale/fr';
@@ -98,6 +98,19 @@ const Timer = ({navigation}) => {
           }).catch(function(error) {
             console.error(error)
           })
+    }
+
+    const handleItemToJourney = () => {
+        return db.collection("guestUsers")
+        .doc(user.uid)
+        .collection('journey')
+        .doc(userDB.journeyId)
+        .update({
+            clock: specialFirestoreOptions.arrayUnion({
+                hour: time,
+                markup: Date.now()
+            })
+        })
     }
 
     const handlePlatformDate = () => {
@@ -262,6 +275,7 @@ const Timer = ({navigation}) => {
            
             <Button onPress={() => {
                 handleSubmit()
+                handleItemToJourney()
                 showMessage({
                     message: t('reveil_message_succes'),
                     type: "success",

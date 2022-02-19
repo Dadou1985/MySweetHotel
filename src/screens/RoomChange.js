@@ -4,12 +4,13 @@ import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { UserContext } from '../components/userContext'
-import { auth, db, storage } from "../../firebase"
+import { auth, db, storage, specialFirestoreOptions } from "../../firebase"
 import * as ImagePicker from 'expo-image-picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
+import Filter from 'react-css-filter'
 
 const RoomChange = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -146,6 +147,21 @@ const RoomChange = ({ navigation }) => {
               })
     } 
 
+    const handleItemToJourney = () => {
+      return db.collection("guestUsers")
+      .doc(user.uid)
+      .collection('journey')
+      .doc(userDB.journeyId)
+      .update({
+          roomChange: specialFirestoreOptions.arrayUnion({
+            reason: type,
+            details: details,
+            url: url,
+            markup: Date.now()
+          })
+      })
+  }
+
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
              <StatusBar style="light" />
@@ -170,12 +186,14 @@ const RoomChange = ({ navigation }) => {
             <Button onPress={(event) => {
               if(img !== null) {
                   handleChangePhotoUrl(event)
+                  handleItemToJourney()
                   showMessage({
                     message: t('delogement_message_succes'),
                     type: "success"
                 })
               }else{
                 handleSubmit(event)
+                handleItemToJourney()
                 showMessage({
                   message: t('delogement_message_succes'),
                   type: "success"
