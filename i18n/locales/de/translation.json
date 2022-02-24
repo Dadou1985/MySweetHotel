@@ -208,11 +208,11 @@
         "r_to": "... ins Schlafzimmer",
         "r_reason": {
             "r_label": "Aus welchem ​​Grund?",
-            "r_paint": "Malerei",
-            "r_plumbery": "Sanitär",
-            "r_electricity": "Elektrizität",
-            "r_cleaning": "Haushalt",
-            "r_other": "Andere"
+            "r_noise": "Rauschen",
+            "r_temperature": "Temperatur",
+            "r_maintenance": "Technischer Vorfall",
+            "r_cleaning": "Reinigung",
+            "r_others": "Andere"
         },
         "r_state": {
             "s_label": "Raumstatus",
@@ -252,7 +252,7 @@
         "m_second_tab_title": "Liste der technischen Probleme",
         "m_client": "Kundenname",
         "m_room": "Raumnummer",
-        "m_typ": {
+        "m_type": {
             "t_label": "Art des Problems",
             "t_paint": "Malerei",
             "t_plumbery": "Sanitär",
@@ -585,6 +585,7 @@
             }
         }
     },
+    "enter_room_number": "Klicken Sie hier, um meine Zimmernummer einzugeben",
     "no_room": "Ich habe noch kein Zimmer",
     "website_message": "Holen Sie sich alle Informationen, die Sie benötigen, von der Hotel-Website",
     "website": "Besuchen Sie unsere Website",
@@ -668,5 +669,6 @@
     "creation_compte": "Konto erstellen",
     "mot_de_passe": "Passwort",
     "email": "Email",
-    "connection": "Verbindung"
+    "connection": "Verbindung",
+    "choose_reason" : "Wählen Sie ein Muster"
 }

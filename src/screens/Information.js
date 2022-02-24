@@ -15,7 +15,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { DatePickerModal } from 'react-native-paper-dates';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
-
+import { fr, pt, en, de, es, it } from '../locales/config'
 
 const Information = ({ navigation, route }) => {
     const { hotelLogo, currentHotelId } = route.params
@@ -41,15 +41,27 @@ const Information = ({ navigation, route }) => {
 
     const { t } = useTranslation()
 
-    LocaleConfig.locales['fr'] = {
-        monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-        monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-        dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-        dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
-        today: 'Aujourd\'hui'
-      };
-
-    LocaleConfig.defaultLocale = 'fr';
+    const locales = () => {
+        switch(i18next.language) {
+            case 'fr':
+                return fr
+            case 'en':
+                return en
+            case 'es':
+                return es
+            case 'de':
+                return de
+            case 'it':
+                return it
+            case 'pt':
+                return pt
+            default:
+                return fr
+        }
+    }
+    
+      LocaleConfig.locales[i18next.language] = locales()
+      LocaleConfig.defaultLocale = userDB.language;
 
     useLayoutEffect(() => {
         navigation.setOptions({

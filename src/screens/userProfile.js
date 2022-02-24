@@ -24,7 +24,7 @@ import webPush from "web-push"
 import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
 import * as WebBrowser from 'expo-web-browser';
 import Filter from 'react-css-filter'
-
+import { fr, pt, en, de, es, it } from '../locales/config'
 
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
@@ -60,14 +60,27 @@ const UserProfile = ({navigation}) => {
                     navigator.userAgent.indexOf('CriOS') == -1 &&
                     navigator.userAgent.indexOf('FxiOS') == -1;
 
-  LocaleConfig.locales[i18next.language] = {
-    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
-    today: 'Aujourd\'hui'
-  };
-  LocaleConfig.defaultLocale = 'fr';
+  const locales = () => {
+    switch(i18next.language) {
+        case 'fr':
+            return fr
+        case 'en':
+            return en
+        case 'es':
+            return es
+        case 'de':
+            return de
+        case 'it':
+            return it
+        case 'pt':
+            return pt
+        default:
+            return fr
+    }
+}
+
+  LocaleConfig.locales[i18next.language] = locales()
+  LocaleConfig.defaultLocale = userDB.language;
 
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -410,7 +423,7 @@ const UserProfile = ({navigation}) => {
                             }}>{t('date_checkout')}</Text>
                     <Calendar
                         minDate={new Date()} 
-                        theme={{arrowColor: "blue"}}
+                        renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
                         pastScrollRange={0}
                         onDayPress={(day) => {
                           setDate(day)
@@ -659,7 +672,7 @@ if(isForegrounding) {
             </Text>
           </TouchableOpacity> : <></>}
           <View style={{flexDirection: "row", justifyContent: userDB.room ? "space-around" : "center", mawWidth: "90%"}}>
-          {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 15, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center"}}>Cliquez ici pour entrer mon numéro de Chambre</Text></TouchableOpacity>}
+          {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 12, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center"}}>{t('enter_room_number')}</Text></TouchableOpacity>}
             {userDB.room ? <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
               <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity> : null}

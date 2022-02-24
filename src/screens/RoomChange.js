@@ -11,15 +11,18 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import Filter from 'react-css-filter'
+import ModalWeb from 'modal-enhanced-react-native-web';
 
 const RoomChange = ({ navigation }) => {
     const [type, setType] = useState("")
+    const [typeClone, setTypeClone] = useState("")
     const [details, setDetails] = useState("")
     const [user, setUser] = useState(auth.currentUser)
     const {userDB, setUserDB} = useContext(UserContext)
     const [img, setImg] = useState(null)
     const [url, setUrl] = useState("")
-
+    const [showModal, setShowModal] = useState(false)
+    
     const { t } = useTranslation()
 
     useLayoutEffect(() => {
@@ -104,6 +107,7 @@ const RoomChange = ({ navigation }) => {
                         toRoom: "",
                         state: "",
                         reason: type,
+                        resonClone: typeClone, 
                         details: details,
                         markup: Date.now(),
                         img: url,
@@ -172,8 +176,10 @@ const RoomChange = ({ navigation }) => {
                 </ImageBackground>
             </View>
             <View style={styles.inputContainer}>
-                <Input placeholder={t('motif_delogement')} type="text" value={type} 
-                onChangeText={(text) => setType(text)} />
+                <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
+                  <Input placeholder={type !== "" ? type : t('motif_delogement')} type="text" value={type} 
+                  onChangeText={(text) => setType(text)} />
+                </TouchableOpacity>
                 <Input placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
@@ -200,6 +206,64 @@ const RoomChange = ({ navigation }) => {
                 })
               }
             }} containerStyle={styles.button} title={t('delogement_bouton')} />
+
+          <ModalWeb 
+          animationType="slide"
+          transparent={true}
+          isVisible={showModal} 
+          style={styles.roomBoxView}>
+              <View style={styles.modalRoom}>
+                  <Text style={{
+                      width: "100%", 
+                      fontSize: 20,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      paddingTop: 10,
+                      backgroundColor: "lightgrey",
+                      borderTopLeftRadius: 15,
+                      borderTopRightRadius: 15
+                      }}>{t('choose_reason')}</Text>
+                      <View style={{width: "100%", alignItems: "center"}}>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_room_change.r_reason.r_noise'))
+                          setTypeClone("noise")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_noise')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_room_change.r_reason.r_temperature'))
+                          setTypeClone("temperature")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_temperature')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_room_change.r_reason.r_maintenance'))
+                          setTypeClone("maintenance")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_maintenance')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_room_change.r_reason.r_cleaning'))
+                          setTypeClone("cleaning")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_cleaning')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_room_change.r_reason.r_others'))
+                          setTypeClone("others")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_others')}</Text>
+                        </TouchableOpacity>
+                      </View>
+              </View>
+          </ModalWeb>
+
         </KeyboardAvoidingView>
     )
 }
@@ -244,6 +308,25 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
+    },
+    roomBoxView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: "90%"
+    },
+    modalRoom: {
+      flexDirection: "column",
+        backgroundColor: 'white',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        borderRadius: 15,
+        paddingBottom: 15,
+        width: 350
     }
 })
 

@@ -10,14 +10,17 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign, Octicons } from '@expo/vector-icons';
+import ModalWeb from 'modal-enhanced-react-native-web';
 
 const Maintenance = ({ navigation }) => {
     const [type, setType] = useState("")
+    const [typeClone, setTypeClone] = useState("")
     const [details, setDetails] = useState("")
     const [user, setUser] = useState(auth.currentUser)
     const {userDB, setUserDB} = useContext(UserContext)
     const [img, setImg] = useState(null)
     const [url, setUrl] = useState("")
+    const [showModal, setShowModal] = useState(false)
 
     const { t } = useTranslation()
 
@@ -129,6 +132,7 @@ const Maintenance = ({ navigation }) => {
                     client: user.displayName,
                     room: userDB.room,
                     type: type,
+                    typeClone: typeClone,
                     details: details,
                     markup: Date.now(),
                     img: url,
@@ -168,8 +172,10 @@ const Maintenance = ({ navigation }) => {
               </ImageBackground>
             </View>
             <View style={styles.inputContainer}>
-                <Input placeholder={t('maintenance_type')} type="text" value={type} 
-                onChangeText={(text) => setType(text)} />
+                <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
+                  <Input placeholder={type !== "" ? type : t('maintenance_type')} type="text" value={type} 
+                  onChangeText={(text) => setType(text)} />
+                </TouchableOpacity>
                 <Input placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
@@ -196,6 +202,64 @@ const Maintenance = ({ navigation }) => {
                 })
               }
             }} containerStyle={styles.button} title={t('maintenance_bouton')} />
+
+<ModalWeb 
+          animationType="slide"
+          transparent={true}
+          isVisible={showModal} 
+          style={styles.roomBoxView}>
+              <View style={styles.modalRoom}>
+                  <Text style={{
+                      width: "100%", 
+                      fontSize: 20,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      paddingTop: 10,
+                      backgroundColor: "lightgrey",
+                      borderTopLeftRadius: 15,
+                      borderTopRightRadius: 15
+                      }}>{t('choose_reason')}</Text>
+                      <View style={{width: "100%", alignItems: "center"}}>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_maintenance.m_type.t_paint'))
+                          setTypeClone("paint")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_paint')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_maintenance.m_type.t_plumbery'))
+                          setTypeClone("plumbery")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_plumbery')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_maintenance.m_type.t_electricity'))
+                          setTypeClone("electricity")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_electricity')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_maintenance.m_type.t_cleaning'))
+                          setTypeClone("cleaning")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_cleaning')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: "100%"}} onPress={() => {
+                          setType(t('msh_maintenance.m_type.t_other'))
+                          setTypeClone("others")
+                          setShowModal(false)
+                        }}>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_other')}</Text>
+                        </TouchableOpacity>
+                      </View>
+              </View>
+          </ModalWeb>
+
         </KeyboardAvoidingView>
     )
 }
@@ -239,5 +303,24 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         marginRight: 5
+    },
+    roomBoxView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: "90%"
+    },
+    modalRoom: {
+      flexDirection: "column",
+        backgroundColor: 'white',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        borderRadius: 15,
+        paddingBottom: 15,
+        width: 350
     }
 })

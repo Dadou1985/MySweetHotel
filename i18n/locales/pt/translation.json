@@ -207,12 +207,12 @@
         "r_from": "Do quarto ...",
         "r_to": "... para o quarto",
         "r_reason": {
-            "r_label": "Por que motivo?",
-            "r_paint": "Pintura",
-            "r_plumbery": "Encanamento",
-            "r_electricity": "Eletricidade",
-            "r_cleaning": "Household",
-            "r_other": "Outros"
+            "r_label": "Por qual motivo?",
+            "r_noise": "Ruído",
+            "r_temperature": "Temperatura",
+            "r_maintenance": "Incidente técnico",
+            "r_cleaning": "Limpeza",
+            "r_others": "Outros"
         },
         "r_state": {
             "s_label": "Status da sala",
@@ -585,9 +585,7 @@
             }
         }
     },
-    
-    
-    
+    "enter_room_number": "Clique aqui para inserir o número do meu quarto",
     "no_room": "Ainda não tenho um quarto",
     "website_message": "Obtenha todas as informações que você precisa no site do hotel",
     "website": "Visite nosso site",
@@ -671,5 +669,6 @@
     "creation_compte": "Criar uma conta",
     "mot_de_passe": "Senha",
     "email": "E-mail",
-    "connection": "Conexão"
+    "connection": "Conexão",
+    "choose_reason" : "Escolha um padrão"
 }

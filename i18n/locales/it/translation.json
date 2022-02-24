@@ -206,13 +206,13 @@
         "r_client": "Nome cliente",
         "r_from": "Dalla camera da letto...",
         "r_to": "... in camera da letto",
-        "r_ragione": {
+        "r_reason": {
             "r_label": "Per quale motivo?",
-            "r_paint": "Pittura",
-            "r_plumbery": "Idraulica",
-            "r_electricity": "Elettricità",
-            "r_cleaning": "Famiglia",
-            "r_other": "Altri"
+            "r_noise": "Rumore",
+            "r_temperature": "Temperatura",
+            "r_maintenance": "Incidente tecnico",
+            "r_cleaning": "Pulizia",
+            "r_others": "Altri"
         },
         "r_state": {
             "s_label": "Stato camera",
@@ -584,6 +584,7 @@
             }
         }
     },
+    "enter_room_number": "Clicca qui per inserire il mio numero di camera",
     "no_room": "Non ho ancora una stanza",
     "website_message": "Ricevi tutte le informazioni di cui hai bisogno dal sito web dell'hotel",
     "website": "Visita il nostro sito web",
@@ -667,5 +668,6 @@
     "creation_compte": "Crea un account",
     "mot_de_passe": "Password",
     "email": "E-mail",
-    "connection": "Connessione"
+    "connection": "Connessione",
+    "choose_reason" : "Scegli un modello"
 }

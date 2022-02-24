@@ -588,6 +588,7 @@
             }
         }
     },
+    "enter_room_number": "Cliquez ici pour entrer mon numéro de Chambre",
     "no_room": "Je n'ai pas encore de chambre",
     "website_message": "Obtenez toutes les informations dont vous avez besoin sur le site web de l'hôtel",
     "website": "Visiter notre site web",
@@ -671,5 +672,6 @@
     "creation_compte": "Créer un compte",
     "mot_de_passe": "Mot de passe",
     "email": "E-mail",
-    "connection": "Connexion"
+    "connection": "Connexion",
+    "choose_reason" : "Choisir un motif"
 }

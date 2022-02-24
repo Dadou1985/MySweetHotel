@@ -13,6 +13,7 @@ import i18next from 'i18next'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
+import { fr, pt, en, de, es, it } from '../locales/config'
 
 const Timer = ({navigation}) => {
     const [date, setDate] = useState(new Date())
@@ -29,14 +30,27 @@ const Timer = ({navigation}) => {
 
     const { t } = useTranslation()
 
-    LocaleConfig.locales[i18next.language] = {
-        monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-        monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-        dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-        dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
-        today: 'Aujourd\'hui'
-      };
-      LocaleConfig.defaultLocale = 'fr';
+    const locales = () => {
+        switch(i18next.language) {
+            case 'fr':
+                return fr
+            case 'en':
+                return en
+            case 'es':
+                return es
+            case 'de':
+                return de
+            case 'it':
+                return it
+            case 'pt':
+                return pt
+            default:
+                return fr
+        }
+    }
+    
+      LocaleConfig.locales[i18next.language] = locales()
+      LocaleConfig.defaultLocale = userDB.language;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -368,7 +382,7 @@ const Timer = ({navigation}) => {
                             }}>{t("jour")}</Text>
                             <Calendar
                             minDate={new Date()} 
-                            theme={{arrowColor: "blue"}}
+                            renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
                             pastScrollRange={0}
                             onDayPress={(day) => {
                                 setDate(day)

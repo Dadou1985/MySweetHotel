@@ -25,6 +25,7 @@ const Register = ({ navigation, route }) => {
     const [language, setLanguage] = useState(i18next.language)
     const [gender, setGender] = useState("male")
     const [guestCategory, setGuestCategory] = useState("tourisme")
+    const [guestCategoryClone, setGuestCategoryClone] = useState(null)
 
     const { hotelLogo } = route.params
   
@@ -62,6 +63,7 @@ const Register = ({ navigation, route }) => {
           checkoutDate: "",
           gender: gender,
           guestCategory: guestCategory,
+          guestCategoryClone: guestCategoryClone !== null ? guestCategoryClone : t("tourisme"),
           notificationStatus: "default",
           photo: photo ? photo : null
         })  
@@ -185,9 +187,15 @@ const Register = ({ navigation, route }) => {
                 onChangeText={(text) => setConfirmPassword(text)}  />
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                   <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 25}}>
-                      <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory("tourisme")}
+                      <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => {
+                        setGuestCategory("tourisme")
+                        setGuestCategoryClone(t("tourisme"))
+                      }}
                   onSubmitEditing={freeRegister} />
-                      <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => setGuestCategory("business")}
+                      <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => {
+                        setGuestCategory("business")
+                        setGuestCategoryClone(t("business"))
+                      }}
                   onSubmitEditing={freeRegister} />
                   </View>
                 </View>
