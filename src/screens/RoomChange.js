@@ -94,6 +94,7 @@ const RoomChange = ({ navigation }) => {
               .then(url => {
                 const uploadTask = () => {
                     setType('')
+                    setTypeClone('')
                     setDetails('')
 
                    return db.collection("hotels")
@@ -127,6 +128,7 @@ const RoomChange = ({ navigation }) => {
     const handleSubmit = (event) => {
       event.preventDefault()
       setType('')
+      setTypeClone('')
       setDetails('')
       return db.collection("hotels")
               .doc(userDB.hotelId)
@@ -139,6 +141,7 @@ const RoomChange = ({ navigation }) => {
                   toRoom: "",
                   state: "",
                   reason: type,
+                  resonClone: typeClone, 
                   details: details,
                   markup: Date.now(),
                   img: url,
@@ -160,7 +163,6 @@ const RoomChange = ({ navigation }) => {
           roomChange: specialFirestoreOptions.arrayUnion({
             reason: type,
             details: details,
-            url: url,
             markup: Date.now()
           })
       })
@@ -177,8 +179,8 @@ const RoomChange = ({ navigation }) => {
             </View>
             <View style={styles.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input placeholder={type !== "" ? type : t('motif_delogement')} type="text" value={type} 
-                  onChangeText={(text) => setType(text)} />
+                  <Input placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} type="text" value={typeClone} 
+                  onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
                 <Input placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
@@ -226,36 +228,36 @@ const RoomChange = ({ navigation }) => {
                       }}>{t('choose_reason')}</Text>
                       <View style={{width: "100%", alignItems: "center"}}>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_room_change.r_reason.r_noise'))
-                          setTypeClone("noise")
+                          setTypeClone(t('msh_room_change.r_reason.r_noise'))
+                          setType("noise")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_noise')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_room_change.r_reason.r_temperature'))
-                          setTypeClone("temperature")
+                          setTypeClone(t('msh_room_change.r_reason.r_temperature'))
+                          setType("temperature")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_temperature')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_room_change.r_reason.r_maintenance'))
-                          setTypeClone("maintenance")
+                          setTypeClone(t('msh_room_change.r_reason.r_maintenance'))
+                          setType("maintenance")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_maintenance')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_room_change.r_reason.r_cleaning'))
-                          setTypeClone("cleaning")
+                          setTypeClone(t('msh_room_change.r_reason.r_cleaning'))
+                          setType("cleaning")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_cleaning')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_room_change.r_reason.r_others'))
-                          setTypeClone("others")
+                          setTypeClone(t('msh_room_change.r_reason.r_others'))
+                          setType("others")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_others')}</Text>

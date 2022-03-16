@@ -210,7 +210,7 @@ const UserProfile = ({navigation}) => {
       })
   }
 
-    const handleSubmit = async() => {
+    const handleChangeRoom = async() => {
       await db.collection('guestUsers')
         .doc(user.uid)
         .update({
@@ -227,6 +227,16 @@ const UserProfile = ({navigation}) => {
         setRoom(null)
         setUpdateRoom(false)
       })
+    }
+
+    const handleChangeRoomChat = () => {
+      return db.collection('hotels')
+          .doc(userDB.hotelId)
+          .collection('chat')
+          .doc(userDB.username)
+          .update({
+            room: room 
+        })  
     }
 
     const handleChangePhotoUrl = async() => {
@@ -269,6 +279,16 @@ const UserProfile = ({navigation}) => {
       return handleLoadUserDB()     
     }
 
+    const handleChangeCheckoutDateChat = () => {
+      return db.collection('hotels')
+          .doc(userDB.hotelId)
+          .collection('chat')
+          .doc(userDB.username)
+          .update({
+            checkoutDate: moment(date.timestamp).format('L') 
+        })  
+    }
+
     const fadeAnim = useRef(new Animated.Value(-500)).current;
 
     const fadeIn = () => {
@@ -308,21 +328,25 @@ const UserProfile = ({navigation}) => {
    },[])
 
    const updateAdminSpeakStatus = () => {
-    return db.collection('hotels')
+    if(chatResponse.length > 0) {
+      return db.collection('hotels')
           .doc(userDB.hotelId)
           .collection('chat')
           .doc(user.displayName)
           .update({
               hotelResponding: false,
-          })      
+          }) 
+    }     
   }
 
   const inChat = () => {
-    return db.collection("hotels")
+    if(chatResponse.length > 0) {
+      return db.collection("hotels")
           .doc(userDB.hotelId)
           .collection('chat')
           .doc(user.displayName)
-          .update({isChatting: true})  
+          .update({isChatting: true}) 
+    } 
   }
 
   const handleNavigate = (feature) => {
@@ -493,7 +517,7 @@ const pushNotificationSubscription = () => {
                 notificationStatus: "granted"
               })
               .then(handleLoadUserDB())
-              .then(navigation.navigate('Chat'))
+              .then(() => navigation.navigate('Chat'))
           }).catch(function(e) {
             if (Notification.permission === 'denied') {
               console.warn('Permission for notifications was denied');
@@ -514,7 +538,7 @@ const pushNotificationSubscription = () => {
         .doc(user.uid)
         .update({notificationStatus: "denied"})
         .then(handleLoadUserDB())
-        .then(navigation.navigate('Chat'))
+        .then(() => navigation.navigate('Chat'))
       }
     });
         
@@ -524,7 +548,7 @@ const pushNotificationSubscription = () => {
 useEffect(() => {  
   const newJourneyId = `${userDB.hotelId}${Date.now()}`
 
-  const journeySttings = async() => {
+  const journeySettings = async() => {
     await db.collection("guestUsers")
     .doc(user.uid)
     .collection('journey')
@@ -548,7 +572,10 @@ useEffect(() => {
   }
      
   if(userDB.journeyId === "") {
-    journeySttings()
+    journeySettings()
+    .then(() => {
+      return handleLoadUserDB()
+    })
   }
 
 }, [userDB.journeyId])
@@ -786,7 +813,10 @@ if(isForegrounding) {
               <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center"}} 
               onChangeText={(text) => setRoom(text)} />
             </View>
-            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleSubmit} />
+            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
+              handleChangeRoom()
+              handleChangeRoomChat()
+              }} />
           </View>
         </ModalWeb>
 
@@ -837,6 +867,7 @@ if(isForegrounding) {
                   }}>{t('message_confirmation_actualisation_checkout')}</Text>
             <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
               handleCheckoutDateChange()
+              handleChangeCheckoutDateChat()
               setUpdateCheckout(false)
             }} />
           </View>

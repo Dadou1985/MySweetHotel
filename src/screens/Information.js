@@ -70,7 +70,7 @@ const Information = ({ navigation, route }) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    {recap && <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground>}
+                    {hotelLogo ? <ImageBackground source={{uri: hotelLogo}} style={{width: 100, height: 50}}></ImageBackground> : <ImageBackground source={require('../../img/msh-newLogo-transparent.png')} style={{width: 80, height: 60}}></ImageBackground>}
                 </View>
             ),
             headerLeft: null
@@ -121,6 +121,16 @@ const Information = ({ navigation, route }) => {
             return navigation.replace('My Sweet Hotel')
         })
     }
+
+    const updateChatRoomname = () => {
+        return db.collection('hotels')
+          .doc(formValue.hotelId)
+          .collection('chat')
+          .doc(user.displayName)
+          .update({
+            checkoutDate: moment(date.timestamp).format('L') 
+        })      
+      }
 
     const handleSubmit = async () => {
         await db.collection('guestUsers')
@@ -361,7 +371,7 @@ const Information = ({ navigation, route }) => {
         return <Text>No access to camera</Text>;
       }*/}
 
-    console.log(date)
+    console.log(user.displayName)
 
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -369,9 +379,9 @@ const Information = ({ navigation, route }) => {
                     <View style={styles.containerText}>
                         {recap && <>
                         <View style={styles.containerImg}>
-                            <ImageBackground source={ require('../../img/certified.png') } style={{width: 250, height: 300}}>
-                            </ImageBackground>
-                            {currentRoom && <Text style={{fontSize: 18, marginBottom: 10}}>{t("occupation_chbre")} {currentRoom}</Text>}
+                            {hotelLogo ? <ImageBackground source={{uri: hotelLogo}} style={{width: 250, height: 300, borderRadius: 5}}></ImageBackground> : 
+                            <ImageBackground source={require('../../img/new-logo-msh.png')} style={{width: 400, height: 200, marginLeft: 100}}></ImageBackground>}
+                            {currentRoom && <Text style={{fontSize: 18, marginBottom: 10, marginTop: 20}}>{t("occupation_chbre")} {currentRoom}</Text>}
                             <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date.timestamp).format('L')}</Text>
                         </View>
                         <View style={styles.buttonView}>
@@ -409,6 +419,7 @@ const Information = ({ navigation, route }) => {
                              icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
                              onPress={() => {
                                 handleSubmit()
+                                updateChatRoomname()
                             }} containerStyle={styles.button} title={t("accueil")} />
                         </View>
                         </>}

@@ -93,6 +93,7 @@ const Maintenance = ({ navigation }) => {
               .then(url => {
                 const uploadTask = () => {
                     setType('')
+                    setTypeClone('')
                     setDetails('')
                     
                     return db.collection("hotels")
@@ -104,6 +105,7 @@ const Maintenance = ({ navigation }) => {
                         client: user.displayName,
                         room: userDB.room,
                         type: type,
+                        typeClone: typeClone,
                         details: details,
                         markup: Date.now(),
                         img: url,
@@ -122,6 +124,7 @@ const Maintenance = ({ navigation }) => {
       const handleSubmit = (event) => {
         event.preventDefault()
         setType('')
+        setTypeClone('')
         setDetails('')
         return db.collection("hotels")
                 .doc(userDB.hotelId)
@@ -153,7 +156,6 @@ const Maintenance = ({ navigation }) => {
             maintenace: specialFirestoreOptions.arrayUnion({
               reason: type,
               details: details,
-              url: url,
               markup: Date.now()
             })
         })
@@ -173,8 +175,8 @@ const Maintenance = ({ navigation }) => {
             </View>
             <View style={styles.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input placeholder={type !== "" ? type : t('maintenance_type')} type="text" value={type} 
-                  onChangeText={(text) => setType(text)} />
+                  <Input placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
+                  onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
                 <Input placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
@@ -197,7 +199,7 @@ const Maintenance = ({ navigation }) => {
                 handleSubmit(event)
                 handleItemToJourney()
                 showMessage({
-                  message: t('ajout_photo'),
+                  message: t('maintenance_message_succes'),
                   type: "success"
                 })
               }
@@ -222,36 +224,36 @@ const Maintenance = ({ navigation }) => {
                       }}>{t('choose_reason')}</Text>
                       <View style={{width: "100%", alignItems: "center"}}>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_maintenance.m_type.t_paint'))
-                          setTypeClone("paint")
+                          setTypeClone(t('msh_maintenance.m_type.t_paint'))
+                          setType("paint")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_paint')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_maintenance.m_type.t_plumbery'))
-                          setTypeClone("plumbery")
+                          setTypeClone(t('msh_maintenance.m_type.t_plumbery'))
+                          setType("plumbery")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_plumbery')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_maintenance.m_type.t_electricity'))
-                          setTypeClone("electricity")
+                          setTypeClone(t('msh_maintenance.m_type.t_electricity'))
+                          setType("electricity")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_electricity')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_maintenance.m_type.t_cleaning'))
-                          setTypeClone("cleaning")
+                          setTypeClone(t('msh_maintenance.m_type.t_cleaning'))
+                          setType("cleaning")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_cleaning')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
-                          setType(t('msh_maintenance.m_type.t_other'))
-                          setTypeClone("others")
+                          setTypeClone(t('msh_maintenance.m_type.t_other'))
+                          setType("others")
                           setShowModal(false)
                         }}>
                           <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_other')}</Text>

@@ -19,13 +19,13 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import DefaultAvatar from "../../img/avatar-client.png"
 
 
-YellowBox.ignoreWarnings(['Setting a timer']);
+{/*YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
 console.warn = message => {
   if (message.indexOf('Setting a timer') <= -1) {
     _console.warn(message);
   }
-};
+};*/}
 
 const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                     navigator.userAgent &&
@@ -38,7 +38,7 @@ const Chat = ({ navigation }) => {
     const [user, setUser] = useState(auth.currentUser)
     const {userDB, setUserDB} = useContext(UserContext)
     const [messages, setMessages] = useState([])
-    const [chatRoom, setChatRoom] = useState(null)
+    const [chatRoom, setChatRoom] = useState([])
 
     const { t } = useTranslation()
 
@@ -101,7 +101,8 @@ const Chat = ({ navigation }) => {
     }, [])
 
     const outChat = () => {
-      return db.collection("hotels")
+      if(chatRoom.length > 0) {
+        return db.collection("hotels")
         .doc(userDB.hotelId)
         .collection('chat')
         .doc(user.displayName)
@@ -109,22 +110,7 @@ const Chat = ({ navigation }) => {
             hotelResponding: false,
             isChatting: false
         })
-    }
-
-    const getChatRoom = () => {
-        return db.collection('hotels')
-        .doc(userDB.hotelId)
-        .collection('chat')
-        .doc(user.displayName)
-        .get()
-        .then((doc) => {
-            if (doc.exists) {
-            setChatRoom(doc.data())
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        })
+      }
     }
 
     const createRoomnameSubmit = () => {
@@ -133,6 +119,7 @@ const Chat = ({ navigation }) => {
         .collection('chat')
         .doc(user.displayName)
         .set({
+            checkoutDate: userDB.checkoutDate,
             title: user.displayName,
             room: userDB.room ? userDB.room : "Pre-checkin",
             userId: user.uid,
@@ -191,7 +178,7 @@ const Chat = ({ navigation }) => {
         }
       }
 
-    console.log("Chatroom-----", chatRoom)
+    console.log("Chatroom-----", messages)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
@@ -286,9 +273,8 @@ const Chat = ({ navigation }) => {
                     />
                     <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={async() => {
-                        await getChatRoom()
-                        if(chatRoom !== null) {
+                    onPress={() => {
+                        if(messages.length > 0) {
                             return updateRoomnameSubmit()
                             .then(sendMessage())
                         }else{
