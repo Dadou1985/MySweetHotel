@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, ImageBackground, Platform } from 'react-native';
+import { KeyboardAvoidingView, Text, View, TouchableOpacity, ImageBackground, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -12,6 +12,7 @@ import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import Filter from 'react-css-filter'
 import ModalWeb from 'modal-enhanced-react-native-web';
+import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
 
 const RoomChange = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -108,7 +109,7 @@ const RoomChange = ({ navigation }) => {
                         toRoom: "",
                         state: "",
                         reason: type,
-                        resonClone: typeClone, 
+                        reasonClone: typeClone, 
                         details: details,
                         markup: Date.now(),
                         img: url,
@@ -141,7 +142,7 @@ const RoomChange = ({ navigation }) => {
                   toRoom: "",
                   state: "",
                   reason: type,
-                  resonClone: typeClone, 
+                  reasonClone: typeClone, 
                   details: details,
                   markup: Date.now(),
                   img: url,
@@ -169,15 +170,15 @@ const RoomChange = ({ navigation }) => {
   }
 
     return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <KeyboardAvoidingView behavior="padding" style={GlobalCameraFeatureStyle.container}>
              <StatusBar style="light" />
-            <View style={styles.containerText}>
+            <View style={GlobalCameraFeatureStyle.containerText}>
             <ImageBackground source={ require('../../img/pic_roomChange.png') } style={{
                 flex: 1,
                 width: "100%"}}>
                 </ImageBackground>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
                   <Input placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} type="text" value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
@@ -207,14 +208,14 @@ const RoomChange = ({ navigation }) => {
                   type: "success"
                 })
               }
-            }} containerStyle={styles.button} title={t('delogement_bouton')} />
+            }} containerStyle={GlobalCameraFeatureStyle.button} title={t('delogement_bouton')} />
 
           <ModalWeb 
           animationType="slide"
           transparent={true}
           isVisible={showModal} 
-          style={styles.roomBoxView}>
-              <View style={styles.modalRoom}>
+          style={GlobalCameraFeatureStyle.roomBoxView}>
+              <View style={GlobalCameraFeatureStyle.modalRoom}>
                   <Text style={{
                       width: "100%", 
                       fontSize: 20,
@@ -271,64 +272,3 @@ const RoomChange = ({ navigation }) => {
 }
 
 export default RoomChange
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "white"
-    },
-    containerText: {
-      flex: 2,
-      width: "100%",
-    },
-    text: {
-        fontSize: 30,
-        textAlign: "center",
-        color: "white"
-    },
-    inputContainer: {
-        width: "80%",
-        marginTop: 70, 
-
-    },
-    button: {
-        width: "80%",
-        marginTop: 10, 
-        marginBottom: 50,
-        borderColor: "white",
-        borderRadius: 30,
-    },
-    img: {
-        width: 70,
-        height: 70,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-    },
-    roomBoxView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: "90%"
-    },
-    modalRoom: {
-      flexDirection: "column",
-        backgroundColor: 'white',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        borderRadius: 15,
-        paddingBottom: 15,
-        width: 350
-    }
-})
-

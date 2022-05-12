@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground, Platform } from 'react-native';
+import { KeyboardAvoidingView, Text, View, TouchableOpacity, Image, ImageBackground, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign, Octicons } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
+import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
 
 const Maintenance = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -163,9 +164,9 @@ const Maintenance = ({ navigation }) => {
 
 
     return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <KeyboardAvoidingView behavior="padding" style={GlobalCameraFeatureStyle.container}>
              <StatusBar style="light" />
-            <View style={styles.containerText}>
+            <View style={GlobalCameraFeatureStyle.containerText}>
               <ImageBackground source={ require('../../img/pic_maintenance.png') } style={{
                 flex: 1,
                 resizeMode: "contain",
@@ -173,7 +174,7 @@ const Maintenance = ({ navigation }) => {
                 width: "100%"}}>
               </ImageBackground>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
                   <Input placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
@@ -203,14 +204,14 @@ const Maintenance = ({ navigation }) => {
                   type: "success"
                 })
               }
-            }} containerStyle={styles.button} title={t('maintenance_bouton')} />
+            }} containerStyle={GlobalCameraFeatureStyle.button} title={t('maintenance_bouton')} />
 
 <ModalWeb 
           animationType="slide"
           transparent={true}
           isVisible={showModal} 
-          style={styles.roomBoxView}>
-              <View style={styles.modalRoom}>
+          style={GlobalCameraFeatureStyle.roomBoxView}>
+              <View style={GlobalCameraFeatureStyle.modalRoom}>
                   <Text style={{
                       width: "100%", 
                       fontSize: 20,
@@ -267,62 +268,3 @@ const Maintenance = ({ navigation }) => {
 }
 
 export default Maintenance
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 2,
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "white"
-    },
-    containerText: {
-        flex: 2,
-        width: "100%"
-    },
-    text: {
-        fontSize: 30,
-        textAlign: "center",
-    },
-    inputContainer: {
-        width: "80%",
-        marginTop: 70, 
-    },
-    button: {
-        width: "80%",
-        marginTop: 10, 
-        marginBottom: 50,
-        borderColor: "white",
-        borderRadius: 30
-    },
-    img: {
-        width: 24,
-        height: 24,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        marginRight: 5
-    },
-    roomBoxView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: "90%"
-    },
-    modalRoom: {
-      flexDirection: "column",
-        backgroundColor: 'white',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        borderRadius: 15,
-        paddingBottom: 15,
-        width: 350
-    }
-})

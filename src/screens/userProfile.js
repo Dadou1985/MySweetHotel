@@ -2,11 +2,11 @@ import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-import { auth, db, storage, functions, messaging } from "../../firebase"
+import { auth, db, storage } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
 import 'moment/locale/fr';
-import { Button, Input, Overlay } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import { showMessage } from "react-native-flash-message";
@@ -15,16 +15,13 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChatNotification from '../components/chatNotification'
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
 import ModalWeb from 'modal-enhanced-react-native-web';
-import { DatePickerModal } from 'react-native-paper-dates';
-import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
-import webPush from "web-push"
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
 import * as WebBrowser from 'expo-web-browser';
 import Filter from 'react-css-filter'
 import { fr, pt, en, de, es, it } from '../locales/config'
+import { pushNotificationSubscription } from '../utils/pushNotificationSubscription';
 
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
@@ -40,20 +37,11 @@ const UserProfile = ({navigation}) => {
     const [room, setRoom] = useState(null)
     const [showDate, setShowDate] = useState(false)
     const [chatResponse, setChatResponse] = useState([])
-    const [reloadPhotoURLIos, setReloadPhotoURLIos] = useState(false)
-    const appState = useRef(AppState.currentState);
-    const [appStateVisible, setAppStateVisible] = useState(appState.current);
     const [isForegrounding, setIsForegrounding] = useState(false)
     const [conciergePanel, setConciergePanel] = useState(false)
     const [showModalNotification, setShowModalNotification] = useState(false)
     const [showWebsite, setShowWebsite] = useState(false)
-
-    const Logout = () => {
-      auth.signOut()
-      //serviceWorkerRegistration.unregister()
-  }
-
-  const { t } = useTranslation()
+    const { t } = useTranslation()
 
   const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                     navigator.userAgent &&
@@ -81,6 +69,7 @@ const UserProfile = ({navigation}) => {
 
   LocaleConfig.locales[i18next.language] = locales()
   LocaleConfig.defaultLocale = userDB.language;
+
 
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -133,7 +122,7 @@ const UserProfile = ({navigation}) => {
       })();
     }, []);
 
-    const save = async () => {
+    const save = async () => { 
       try {
         let userMemo = JSON.stringify(userDB)
           await AsyncStorage.setItem("userDB", userMemo)
@@ -145,319 +134,258 @@ const UserProfile = ({navigation}) => {
   useEffect(() => {
     save()
   }, [])
-    
-    const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-      console.log(result);
-  
-      if (!result.cancelled) {
-        setImg(result.uri);
-        setUpdatePhoto(true)    
-      }
 
-    };
 
-    const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate || date;
-       setShowDate(Platform.OS === 'ios');
-       setDate(currentDate);
-       if(userDB.checkoutDate !== moment(currentDate).format('L')) {
-        setUpdateCheckout(true)
-       }    
-    };
-
-    const handleLoadUserDB = () => {
-      return db.collection('guestUsers')
-      .doc(user.uid)
-      .get()
-      .then((doc) => {
-          if (doc.exists) {
-          setUserDB(doc.data())
-          } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-          }
-      })
-  }
-
-  const handleChangeEmail = async() => {
-    await auth.signInWithEmailAndPassword(user.email, userDB.password)
-        .then(function(userCredential) {
-        userCredential.user.updateEmail(email)
-    })
-
-    await db.collection('guestUsers')
-        .doc(user.uid)
-        .update({
-          email: email,
-        })
-
-      await showMessage({
-        message: t('message_actualisation_email'),
-        type: "success"
-      })
-
-      return handleLoadUserDB()
-      .then(() => {
-        setEmail("")
-        setUpdateMail(false)
-      })
-  }
-
-    const handleChangeRoom = async() => {
-      await db.collection('guestUsers')
-        .doc(user.uid)
-        .update({
-          room: room,
-        })
-
-      await showMessage({
-        message: t('message_actualisation_chbre'),
-        type: "success"
-      })
-
-      return handleLoadUserDB()
-      .then(() => {
-        setRoom(null)
-        setUpdateRoom(false)
-      })
-    }
-
-    const handleChangeRoomChat = () => {
+  useEffect(() => {
+    const toolOnAir = () => {
       return db.collection('hotels')
-          .doc(userDB.hotelId)
-          .collection('chat')
-          .doc(userDB.username)
-          .update({
-            room: room 
-        })  
+        .doc(userDB.hotelId)
+        .collection("chat")
+        .where("title", "==", user.displayName)
     }
 
-    const handleChangePhotoUrl = async() => {
-      const response = await fetch(img)
-      const blob = await response.blob()
-      
-      const uploadTask = storage.ref(`msh-photo-user/${user.displayName}`).put(blob)
-        uploadTask.on(
-          "state_changed",
-          snapshot => {},
-          error => {console.log(error)},
-          () => {
-            storage
-              .ref("msh-photo-user")
-              .child(user.displayName)
-              .getDownloadURL()
-              .then(url => {
-                const uploadTask = () => {
-                  user.updateProfile({photoURL: url})
-                  .then(() => navigation.replace('My Sweet Hotel'))
-                }
-                  return setUrl(url, uploadTask())})
-          }
-        )
-      } 
-      
+    let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
+                const snapInfo = []
+              snapshot.forEach(function(doc) {          
+                snapInfo.push({
+                    id: doc.id,
+                    ...doc.data()
+                  })        
+                });
+                console.log(snapInfo)
+                setChatResponse(snapInfo)
+            });
+            return unsubscribe
+ },[])
 
-    const handleCheckoutDateChange = async() => {
-      await db.collection('guestUsers')
+
+
+const Logout = () => {
+  auth.signOut()
+  //serviceWorkerRegistration.unregister()
+}
+    
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    setImg(result.uri);
+    setUpdatePhoto(true)    
+  }
+
+};
+
+const onChange = (event, selectedDate) => {
+  const currentDate = selectedDate || date;
+    setShowDate(Platform.OS === 'ios');
+    setDate(currentDate);
+    if(userDB.checkoutDate !== moment(currentDate).format('L')) {
+    setUpdateCheckout(true)
+    }    
+};
+
+const handleLoadUserDB = async () => {
+  const doc = await db.collection('guestUsers')
+    .doc(user.uid)
+    .get();
+  if (doc.exists) {
+    setUserDB(doc.data());
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+}
+
+const handleChangeEmail = async() => {
+  await auth.signInWithEmailAndPassword(user.email, userDB.password)
+      .then(function(userCredential) {
+      userCredential.user.updateEmail(email)
+  })
+
+  await db.collection('guestUsers')
       .doc(user.uid)
       .update({
-        checkoutDate: moment(date.timestamp).format('L')
+        email: email,
       })
 
-      await showMessage({
-        message: t('message_actualisation_checkout'),
-        type: "success",
-      })
+    showMessage({
+      message: t('message_actualisation_email'),
+      type: "success"
+    })
 
-      return handleLoadUserDB()     
-    }
+    return handleLoadUserDB()
+    .then(() => {
+      setEmail("")
+      setUpdateMail(false)
+    })
+}
 
-    const handleChangeCheckoutDateChat = () => {
-      return db.collection('hotels')
-          .doc(userDB.hotelId)
-          .collection('chat')
-          .doc(userDB.username)
-          .update({
-            checkoutDate: moment(date.timestamp).format('L') 
-        })  
-    }
+const handleChangeRoom = async() => {
+  await db.collection('guestUsers')
+    .doc(user.uid)
+    .update({
+      room: room,
+    })
 
-    const fadeAnim = useRef(new Animated.Value(-500)).current;
+  showMessage({
+    message: t('message_actualisation_chbre'),
+    type: "success"
+  })
 
-    const fadeIn = () => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500,
-      }).start();
-    };
+  return handleLoadUserDB()
+  .then(() => {
+    setRoom(null)
+    setUpdateRoom(false)
+  })
+}
+
+const handleChangeRoomChat = () => {
+  return db.collection('hotels')
+      .doc(userDB.hotelId)
+      .collection('chat')
+      .doc(userDB.username)
+      .update({
+        room: room 
+    })  
+}
+
+const handleChangePhotoUrl = async() => {
+  const response = await fetch(img)
+  const blob = await response.blob()
   
-    const fadeOut = () => {
-      Animated.timing(fadeAnim, {
-        toValue: -500,
-        duration: 500,
-      }).start();
-    };
-
-    useEffect(() => {
-      const toolOnAir = () => {
-        return db.collection('hotels')
-          .doc(userDB.hotelId)
-          .collection("chat")
-          .where("title", "==", user.displayName)
-      }
-
-      let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
-                  const snapInfo = []
-                snapshot.forEach(function(doc) {          
-                  snapInfo.push({
-                      id: doc.id,
-                      ...doc.data()
-                    })        
-                  });
-                  console.log(snapInfo)
-                  setChatResponse(snapInfo)
-              });
-              return unsubscribe
-   },[])
-
-   const updateAdminSpeakStatus = () => {
-    if(chatResponse.length > 0) {
-      return db.collection('hotels')
-          .doc(userDB.hotelId)
-          .collection('chat')
-          .doc(user.displayName)
-          .update({
-              hotelResponding: false,
-          }) 
-    }     
-  }
-
-  const inChat = () => {
-    if(chatResponse.length > 0) {
-      return db.collection("hotels")
-          .doc(userDB.hotelId)
-          .collection('chat')
-          .doc(user.displayName)
-          .update({isChatting: true}) 
-    } 
-  }
-
-  const handleNavigate = (feature) => {
-    if(userDB.room) {
-      return navigation.navigate(feature)
-    }else{
-      return showMessage({
-        message: "Vous devez renseigner votre numéro de chambre pour accéder à cette fonctionnalité.",
-        type: "danger"
-      })
+  const uploadTask = storage.ref(`msh-photo-user/${user.displayName}`).put(blob)
+  uploadTask.on(
+    "state_changed",
+    snapshot => {},
+    error => {console.log(error)},
+    () => {
+      storage
+        .ref("msh-photo-user")
+        .child(user.displayName)
+        .getDownloadURL()
+        .then(url => {
+          const uploadTask = () => {
+            user.updateProfile({photoURL: url})
+            .then(() => navigation.replace('My Sweet Hotel'))
+          }
+            return setUrl(url, uploadTask())})
     }
+  )
+} 
+      
+
+const handleCheckoutDateChange = async() => {
+  await db.collection('guestUsers')
+  .doc(user.uid)
+  .update({
+    checkoutDate: moment(date.timestamp).format('L')
+  })
+
+  await showMessage({
+    message: t('message_actualisation_checkout'),
+    type: "success",
+  })
+
+  return handleLoadUserDB()     
+}
+
+const handleChangeCheckoutDateChat = () => {
+  return db.collection('hotels')
+      .doc(userDB.hotelId)
+      .collection('chat')
+      .doc(userDB.username)
+      .update({
+        checkoutDate: moment(date.timestamp).format('L') 
+    })  
+}
+
+const fadeAnim = useRef(new Animated.Value(-500)).current;
+
+const fadeIn = () => {
+  Animated.timing(fadeAnim, {
+    toValue: 0,
+    duration: 500,
+  }).start();
+};
+
+const fadeOut = () => {
+  Animated.timing(fadeAnim, {
+    toValue: -500,
+    duration: 500,
+  }).start();
+};
+
+const updateAdminSpeakStatus = () => {
+if(chatResponse.length > 0) {
+  return db.collection('hotels')
+      .doc(userDB.hotelId)
+      .collection('chat')
+      .doc(user.displayName)
+      .update({
+          hotelResponding: false,
+      }) 
+  }     
+}
+
+const inChat = () => {
+  if(chatResponse.length > 0) {
+    return db.collection("hotels")
+        .doc(userDB.hotelId)
+        .collection('chat')
+        .doc(user.displayName)
+        .update({isChatting: true}) 
+  } 
+}
+
+const handleNavigate = (feature) => {
+  if(userDB.room) {
+    return navigation.navigate(feature)
+  }else{
+    return showMessage({
+      message: "Vous devez renseigner votre numéro de chambre pour accéder à cette fonctionnalité.",
+      type: "danger"
+    })
   }
+}
 
-  const tomorrow = Date.now() + 86400000
-
-  const handlePlatformDate = () => {
-    if(Platform.OS === 'ios') {
-        return (
-            <Modal 
-                animationType="slide"
-                visible={showDate} 
-                style={styles.datePickerModal}>
-                <View style={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    marginTop: 55,
-                    width: "100%",
-                    height: "80%"
-                }}>
-                    <View style={{
-                        flexDirection: "row", 
-                        width: 420, 
-                        alignItems: "center", 
-                        justifyContent: "center", 
-                        marginBottom: 10, 
-                        paddingTop: 10, 
-                        paddingBottom: 10, 
-                        backgroundColor: "lightblue"}}>
-                        <Text style={{fontSize: 25, marginRight: 20}}>{t('date_checkout')}</Text>
-                        <TouchableOpacity>
-                            <AntDesign name="closecircle" size={24} color="black" onPress={() => setShowDate(false)} />
-                        </TouchableOpacity>
-                    </View>
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        locale={i18next.language}
-                        value={date}
-                        mode='date'
-                        is24Hour={true}
-                        minimumDate={date}
-                        display="spinner"
-                        onChange={onChange}
-                        style={styles.datePicker}
-                    />
-                    <Button raised={true} onPress={() => {
-                        setUpdateCheckout(true)
-                        setShowDate(false)
-                    }} containerStyle={styles.datePickerButton} title={t('validation')} />
-                </View>
-            </Modal>
-        )
-    }else{
-        if(Platform.OS === "android") {
-            return (
-                <View>
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        locale={i18next.language}
-                        value={date}
-                        mode='date'
-                        is24Hour={true}
-                        minimumDate={Date.now() + 86400000}
-                        display="default"
-                        onChange={onChange}
-                    />
-                </View>
-            )
-        }else{
-            return (
-                <ModalWeb 
-                animationType="slide"
-                isVisible={showDate} 
-                style={styles.roomBoxView}
-                transparent={true}
-                onBackdropPress={() => setShowDate(false)}
-                >
-                <View style={styles.modalRoom}>
-                    <Text style={{
-                            width: "100%", 
-                            marginBottom: 10, 
-                            fontSize: 20,
-                            paddingTop: 10, 
-                            paddingBottom: 10,
-                            borderRadius: 5,
-                            textAlign: "center", 
-                            backgroundColor: "lightblue"
-                            }}>{t('date_checkout')}</Text>
-                    <Calendar
-                        minDate={new Date()} 
-                        renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
-                        pastScrollRange={0}
-                        onDayPress={(day) => {
-                          setDate(day)
-                          setUpdateCheckout(true)
-                        setShowDate(false)}} />
-                </View>
-            </ModalWeb>
-            )
-        }
-    }
+const handlePlatformDate = () => {
+  return (
+      <ModalWeb 
+      animationType="slide"
+      isVisible={showDate} 
+      style={styles.roomBoxView}
+      transparent={true}
+      onBackdropPress={() => setShowDate(false)}
+      >
+      <View style={styles.modalRoom}>
+          <Text style={{
+                  width: "100%", 
+                  marginBottom: 10, 
+                  fontSize: 20,
+                  paddingTop: 10, 
+                  paddingBottom: 10,
+                  borderRadius: 5,
+                  textAlign: "center", 
+                  backgroundColor: "lightblue"
+                  }}>{t('date_checkout')}</Text>
+          <Calendar
+              minDate={new Date()} 
+              renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
+              pastScrollRange={0}
+              onDayPress={(day) => {
+                setDate(day)
+                setUpdateCheckout(true)
+              setShowDate(false)}} />
+      </View>
+  </ModalWeb>
+  )  
 }
 
 const handleLinkWebsite = async() => {
@@ -475,74 +403,6 @@ const handleNewwConnection = () => {
   return db.collection("guestUsers")
          .doc(user.uid)
          .update({newConnection: false})
-}
-
-const pushNotificationSubscription = () => {
-  if(!isSafari) {
-  
-    function determineAppServerKey() {
-      const vapidPublicKey =
-      "BMSSazlbQtYWLKQKC-vr8gQcaX1piG2geiTDGBJXzQT_wW6dGdHbwnGReCH-6r_HcWVNE4vvBZG7VF059Hre-Bk";
-        return urlBase64ToUint8Array(vapidPublicKey);
-    }
-    
-    function urlBase64ToUint8Array(base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4);
-      const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-    
-      const rawData = window.atob(base64);
-      const outputArray = new Uint8Array(rawData.length);
-    
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-      }
-      return outputArray;
-    }
-    
-    function subscribeUser() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(function(reg) {
-          reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: determineAppServerKey()
-          }).then(function(sub) {
-            console.log('Endpoint URL: ', sub.endpoint);
-            const subPush = sub.toJSON()
-              return db.collection("guestUsers")
-              .doc(user.uid)
-              .update({
-                token: subPush,
-                notificationStatus: "granted"
-              })
-              .then(handleLoadUserDB())
-              .then(() => navigation.navigate('Chat'))
-          }).catch(function(e) {
-            if (Notification.permission === 'denied') {
-              console.warn('Permission for notifications was denied');
-            } else {
-              console.error('Unable to subscribe to push', e);
-            }
-          });
-        })
-      }
-    }
-  
-    return Notification.requestPermission(function(status) {
-      console.log('Notification permission status:', status);
-      if(status === 'granted'){
-        return subscribeUser()
-      }else{
-        return db.collection("guestUsers")
-        .doc(user.uid)
-        .update({notificationStatus: "denied"})
-        .then(handleLoadUserDB())
-        .then(() => navigation.navigate('Chat'))
-      }
-    });
-        
-  } 
 }
 
 useEffect(() => {  
@@ -579,77 +439,6 @@ useEffect(() => {
   }
 
 }, [userDB.journeyId])
-
-
-{/*useEffect(() => {
-  (() => registerForPushNotificationsAsync())()
-}, [])
-
-const registerForPushNotificationsAsync = async() => {
-  let token;
-  if (Constants.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
-
-  if (token) {
-      const res = await db.collection("guestUsers")
-          .doc(user.uid)
-          .update({token: token})
-      return handleLoadUserDB()
-  }
-
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  return token;
-}*/}
-
-{/*useEffect(() => {
-  if(Platform.OS === 'ios') {
-    AppState.addEventListener('change', _handleAppStateChange);
-  }
-
-  return () => {
-    AppState.removeEventListener('change', _handleAppStateChange);
-  };
-}, []);
-
-const _handleAppStateChange = (nextAppState) => {
-  if (
-    appState.current.match(/inactive|background/) &&
-    nextAppState === 'active'
-  ) {
-    setTimeout(() => {
-      setIsForegrounding(false)
-    }, 3000);
-    navigation.replace('My Sweet Hotel')
-  }else{
-    setIsForegrounding(true)
-  }
-
-  appState.current = nextAppState;
-  setAppStateVisible(appState.current);
-  console.log('AppState', appState.current);
-};*/}
 
 const handleCloseConciergePanel = () => setConciergePanel(false)
 
@@ -757,9 +546,7 @@ if(isForegrounding) {
             </TouchableOpacity>
             </View>
           </Filter>
-         {/* <Button raised={true} disabled={userDB.room ? false : true} title={t('conciergerie')} containerStyle={{width: "100%", position: "absolute", bottom: 0, borderRadius: 0}} onPress={() => {
-            setConciergePanel(true)
-         fadeIn()}} />*/} 
+
           {conciergePanel && <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} closePanel={handleCloseConciergePanel} navigation={navigation} />}
         </View>
 
@@ -882,7 +669,7 @@ if(isForegrounding) {
           style={styles.roomBoxView}
           onBackdropPress={() => {
             setShowModalNotification(false)
-            pushNotificationSubscription()}}>
+            pushNotificationSubscription(user.uid, navigation, handleLoadUserDB)}}>
               <View style={styles.modalRoom2}>
                   <Text style={{
                       width: "100%", 

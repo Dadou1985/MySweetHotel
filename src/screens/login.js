@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useContext, useLayoutEffect, useRef } from 'react'
 import { KeyboardAvoidingView, Dimensions, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView, Platform } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'

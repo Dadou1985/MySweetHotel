@@ -7,7 +7,7 @@ module.exports = async function (env, argv) {
   const isEnvProduction = env.mode === "production";
 
   // Create the default config
-  const config = await createExpoWebpackConfigAsync(env, argv);
+  const config = await createExpoWebpackConfigAsync(env,argv);
 
   if (isEnvProduction) {
     config.plugins.push(
