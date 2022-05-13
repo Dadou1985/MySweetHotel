@@ -1,40 +1,34 @@
 import React, { useLayoutEffect, useState, useContext, useEffect, useRef } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Modal, Platform, AppState } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, Animated, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Entypo, MaterialIcons, SimpleLineIcons, Ionicons, AntDesign, FontAwesome5, Octicons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-import { auth, db, storage } from "../../firebase"
+import { auth, db } from "../../firebase"
 import { UserContext } from '../components/userContext'
 import moment from 'moment'
 import 'moment/locale/fr';
-import { Button, Input } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import { showMessage } from "react-native-flash-message";
 import ClickNwaitDrawer from '../components/ClickNwaitDrawer';
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ChatNotification from '../components/chatNotification'
 import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import * as serviceWorkerRegistration from "../serviceWorkerRegistration";
 import * as WebBrowser from 'expo-web-browser';
 import Filter from 'react-css-filter'
 import { fr, pt, en, de, es, it } from '../locales/config'
-import { pushNotificationSubscription } from '../utils/pushNotificationSubscription';
-
+import { ModalChatPushNotification, ModalConfirmUpdateCheckout, ModalConfirmationUpdatePhoto, ModalMessageWebsite, ModalUpdateRoom } from '../components/userProfileModals'
+import ModalUpdateEmail from '../components/userProfileModals/modalUpdateEmail'
 const UserProfile = ({navigation}) => {
     const [img, setImg] = useState(null)
-    const [url, setUrl] = useState("")
     const [user, setUser] = useState(auth.currentUser)
     const {userDB, setUserDB} = useContext(UserContext)
     const [updateRoom, setUpdateRoom] = useState(false)
     const [updateMail, setUpdateMail] = useState(false)
     const [updatePhoto, setUpdatePhoto] = useState(false)
     const [updateCheckout, setUpdateCheckout] = useState(false)
-    const [email, setEmail] = useState('')
     const [date, setDate] = useState(new Date())
-    const [room, setRoom] = useState(null)
     const [showDate, setShowDate] = useState(false)
     const [chatResponse, setChatResponse] = useState([])
     const [isForegrounding, setIsForegrounding] = useState(false)
@@ -72,32 +66,32 @@ const UserProfile = ({navigation}) => {
 
 
   useLayoutEffect(() => {
-      navigation.setOptions({
-          title: "My Sweet Hotel",
-          headerBackTitleVisible: false,
-          headerTitleAlign: "right",
-          headerTitle: () =>(
-              <View style={{flexDirection: "row", alignItems: "center"}}>
-                {userDB.logo ? <Image source={{uri: userDB.logo}} style={{width: 100, height: 70, resizeMode:"contain"}}></Image> : <Image source={require('../../img/msh-newLogo-transparent.png')} style={{width: 80, height: 60}} />}
-              </View>
-          ),
-          headerLeft: null,
-          headerRight: () => (
-          <SimpleLineIcons 
-          name="logout" 
-          size={24} 
-          color="black" 
-          style={{marginRight: 20}}
-          onPress={() => {
-              Logout()
-              setTimeout(() => {
-                  showMessage({
-                      message: t('deconnexion'),
-                      type: "info",
-                    })
-              }, 1000)
-          }} />)
-      })
+    navigation.setOptions({
+        title: "My Sweet Hotel",
+        headerBackTitleVisible: false,
+        headerTitleAlign: "right",
+        headerTitle: () =>(
+            <View style={{flexDirection: "row", alignItems: "center"}}>
+              {userDB.logo ? <Image source={{uri: userDB.logo}} style={{width: 100, height: 70, resizeMode:"contain"}}></Image> : <Image source={require('../../img/msh-newLogo-transparent.png')} style={{width: 80, height: 60}} />}
+            </View>
+        ),
+        headerLeft: null,
+        headerRight: () => (
+        <SimpleLineIcons 
+        name="logout" 
+        size={24} 
+        color="black" 
+        style={{marginRight: 20}}
+        onPress={() => {
+            Logout()
+            setTimeout(() => {
+                showMessage({
+                    message: t('deconnexion'),
+                    type: "info",
+                  })
+            }, 1000)
+        }} />)
+    })
   }, [])
 
   useEffect(() => {
@@ -111,54 +105,51 @@ const UserProfile = ({navigation}) => {
 }, [])
 
 
-    useEffect(() => {
-      (async () => {
-        if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          }
-        }
-      })();
-    }, []);
-
-    const save = async () => { 
-      try {
-        let userMemo = JSON.stringify(userDB)
-          await AsyncStorage.setItem("userDB", userMemo)
-      }catch (err) {
-          alert(err)
+useEffect(() => {
+  (async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
       }
+    }
+  })();
+}, []);
+
+const save = async () => { 
+  try {
+    let userMemo = JSON.stringify(userDB)
+      await AsyncStorage.setItem("userDB", userMemo)
+  }catch (err) {
+      alert(err)
+  }
+}
+
+useEffect(() => {
+  save()
+}, [])
+
+useEffect(() => {
+  const toolOnAir = () => {
+    return db.collection('hotels')
+      .doc(userDB.hotelId)
+      .collection("chat")
+      .where("title", "==", user.displayName)
   }
 
-  useEffect(() => {
-    save()
-  }, [])
-
-
-  useEffect(() => {
-    const toolOnAir = () => {
-      return db.collection('hotels')
-        .doc(userDB.hotelId)
-        .collection("chat")
-        .where("title", "==", user.displayName)
-    }
-
-    let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
-                const snapInfo = []
-              snapshot.forEach(function(doc) {          
-                snapInfo.push({
-                    id: doc.id,
-                    ...doc.data()
-                  })        
-                });
-                console.log(snapInfo)
-                setChatResponse(snapInfo)
-            });
-            return unsubscribe
+  let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
+      const snapInfo = []
+      snapshot.forEach(function(doc) {          
+        snapInfo.push({
+            id: doc.id,
+            ...doc.data()
+          })        
+        });
+        console.log(snapInfo)
+        setChatResponse(snapInfo)
+    });
+    return unsubscribe
  },[])
-
-
 
 const Logout = () => {
   auth.signOut()
@@ -182,15 +173,6 @@ const pickImage = async () => {
 
 };
 
-const onChange = (event, selectedDate) => {
-  const currentDate = selectedDate || date;
-    setShowDate(Platform.OS === 'ios');
-    setDate(currentDate);
-    if(userDB.checkoutDate !== moment(currentDate).format('L')) {
-    setUpdateCheckout(true)
-    }    
-};
-
 const handleLoadUserDB = async () => {
   const doc = await db.collection('guestUsers')
     .doc(user.uid)
@@ -203,107 +185,8 @@ const handleLoadUserDB = async () => {
   }
 }
 
-const handleChangeEmail = async() => {
-  await auth.signInWithEmailAndPassword(user.email, userDB.password)
-      .then(function(userCredential) {
-      userCredential.user.updateEmail(email)
-  })
-
-  await db.collection('guestUsers')
-      .doc(user.uid)
-      .update({
-        email: email,
-      })
-
-    showMessage({
-      message: t('message_actualisation_email'),
-      type: "success"
-    })
-
-    return handleLoadUserDB()
-    .then(() => {
-      setEmail("")
-      setUpdateMail(false)
-    })
-}
-
-const handleChangeRoom = async() => {
-  await db.collection('guestUsers')
-    .doc(user.uid)
-    .update({
-      room: room,
-    })
-
-  showMessage({
-    message: t('message_actualisation_chbre'),
-    type: "success"
-  })
-
-  return handleLoadUserDB()
-  .then(() => {
-    setRoom(null)
-    setUpdateRoom(false)
-  })
-}
-
-const handleChangeRoomChat = () => {
-  return db.collection('hotels')
-      .doc(userDB.hotelId)
-      .collection('chat')
-      .doc(userDB.username)
-      .update({
-        room: room 
-    })  
-}
-
-const handleChangePhotoUrl = async() => {
-  const response = await fetch(img)
-  const blob = await response.blob()
-  
-  const uploadTask = storage.ref(`msh-photo-user/${user.displayName}`).put(blob)
-  uploadTask.on(
-    "state_changed",
-    snapshot => {},
-    error => {console.log(error)},
-    () => {
-      storage
-        .ref("msh-photo-user")
-        .child(user.displayName)
-        .getDownloadURL()
-        .then(url => {
-          const uploadTask = () => {
-            user.updateProfile({photoURL: url})
-            .then(() => navigation.replace('My Sweet Hotel'))
-          }
-            return setUrl(url, uploadTask())})
-    }
-  )
-} 
-      
-
-const handleCheckoutDateChange = async() => {
-  await db.collection('guestUsers')
-  .doc(user.uid)
-  .update({
-    checkoutDate: moment(date.timestamp).format('L')
-  })
-
-  await showMessage({
-    message: t('message_actualisation_checkout'),
-    type: "success",
-  })
-
-  return handleLoadUserDB()     
-}
-
-const handleChangeCheckoutDateChat = () => {
-  return db.collection('hotels')
-      .doc(userDB.hotelId)
-      .collection('chat')
-      .doc(userDB.username)
-      .update({
-        checkoutDate: moment(date.timestamp).format('L') 
-    })  
+const handleLinkWebsite = async() => {
+  return WebBrowser.openBrowserAsync(userDB.website)
 }
 
 const fadeAnim = useRef(new Animated.Value(-500)).current;
@@ -386,23 +269,6 @@ const handlePlatformDate = () => {
       </View>
   </ModalWeb>
   )  
-}
-
-const handleLinkWebsite = async() => {
-  return WebBrowser.openBrowserAsync(userDB.website)
-}
-
-useEffect(() => {
-  if(userDB.newConnection && userDB.website !== "none") {
-    setShowWebsite(true)
-  }
-}, [])
-
-
-const handleNewwConnection = () => {
-  return db.collection("guestUsers")
-         .doc(user.uid)
-         .update({newConnection: false})
 }
 
 useEffect(() => {  
@@ -523,7 +389,7 @@ if(isForegrounding) {
                 <Entypo name="chat" size={30} color="black" /> 
                 {chatResponse.map(response => {
                   if(response.hotelResponding) {
-                    return <ChatNotification />
+                    return <Text style={{fontWeight: "bold", color: "red", marginLeft: 5, fontSize: 20}}>!</Text>
                   } 
                 })}                   
             </TouchableOpacity>
@@ -550,180 +416,19 @@ if(isForegrounding) {
           {conciergePanel && <ClickNwaitDrawer fadeAnim={fadeAnim} fadeOut={fadeOut} closePanel={handleCloseConciergePanel} navigation={navigation} />}
         </View>
 
-        <ModalWeb 
-          animationType="slide" 
-          style={styles.roomBoxView}
-          transparent={true} 
-          isVisible={updateMail} 
-          onBackdropPress={() => {
-            setUpdateMail(false)
-            setEmail(null)}}>
-          <View style={styles.modalRoom}>
-            <Text style={{
-                  width: "100%", 
-                  marginBottom: 10, 
-                  fontSize: 20,
-                  paddingTop: 10, 
-                  paddingBottom: 10,
-                  borderRadius: 5,
-                  textAlign: "center", 
-                  backgroundColor: "lightblue"
-                  }}>{t('actualisation_email')}</Text>
-            <View style={styles.inputContainer}>
-              <Input placeholder={t('email')} type="email" value={email} style={{textAlign: "center"}}
-              onChangeText={(text) => setEmail(text)} />
-            </View>
-            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleChangeEmail} />
-          </View>
-        </ModalWeb>
+        <ModalUpdateEmail user={user} userDB={userDB} handleLoadUserDB={handleLoadUserDB} updateMail={updateMail} setUpdateMail={setUpdateMail} />
 
-        <ModalWeb 
-          animationType="slide"
-          style={styles.roomBoxView}                
-          transparent={true} 
-          isVisible={updateRoom} 
-          onBackdropPress={() => {
-            setUpdateRoom(false)
-            setRoom(null)}}>
-          <View style={styles.modalRoom}>
-          <Text style={{
-                  width: "100%", 
-                  marginBottom: 10, 
-                  fontSize: 20,
-                  paddingTop: 10, 
-                  paddingBottom: 10,
-                  borderRadius: 5,
-                  textAlign: "center", 
-                  backgroundColor: "lightblue"
-                  }}>{t('actualisation_chbre')}</Text>
-            <View style={styles.inputContainer}>
-              <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center"}} 
-              onChangeText={(text) => setRoom(text)} />
-            </View>
-            <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
-              handleChangeRoom()
-              handleChangeRoomChat()
-              }} />
-          </View>
-        </ModalWeb>
+        <ModalUpdateRoom user={user} userDB={userDB} handleLoadUserDB={handleLoadUserDB} updateRoom={updateRoom} setUpdateRoom={setUpdateRoom} />
 
-        <ModalWeb 
-          animationType="slide"
-          style={styles.roomBoxView}                
-          transparent={true} 
-          isVisible={updatePhoto} 
-          onBackdropPress={() => setUpdatePhoto(false)}>
-          <View style={styles.modalRoom}>
-          <Text style={{
-                  width: "100%", 
-                  marginBottom: 10, 
-                  fontSize: 15,
-                  paddingTop: 10, 
-                  paddingBottom: 10,
-                  borderRadius: 5,
-                  textAlign: "center", 
-                  backgroundColor: "lightblue"
-                  }}>{t('message_confirmation_actualisation_photo')}</Text>
-            <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={(event) => {
-              handleChangePhotoUrl(event)
-              setUpdatePhoto(false)
-              showMessage({
-                message: t('message_actualisation_photo'),
-                type: "success",
-              })
-            }} />
-          </View>
-        </ModalWeb>
+        <ModalConfirmationUpdatePhoto user={user} updatePhoto={updatePhoto} setUpdatePhoto={setUpdatePhoto} img={img} />
 
-        <ModalWeb 
-          animationType="slide" 
-          style={styles.roomBoxView}
-          transparent={true}  
-          isVisible={updateCheckout} 
-          onBackdropPress={() => setUpdateCheckout(false)}>
-          <View style={styles.modalRoom}>
-          <Text style={{
-                  width: "100%", 
-                  marginBottom: 10, 
-                  fontSize: 15,
-                  paddingTop: 10, 
-                  paddingBottom: 10,
-                  borderRadius: 5,
-                  textAlign: "center", 
-                  backgroundColor: "lightblue"
-                  }}>{t('message_confirmation_actualisation_checkout')}</Text>
-            <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
-              handleCheckoutDateChange()
-              handleChangeCheckoutDateChat()
-              setUpdateCheckout(false)
-            }} />
-          </View>
-        </ModalWeb>
+        <ModalConfirmUpdateCheckout user={user} userDB={userDB} handleLoadUserDB={handleLoadUserDB} updateCheckout={updateCheckout} setUpdateCheckout={setUpdateCheckout} />
 
         {showDate && handlePlatformDate()}
 
-        <ModalWeb 
-          animationType="slide"
-          transparent={true}
-          isVisible={showModalNotification} 
-          style={styles.roomBoxView}
-          onBackdropPress={() => {
-            setShowModalNotification(false)
-            pushNotificationSubscription(user.uid, navigation, handleLoadUserDB)}}>
-              <View style={styles.modalRoom2}>
-                  <Text style={{
-                      width: "100%", 
-                      fontSize: 20,
-                      paddingBottom: 10,
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      paddingTop: 10,
-                      }}><AntDesign name="infocirlce" size={15} color="black" style={{marginRight: 15}} />
-                      {t('chat_push_notification')}</Text>
-                      <Text style={{textAlign: "center", marginBottom: 10}}>{t('message_push_notification')}</Text>
-              </View>
-          </ModalWeb>
+        <ModalChatPushNotification user={user} userDB={userDB} handleLoadUserDB={handleLoadUserDB} showModalNotification={showModalNotification} setShowModalNotification={setShowModalNotification} />
 
-          <ModalWeb 
-          animationType="slide"
-          transparent={true}
-          isVisible={showWebsite} 
-          style={styles.roomBoxView}>
-              <View style={styles.modalRoom2}>
-                  <Text style={{
-                      width: "100%", 
-                      fontSize: 20,
-                      paddingBottom: 10,
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      paddingTop: 10,
-                      }}><Fontisto name="world" size={15} color="black" style={{marginRight: 15}} />
-                      {t('website')}</Text>
-                      <View style={{width: "90%", alignItems: "center"}}>
-                        <ImageBackground source={ require('../../img/booking-shadow.png') } style={{
-                            resizeMode: "contain",
-                            width: 300,
-                            height: 300}}>
-                        </ImageBackground>
-                        <Text style={{textAlign: "center", marginBottom: 10, width: "90%"}}>{t("website_message")}</Text>
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            width: "80%",
-                            marginBottom: 20}}>
-                            <Button containerStyle={styles.button2} type="clear" title={t("oui")} onPress={() => {
-                              handleLinkWebsite()
-                              setShowWebsite(false)
-                              handleNewwConnection()
-                            }} />
-                            <Button containerStyle={styles.button2} title={t("non")} onPress={() => {
-                              setShowWebsite(false)
-                              handleNewwConnection()}} />
-                        </View>
-              </View>
-          </ModalWeb>
+        <ModalMessageWebsite user={user} userDB={userDB} showWebsite={showWebsite} setShowWebsite={setShowWebsite} />
 
     </KeyboardAvoidingView>
   )
@@ -772,29 +477,6 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
   },
-  datePicker: {
-    width: 350,
-    height: 260,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    backgroundColor: "white",
-    marginTop: 200
-},
-datePickerModal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 55,
-    backgroundColor: "white"
-  },
-datePickerButton: {
-    width: 250,
-    marginTop: 50, 
-    marginBottom: 90,
-    borderColor: "white",
-    marginTop: 100
-},
 roomBoxView: {
     flex: 1,
     justifyContent: 'center',
@@ -814,18 +496,5 @@ modalRoom: {
     elevation: 5,
     width: "100%",
     borderRadius: 5
-},
-modalRoom2: {
-  padding: 10,
-  borderRadius: 10,
-  backgroundColor: 'white',
-  alignItems: 'center',
-  shadowColor: '#000',
-  shadowOffset: {
-      width: 0,
-      height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
 }
 })
