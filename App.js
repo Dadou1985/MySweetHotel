@@ -22,6 +22,8 @@ import { AntDesign } from '@expo/vector-icons';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 import * as Sentry from 'sentry-expo';
 import { withTrans } from './i18n/withTrans'
+import ErrorBoundary from 'react-native-error-boundary'
+import Fallback from './src/utils/errorBoundaryFallback'
 //import { messaging } from "./firebase"
 
 {/*Notifications.setNotificationHandler({
@@ -133,20 +135,22 @@ const App = () => {
       <UserContext.Provider value={{userDB, setUserDB}}>
         <Suspense fallback={loading}>
         <NavigationContainer>
-          <Stack.Navigator 
-          initialRouteName="Connexion"
-          screenOptions={globalScreenOptions}
-          >
-              <Stack.Screen name="Connexion" component={LoginScreen} options={{headerLeft: null, headerTitle: null}} />
-              <Stack.Screen name="Inscription" component={RegisterScreen} />
-              <Stack.Screen name="Chat" component={ChatScreen} />
-              <Stack.Screen name="Délogement" component={RoomChangeScreen} />
-              <Stack.Screen name="Maintenance" component={MaintenanceScreen} />
-              <Stack.Screen name="Réveil" component={TimerScreen} />
-              <Stack.Screen name="Taxi" component={TaxiScreen}/>
-              <Stack.Screen name="Information" component={Information} />
-              <Stack.Screen name="My Sweet Hotel" component={UserProfileScreen} />
-          </Stack.Navigator>
+          <ErrorBoundary FallbackComponent={Fallback}>
+            <Stack.Navigator 
+            initialRouteName="Connexion"
+            screenOptions={globalScreenOptions}
+            >
+                <Stack.Screen name="Connexion" component={LoginScreen} options={{headerLeft: null, headerTitle: null}} />
+                <Stack.Screen name="Inscription" component={RegisterScreen} />
+                <Stack.Screen name="Chat" component={ChatScreen} />
+                <Stack.Screen name="Délogement" component={RoomChangeScreen} />
+                <Stack.Screen name="Maintenance" component={MaintenanceScreen} />
+                <Stack.Screen name="Réveil" component={TimerScreen} />
+                <Stack.Screen name="Taxi" component={TaxiScreen}/>
+                <Stack.Screen name="Information" component={Information} />
+                <Stack.Screen name="My Sweet Hotel" component={UserProfileScreen} />
+            </Stack.Navigator>
+          </ErrorBoundary>
         </NavigationContainer>
         </Suspense>
       </UserContext.Provider>

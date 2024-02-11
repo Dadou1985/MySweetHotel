@@ -272,6 +272,9 @@ const UserProfile = ({navigation}) => {
   }, [showDate])
 
   useEffect(() => {  
+    // if(true) {
+    //   throw new Error("You must")
+    // }
     const newJourneyId = `${userDB.hotelId}${Date.now()}`
 
     const journeySettings = async() => {
