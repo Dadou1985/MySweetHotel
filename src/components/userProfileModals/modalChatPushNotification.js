@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next'
@@ -33,7 +33,7 @@ const ModalChatPushNotification = ({user, navigation, handleLoadUserDB, showModa
   )
 }
 
-export default ModalChatPushNotification
+export default memo(ModalChatPushNotification)
 
 const styles = StyleSheet.create({
   roomBoxView: {

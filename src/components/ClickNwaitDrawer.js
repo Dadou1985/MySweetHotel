@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, memo } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Modal } from 'react-native';
 import { auth, db, specialFirestoreOptions } from "../../firebase"
 import { UserContext } from '../components/userContext'
@@ -15,23 +15,24 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
 
     const { t } = useTranslation()
 
-    const handleClickAndWait = (item) => {
-        return db.collection("hotels")
-        .doc(userDB.hotelId)
-        .collection('housekeeping')
-        .doc("item")
-        .collection(item)
-        .add({
-            client: user.displayName,
-            room: userDB.room,
-            checkoutDate: userDB.checkoutDate
-,            createdAt: new Date(),
-            markup: Date.now(),
-        }).then(function(docRef){
-            console.log(docRef.id)
-          }).catch(function(error) {
-            console.error(error)
-          })
+    const handleClickAndWait = async (item) => {
+        try {
+            const docRef = await db.collection("hotels")
+                .doc(userDB.hotelId)
+                .collection('housekeeping')
+                .doc("item")
+                .collection(item)
+                .add({
+                    client: user.displayName,
+                    room: userDB.room,
+                    checkoutDate: userDB.checkoutDate,
+                    createdAt: new Date(),
+                    markup: Date.now(),
+                });
+            console.log(docRef.id);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleDeleteItemChoosen = async(item) => {
@@ -219,7 +220,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
     )
 }
 
-export default ClickNwaitDrawer
+export default memo(ClickNwaitDrawer)
 
 const styles = StyleSheet.create({
     img: {

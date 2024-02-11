@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useContext, useEffect, useLayoutEffect, useCallback } from 'react';
 import { KeyboardAvoidingView, Text, View, TouchableOpacity, Image, ImageBackground, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
@@ -76,7 +76,7 @@ const Maintenance = ({ navigation }) => {
       };
   
 
-      const handleChangePhotoUrl = async(event) => {
+      const handleChangePhotoUrl = useCallback (async(event) => {
         event.preventDefault()
         const response = await fetch(img)
         const blob = await response.blob()
@@ -120,7 +120,7 @@ const Maintenance = ({ navigation }) => {
                   return setUrl(url, uploadTask())})
           }
         )
-      } 
+      }, [img])
 
       const handleSubmit = (event) => {
         event.preventDefault()

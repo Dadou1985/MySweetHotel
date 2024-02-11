@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, memo} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Avatar } from "react-native-paper"
 import moment from 'moment'
@@ -136,7 +136,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
     }
 }
 
-export default ChatMessage
+export default memo(ChatMessage)
 
 const styles = StyleSheet.create({
     time: {

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, memo } from 'react'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { Fontisto } from '@expo/vector-icons';
 import { db } from "../../../firebase"
@@ -70,7 +70,7 @@ const ModalMessageWebsite = ({user, userDB, showWebsite, setShowWebsite}) => {
   )
 }
 
-export default ModalMessageWebsite
+export default memo(ModalMessageWebsite)
 
 const styles = StyleSheet.create({
   roomBoxView: {

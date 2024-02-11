@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { auth, db } from "../../../firebase"
 import { Button, Input } from 'react-native-elements';
@@ -64,7 +64,7 @@ const ModalUpdateEmail = ({user, userDB, handleLoadUserDB, updateMail, setUpdate
   )
 }
 
-export default ModalUpdateEmail
+export default memo(ModalUpdateEmail)
 
 const styles = StyleSheet.create({
   inputContainer: {

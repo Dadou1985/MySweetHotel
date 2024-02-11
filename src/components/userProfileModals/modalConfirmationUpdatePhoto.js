@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { storage } from "../../../firebase"
 import { Button } from 'react-native-elements';
@@ -65,7 +65,7 @@ const ModalConfirmationUpdatePhoto = ({user, updatePhoto, setUpdatePhoto, img}) 
   )
 }
 
-export default ModalConfirmationUpdatePhoto
+export default memo(ModalConfirmationUpdatePhoto)
 
 const styles = StyleSheet.create({
   roomBoxView: {

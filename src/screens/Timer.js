@@ -81,26 +81,27 @@ const Timer = ({navigation}) => {
         setShowTime(true)
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setPhoneNumber("")
         
-        return db.collection("hotels")
-        .doc(userDB.hotelId)
-        .collection('clock')
-        .add({
-            author: "effectué par le client",
-            client: user.displayName,
-            room: userDB.room,
-            markup: Date.now(),
-            hour: time,
-            date: moment(date.timestamp).format('L'),
-            phoneNumber: phoneNumber,
-            status: true
-          }).then(function(docRef){
-            console.log(docRef.id)
-          }).catch(function(error) {
-            console.error(error)
-          })
+        try {
+            const docRef = await db.collection("hotels")
+                .doc(userDB.hotelId)
+                .collection('clock')
+                .add({
+                    author: "effectué par le client",
+                    client: user.displayName,
+                    room: userDB.room,
+                    markup: Date.now(),
+                    hour: time,
+                    date: moment(date.timestamp).format('L'),
+                    phoneNumber: phoneNumber,
+                    status: true
+                });
+            console.log(docRef.id);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleItemToJourney = () => {
@@ -215,7 +216,7 @@ const Timer = ({navigation}) => {
                             backgroundColor: "lightblue"
                             }}>{t('timer_num_tel')}</Text>
                             <Input 
-                            placeholder={t("phone")} 
+                            placeholder={t("timer_num_tel")} 
                             type="number" 
                             value={phoneNumber} 
                             onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5}} />  
@@ -241,7 +242,7 @@ const Timer = ({navigation}) => {
                             backgroundColor: "lightblue"
                             }}>{t("jour")}</Text>
                             <Calendar
-                            minDate={new Date()} 
+                            minDate={moment(date).format()} 
                             renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
                             pastScrollRange={0}
                             onDayPress={(day) => {

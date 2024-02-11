@@ -144,29 +144,30 @@ const Chat = ({ navigation }) => {
         })      
       }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         Keyboard.dismiss()
         setInput("")
 
-        return db.collection("hotels")
-        .doc(userDB.hotelId)
-        .collection('chat')
-        .doc(user.displayName)
-        .collection("chatRoom")
-        .add({
-            author: user.displayName,
-            date: new Date(),
-            room: userDB.room ? userDB.room : "Pre-checkin",
-            email: user.email,
-            photo: user.photoURL,
-            text: input,
-            markup: Date.now(),
-            title: "guest"
-        }).then(function(docRef){
-            console.log(docRef.id)
-          }).catch(function(error) {
-            console.error(error)
-          })
+        try {
+            const docRef = await db.collection("hotels")
+                .doc(userDB.hotelId)
+                .collection('chat')
+                .doc(user.displayName)
+                .collection("chatRoom")
+                .add({
+                    author: user.displayName,
+                    date: new Date(),
+                    room: userDB.room ? userDB.room : "Pre-checkin",
+                    email: user.email,
+                    photo: user.photoURL,
+                    text: input,
+                    markup: Date.now(),
+                    title: "guest"
+                });
+            console.log(docRef.id);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
@@ -197,49 +198,56 @@ const Chat = ({ navigation }) => {
                         const renderSwitch = () => {
                             switch(language) {
                                 case 'en':
-                                    return <ChatMessage 
+                                    return <ChatMessage
+                                        key={message.id} 
                                         author={message.author}
                                         photo={message.photo ? message.photo : DefaultAvatar}
                                         translation={message.translated.en}
                                         markup={message.markup}
                                     />
                                 case 'de':
-                                    return <ChatMessage 
+                                    return <ChatMessage
+                                        key={message.id} 
                                         author={message.author}
                                         photo={message.photo ? message.photo : DefaultAvatar}
                                         translation={message.translated.de}
                                         markup={message.markup}
                                 />
                                 case 'it':
-                                return <ChatMessage 
+                                return <ChatMessage
+                                    key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.it}
                                     markup={message.markup}
                                 />
                                 case 'pt':
-                                return <ChatMessage 
+                                return <ChatMessage
+                                    key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.pt}
                                     markup={message.markup}
                                 />
                                 case 'es':
-                                return <ChatMessage 
+                                return <ChatMessage
+                                    key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.es}
                                     markup={message.markup}
                                 />
                                 case 'fr':
-                                return <ChatMessage 
+                                return <ChatMessage
+                                    key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.fr}
                                     markup={message.markup}
                                 />
                                 default:
-                                return <ChatMessage 
+                                return <ChatMessage
+                                    key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     translation={message.translated.fr}
@@ -249,7 +257,8 @@ const Chat = ({ navigation }) => {
                         }
 
                         if(userDB.localLanguage === userDB.language) {
-                            return <ChatMessage 
+                            return <ChatMessage
+                                key={message.id} 
                                     author={message.author}
                                     photo={message.photo ? message.photo : DefaultAvatar}
                                     text={message.text}

@@ -22,7 +22,7 @@ const Taxi = ({ navigation }) => {
     const [time, setTime] = useState("")
     const [hour, setHour] = useState("")
     const [minute, setMinute] = useState("")
-    const [passenger, setPassenger] = useState(null)
+    const [passenger, setPassenger] = useState(undefined)
     const [type, setType] = useState("Berline")
     const [typeClone, setTypeClone] = useState("")
     const [adress, setAdress] = useState("")
@@ -239,7 +239,7 @@ const Taxi = ({ navigation }) => {
                             backgroundColor: "lightblue"
                             }}>{t("jour")}</Text>
                             <Calendar
-                            minDate={new Date()} 
+                            minDate={moment(date).format()} 
                             renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
                             pastScrollRange={0}
                             onDayPress={(day) => {

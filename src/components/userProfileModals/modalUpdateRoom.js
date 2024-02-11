@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import {  db } from "../../../firebase"
 import { Button, Input } from 'react-native-elements';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import ModalWeb from 'modal-enhanced-react-native-web';
 
 const ModalUpdateRoom = ({user, userDB, handleLoadUserDB, updateRoom, setUpdateRoom}) => {
-    const [room, setRoom] = useState(null)
+    const [room, setRoom] = useState(undefined)
     const { t } = useTranslation()
 
 
@@ -73,7 +73,7 @@ return db.collection('hotels')
   )
 }
 
-export default ModalUpdateRoom
+export default memo(ModalUpdateRoom)
 
 const styles = StyleSheet.create({
     inputContainer: {

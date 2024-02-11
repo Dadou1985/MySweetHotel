@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext, useLayoutEffect, useRef, useCallback } from 'react'
 import { KeyboardAvoidingView, Dimensions, StyleSheet, Text, View, Image, Modal, TouchableOpacity, ImageBackground, ScrollView, Platform } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'
@@ -99,29 +99,27 @@ const Login = ({ navigation }) => {
         }
     }
 
-    const handleLoadUserDB = (userId) => {
-        return db.collection('guestUsers')
-        .doc(userId)
-        .get()
-        .then((doc) => {
-            if (doc.exists) {
-                setUserDB(doc.data())
-                if(doc.data().checkoutDate !== "") {
-                    navigation.replace('My Sweet Hotel')
-                    return setTimeout(() => {
-                        showMessage({
-                            message: t("succes_connection"),
-                            type: "info",
-                        })
-                    }, 1000);
-                }else{
-                    return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId:hotelId })
-                }
+    const handleLoadUserDB = async (userId) => {
+        const doc = await db.collection('guestUsers')
+            .doc(userId)
+            .get()
+        if (doc.exists) {
+            setUserDB(doc.data())
+            if (doc.data().checkoutDate !== "") {
+                navigation.replace('My Sweet Hotel')
+                return setTimeout(() => {
+                    showMessage({
+                        message: t("succes_connection"),
+                        type: "info",
+                    })
+                }, 1000)
             } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
+                return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId: hotelId })
             }
-        })
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!")
+        }
     }
 
     const handleUpdateLanguage = (userId) => {
@@ -132,7 +130,7 @@ const Login = ({ navigation }) => {
         })
     }
 
-    const addToHomeScreen = () => {
+    const addToHomeScreen = useCallback (() => {
         if(isSafari) {
             return (<ModalWeb 
                 animationType="slide"
@@ -204,7 +202,7 @@ const Login = ({ navigation }) => {
                         </ScrollView>
                     </ModalWeb>)
         }
-    }
+    }, [showModalAdd2Screen])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -274,7 +272,7 @@ const Login = ({ navigation }) => {
         //{title: "عرب", value: "ar", countryFlag: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAs0lEQVR4nO3QsQ1BURiA0X+FR1QSFTXRI6JTm0IjYQKFikSiZQCFARQ63gKiMc0zhNvcvPMl3wInQpIkSZLq2COG1xTvx73j9NK65nY8YlCleDfrlpNzs8ptAAAAAAAAAAAAAAD+/DIfvdb3xSe3kwF8V4eyyjAAAAAAAAAAAAAAAAD897bRfxZF8c7tZADLaJcRUWU3AAAAAAAAAAAAgPoC9G8p3kTnFBG3DJckSZKk+vUD4GJjvgc8XTAAAAAASUVORK5CYII="},
       ]
 
-    const modalLanguage = () => {
+    const modalLanguage = useCallback (() => {
         if(Platform.OS === "web"){
             return (<ModalWeb 
             animationType="slide"
@@ -354,7 +352,7 @@ const Login = ({ navigation }) => {
                 </Modal>
             )
         }
-    }
+    }, [showModalLanguage])
 
     const queryString = window.location.search;
     console.log("url", queryString)

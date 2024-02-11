@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useContext, useLayoutEffect, useCallback } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, ImageBackground, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
@@ -33,6 +33,8 @@ const Information = ({ navigation, route }) => {
 
     const { t } = useTranslation()
 
+    // console.log("USER+++++++++++++++", userDB)
+
     const locales = () => {
         switch(i18next.language) {
             case 'fr':
@@ -52,8 +54,8 @@ const Information = ({ navigation, route }) => {
         }
     }
     
-      LocaleConfig.locales[i18next.language] = locales()
-      LocaleConfig.defaultLocale = userDB.language;
+    LocaleConfig.locales[i18next.language] = locales()
+    LocaleConfig.defaultLocale = userDB && userDB.language && userDB.language;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -85,7 +87,7 @@ const Information = ({ navigation, route }) => {
         }
     }, [hotelId])
         
-    const handleLoadUserDB = async () => {
+    const handleLoadUserDB = useCallback (async () => {
         const doc = await db.collection('guestUsers')
             .doc(user.uid)
             .get();
@@ -96,7 +98,7 @@ const Information = ({ navigation, route }) => {
             console.log("No such document!");
         }
         return navigation.replace('My Sweet Hotel');
-    }
+    }, [userDB])
 
     const updateChatRoomname = () => {
         return db.collection('hotels')

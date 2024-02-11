@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { db } from "../../../firebase"
 import { Button } from 'react-native-elements';
@@ -8,13 +8,12 @@ import ModalWeb from 'modal-enhanced-react-native-web';
 import moment from 'moment'
 import 'moment/locale/fr';
 
-const ModalConfirmUpdateCheckout = ({user, userDB, handleLoadUserDB, upCheckout}) => {
-    const [updateCheckout, setUpdateCheckout] = useState(upCheckout)
+const ModalConfirmUpdateCheckout = ({user, userDB, date, handleLoadUserDB, updateCheckout, setUpdateCheckout}) => {
     const { t } = useTranslation()
 
     const handleCheckoutDateChange = async() => {
         await db.collection('guestUsers')
-        .doc(user.uid)
+        .doc(userDB.userId)
         .update({
           checkoutDate: moment(date.timestamp).format('L')
         })
@@ -27,15 +26,15 @@ const ModalConfirmUpdateCheckout = ({user, userDB, handleLoadUserDB, upCheckout}
         return handleLoadUserDB()     
       }
       
-      const handleChangeCheckoutDateChat = () => {
-        return db.collection('hotels')
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(userDB.username)
-            .update({
-              checkoutDate: moment(date.timestamp).format('L') 
-          })  
-      }
+    const handleChangeCheckoutDateChat = () => {
+      return db.collection('hotels')
+          .doc(userDB.hotelId)
+          .collection('chat')
+          .doc(userDB.username)
+          .update({
+            checkoutDate: moment(date.timestamp).format('L') 
+        })  
+    }
 
   return (
     <ModalWeb 
@@ -58,14 +57,14 @@ const ModalConfirmUpdateCheckout = ({user, userDB, handleLoadUserDB, upCheckout}
         <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
             handleCheckoutDateChange()
             handleChangeCheckoutDateChat()
-            setUpdateCheckout(false)
+            return setUpdateCheckout(false)
         }} />
         </View>
     </ModalWeb>
   )
 }
 
-export default ModalConfirmUpdateCheckout
+export default memo(ModalConfirmUpdateCheckout)
 
 const styles = StyleSheet.create({
   roomBoxView: {
