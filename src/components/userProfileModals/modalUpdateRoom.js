@@ -61,7 +61,7 @@ return db.collection('hotels')
                 backgroundColor: "lightblue"
                 }}>{t('actualisation_chbre')}</Text>
         <View style={styles.inputContainer}>
-            <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center"}} 
+            <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center", outline: "none"}} 
             onChangeText={(text) => setRoom(text)} />
         </View>
         <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {

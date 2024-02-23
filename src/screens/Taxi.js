@@ -167,9 +167,9 @@ const Taxi = ({ navigation }) => {
                                 setTypeClone(t('van'))}} />
                         </View>
                 </View>
-                <Input placeholder={t('passager')} type="number" value={passenger} 
+                <Input style={{ outline: "none" }} placeholder={t('passager')} type="number" value={passenger} 
                 onChangeText={(text) => setPassenger(text)} />
-                <Input placeholder={t('taxi_adresse_destination')}  type="text" value={adress} 
+                <Input style={{ outline: "none" }} placeholder={t('taxi_adresse_destination')}  type="text" value={adress} 
                 onChangeText={(text) => setAdress(text)} />
             </View>
             <Button onPress={() => {
@@ -205,7 +205,8 @@ const Taxi = ({ navigation }) => {
                             value={hour} 
                             maxLength="2"
                             onChangeText={(text) => setHour(text)}
-                            containerStyle={{width: "15%"}}/> 
+                            containerStyle={{width: "15%"}} 
+                            style={{ outline: "none" }} /> 
                             :
                             <Input 
                             placeholder="00" 
@@ -213,7 +214,8 @@ const Taxi = ({ navigation }) => {
                             value={minute} 
                             maxLength="2"
                             onChangeText={(text) => setMinute(text)}
-                            containerStyle={{width: "15%"}}/> 
+                            containerStyle={{width: "15%"}} 
+                            style={{ outline: "none" }} /> 
                         </View>
                         <Button onPress={() => {
                             setTime(`${hour}:${minute}`)

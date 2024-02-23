@@ -383,12 +383,12 @@ const Login = ({ navigation }) => {
             <View style={styles.inputContainer}>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
                     <MaterialIcons name="email" size={24} color="gray" />
-                    <Input placeholder={t('email')} autofocus type="email" value={email} 
+                    <Input style={{ outline: "none" }} placeholder={t('email')} autofocus type="email" value={email} 
                     onChangeText={(text) => setEmail(text)} />
                 </View>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
                     <FontAwesome name="lock" size={24} color="gray" style={{marginLeft: 5, marginRight: 5}} />
-                    <Input placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
+                    <Input style={{ outline: "none" }} placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
                     onChangeText={(text) => setPassword(text)} />
                 </View>
             </View>

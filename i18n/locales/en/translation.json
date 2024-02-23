@@ -660,5 +660,7 @@
     "mot_de_passe": "Password",
     "email": "E-mail",
     "connection": "Connection",
-    "choose_reason" : "Choose a pattern"
+    "choose_reason" : "Choose a pattern",
+    "boundary_error_message_begining": "An error has occurred !",
+    "boundary_error_message_ending": "We apologize for the inconvenience."
 }

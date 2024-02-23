@@ -670,5 +670,7 @@
     "mot_de_passe": "Contraseña",
     "email": "Correo electrónico",
     "connection": "Conexión",
-    "choose_reason" : "Elige un patrón"
+    "choose_reason" : "Elige un patrón",
+    "boundary_error_message_begining": "Se ha producido un error !",
+    "boundary_error_message_ending": "Pedimos disculpas por las molestias."
 }

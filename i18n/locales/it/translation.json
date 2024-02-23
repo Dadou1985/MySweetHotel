@@ -669,5 +669,7 @@
     "mot_de_passe": "Password",
     "email": "E-mail",
     "connection": "Connessione",
-    "choose_reason" : "Scegli un modello"
+    "choose_reason" : "Scegli un modello",
+    "boundary_error_message_begining": "Se ha producido un error !",
+    "boundary_error_message_ending": "Pedimos disculpas por las molestias."
 }

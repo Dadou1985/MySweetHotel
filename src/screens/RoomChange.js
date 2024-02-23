@@ -180,10 +180,10 @@ const RoomChange = ({ navigation }) => {
             </View>
             <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} type="text" value={typeClone} 
+                  <Input style={{ outline: "none" }} placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} type="text" value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
-                <Input placeholder={t('details')}  type="text" value={details} 
+                <Input style={{ outline: "none" }} placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
             <View style={{marginBottom: 55, marginTop: 25}}>

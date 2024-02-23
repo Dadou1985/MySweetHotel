@@ -183,14 +183,18 @@ const Timer = ({navigation}) => {
                             type="number" 
                             value={hour} 
                             maxLength="2"
-                            onChangeText={(text) => setHour(text)} containerStyle={{width: "15%"}} /> 
+                            onChangeText={(text) => setHour(text)} 
+                            containerStyle={{width: "15%"}}
+                            style={{ outline: "none" }} /> 
                             :
                             <Input 
                             placeholder="00" 
                             type="number" 
                             value={minute} 
                             maxLength="2"
-                            onChangeText={(text) => setMinute(text)} containerStyle={{width: "15%"}} />  
+                            onChangeText={(text) => setMinute(text)} 
+                            containerStyle={{width: "15%"}}
+                            style={{ outline: "none" }} />  
                         </View>
                         <Button onPress={() => {
                             setTime(`${hour}:${minute}`)
@@ -219,7 +223,7 @@ const Timer = ({navigation}) => {
                             placeholder={t("timer_num_tel")} 
                             type="number" 
                             value={phoneNumber} 
-                            onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                            onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5, outline: "none"}} />  
                         <Button onPress={() => setshowPhoneNumber(false)} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
                         </View>
                     </ModalWeb>

@@ -9,7 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign, Octicons } from '@expo/vector-icons';
+import { AntDesign, Octicons, FontAwesome5 } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
 
@@ -32,7 +32,7 @@ const Maintenance = ({ navigation }) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                  <Octicons name="tools" size={20} color="black" />
+                  <FontAwesome5 name="tools" size={20} color="black" />
                   <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('maintenance')}</Text>
               </View>
           ),
@@ -176,10 +176,10 @@ const Maintenance = ({ navigation }) => {
             </View>
             <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
+                  <Input style={{ outline: "none" }} placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
-                <Input placeholder={t('details')}  type="text" value={details} 
+                <Input style={{ outline: "none" }} placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
             <View style={{marginBottom: 55, marginTop: 25}}>

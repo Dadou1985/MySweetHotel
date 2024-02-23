@@ -55,7 +55,7 @@ const ModalUpdateEmail = ({user, userDB, handleLoadUserDB, updateMail, setUpdate
                 backgroundColor: "lightblue"
                 }}>{t('actualisation_email')}</Text>
         <View style={styles.inputContainer}>
-            <Input placeholder={t('email')} type="email" value={email} style={{textAlign: "center"}}
+            <Input placeholder={t('email')} type="email" value={email} style={{textAlign: "center", outline: "none"}}
             onChangeText={(text) => setEmail(text)} />
         </View>
         <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={handleChangeEmail} />

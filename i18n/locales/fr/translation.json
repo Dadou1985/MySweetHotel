@@ -673,5 +673,7 @@
     "mot_de_passe": "Mot de passe",
     "email": "E-mail",
     "connection": "Connexion",
-    "choose_reason" : "Choisir un motif"
+    "choose_reason" : "Choisir un motif",
+    "boundary_error_message_begining": "Une erreur est survenue !",
+    "boundary_error_message_ending": "Veuillez nous excuser pour la gène occasionnée."
 }

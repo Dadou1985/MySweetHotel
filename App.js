@@ -66,7 +66,7 @@ const App = () => {
     }catch (err) {
         alert(err)
     }
-}
+  }
 
   useEffect(() => {
       load().then(() => {

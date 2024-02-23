@@ -311,7 +311,7 @@ const UserProfile = ({navigation}) => {
 
   const handleCloseConciergePanel = () => setConciergePanel(false)
 
-  console.log("userDB", userDB)
+  console.log("userDB", user)
    
   if(isForegrounding) {
     return <View style={{width: '100%', height: '100%', flex: 1, flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
@@ -400,7 +400,7 @@ const UserProfile = ({navigation}) => {
                 <MaterialIcons name="room-preferences" size={35} color={userDB.room ? "black" : "gray"} />                
             </TouchableOpacity>            
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Maintenance')}>
-              <Octicons name="tools" size={25} color={userDB.room ? "black" : "gray"} />
+              <FontAwesome5 name="tools" size={25} color={userDB.room ? "black" : "gray"} />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Réveil')}>
               <Ionicons name="alarm" size={35} color={userDB.room ? "black" : "gray"} />

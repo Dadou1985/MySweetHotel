@@ -670,5 +670,7 @@
     "mot_de_passe": "Passwort",
     "email": "Email",
     "connection": "Verbindung",
-    "choose_reason" : "Wählen Sie ein Muster"
+    "choose_reason" : "Wählen Sie ein Muster",
+    "boundary_error_message_begining": "Ein Fehler ist aufgetreten !",
+    "boundary_error_message_ending": "Wir entschuldigen uns für die Unannehmlichkeiten."
 }

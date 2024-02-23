@@ -278,7 +278,7 @@ const Chat = ({ navigation }) => {
                         onChangeText={(text) => setInput(text)}
                         onSubmitEditing={sendMessage}
                         placeholder={t('envoi_message')}
-                        style={styles.input}
+                        style={[styles.input, { outline: "none"}]}
                     />
                     <TouchableOpacity
                     activeOpacity={0.5}
@@ -316,8 +316,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#ECECEC",
         borderWidth: 1,
         padding: 10,
-        color: "grey",
-        borderRadius: 30
+        color: "black",
+        borderRadius: 30, 
     },
     footer: {
         flexDirection: "row",

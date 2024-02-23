@@ -670,5 +670,7 @@
     "mot_de_passe": "Senha",
     "email": "E-mail",
     "connection": "Conexão",
-    "choose_reason" : "Escolha um padrão"
+    "choose_reason" : "Escolha um padrão",
+    "boundary_error_message_begining": "Ocorreu um erro !",
+    "boundary_error_message_ending": "Pedimos desculpas pela inconveniência."
 }

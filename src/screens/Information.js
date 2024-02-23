@@ -250,7 +250,7 @@ const Information = ({ navigation, route }) => {
                             placeholder={t("entre_num_chbre")} 
                             type="number" 
                             value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
-                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5}} />  
+                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5, outline: "none"}} />  
                         <Button raised={true} onPress={() => {
                             setShowModalRoom(false)
                             setShowDate(false)

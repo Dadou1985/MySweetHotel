@@ -177,13 +177,13 @@ const Register = ({ navigation, route }) => {
                     <Button containerStyle={styles.typeButton} title={t("female")} type={gender === "female" ? "solid" : "clear"} raised={true} onPress={() => setGender("female")} />
                 </View>
               </View>
-                <Input placeholder={t("nom") + "*"} autofocus type="text" value={name} 
+                <Input style={{ outline: "none" }} placeholder={t("nom") + "*"} autofocus type="text" value={name} 
                 onChangeText={(text) => setName(text)} />
-                <Input placeholder={t("email") + "*"} type="email" value={email} 
+                <Input style={{ outline: "none" }} placeholder={t("email") + "*"} type="email" value={email} 
                 onChangeText={(text) => setEmail(text)} />
-                <Input placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
+                <Input style={{ outline: "none" }} placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
                 onChangeText={(text) => setPassword(text)} />
-                <Input placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
+                <Input style={{ outline: "none" }} placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
                 onChangeText={(text) => setConfirmPassword(text)}  />
                 <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                   <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 25}}>
