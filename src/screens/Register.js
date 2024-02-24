@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
@@ -10,6 +10,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
+import { UserContext } from '../components/userContext'
 
 
 const Register = ({ navigation, route }) => {
@@ -26,8 +27,10 @@ const Register = ({ navigation, route }) => {
     const [gender, setGender] = useState("male")
     const [guestCategory, setGuestCategory] = useState("tourisme")
     const [guestCategoryClone, setGuestCategoryClone] = useState(null)
+    const [registrationStatus, setRegistrationStatus] = useState("pending")
 
-    const { hotelLogo } = route.params
+    const {userDB, setUserDB} = useContext(UserContext)
+    const { hotelLogo, currentHotelId } = route.params
   
 
     useLayoutEffect(() => {
@@ -49,59 +52,65 @@ const Register = ({ navigation, route }) => {
       })
   }, [navigation])
 
-    const freeRegister = (userId, photo) => {
-        return db.collection('guestUsers')
-        .doc(userId)
-        .set({
-          username: name,
-          email: email.trim(),
-          password: password,
-          language: language,
-          lastTimeConnected: Date.now(),
-          userId: userId,
-          localLanguage: i18next.language,
-          checkoutDate: "",
-          gender: gender,
-          guestCategory: guestCategory,
-          guestCategoryClone: guestCategoryClone !== null ? guestCategoryClone : t("tourisme"),
-          notificationStatus: "default",
-          photo: photo ? photo : null
-        })  
-      }
+  const freeRegister = async (userId, photo) => {
+    try {
+      await db.collection('guestUsers')
+      .doc(userId)
+      .set({
+        username: name,
+        email: email.trim(),
+        password: password,
+        language: language,
+        lastTimeConnected: Date.now(),
+        userId: userId,
+        localLanguage: i18next.language,
+        checkoutDate: "",
+        gender: gender,
+        guestCategory: guestCategory,
+        guestCategoryClone: guestCategoryClone !== null ? guestCategoryClone : t("tourisme"),
+        notificationStatus: "default",
+        photo: photo ? photo : null
+      })  
+      return setRegistrationStatus("accomplished")
+    }catch (e) {
+      throw new Error()
+    }
+  }
 
-      useEffect(() => {
-        let unsubscribe = auth.onAuthStateChanged(function(user) {
-            if (user) {
-              return db.collection('guestUsers')
-              .doc(userId)
-              .get()
-              .then((doc) => {
-                  if (doc.exists) {
-                  setUserDB(doc.data())
-                  } else {
-                      // doc.data() will be undefined in this case
-                      console.log("No such document!");
-                  }
-              }).then(() => {
-                return navigation.navigate('Information')
-              })     
-            } 
-          });
-        return unsubscribe
-    }, [])
+  useEffect(() => {
+    let unsubscribe = auth.onAuthStateChanged(function(user) {
+        if (user) {
+          return db.collection('guestUsers')
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+              if (doc.exists) {
+              setUserDB(doc.data())
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+          }).then(() => {
+            return navigation.navigate('Information', { hotelLogo: hotelLogo, currentHotelId: currentHotelId })
+          })     
+        } 
+      });
+    return unsubscribe
+  }, [registrationStatus])
 
-    useEffect(() => {
-      (async () => {
-        if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          }
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
         }
-      })();
-    }, []);
+      }
+    })();
+  }, []);
     
-    const pickImage = async () => {
+  const pickImage = async () => {
+    try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -111,129 +120,140 @@ const Register = ({ navigation, route }) => {
   
       console.log(result);
   
-      if (!result.cancelled) {
+      if (!result.canceled) {
         setImg(result.uri);
         showMessage({
           message: t('photo_selectionnee_message'),
           type: "info",
         })
       }
-    };
+    }catch (e) {
+      throw new Error()
+    }
+  };
 
-      const handleChangePhotoUrl = async(event) => {
-        event.preventDefault()
-        const response = await fetch(img)
-        const blob = await response.blob()
-        
-        const uploadTask = storage.ref(`msh-photo-user/${name}`).put(blob)
-        uploadTask.on(
-          "state_changed",
-          snapshot => {},
-          error => {console.log(error)},
-          () => {
-            storage
-              .ref("msh-photo-user")
-              .child(name)
-              .getDownloadURL()
-              .then(url => {
-                const uploadTask = () => {
-                    auth.createUserWithEmailAndPassword(email.trim(), password)
-                        .then((authUser) => {
-                            authUser.user.updateProfile({
-                                photoURL: url,
-                                displayName: name
-                            })
-                          freeRegister(authUser.user.uid, url)
-                        })
-                }
-                  return setUrl(url, uploadTask())})
-          }
-        )
-      } 
+  const handleChangePhotoUrl = async(event) => {
+    try {
+      event.preventDefault()
+      const response = await fetch(img)
+      const blob = await response.blob()
+      
+      const uploadTask = storage.ref(`msh-photo-user/${name}`).put(blob)
+      uploadTask.on(
+        "state_changed",
+        snapshot => {},
+        error => {console.log(error)},
+        () => {
+          storage
+            .ref("msh-photo-user")
+            .child(name)
+            .getDownloadURL()
+            .then(url => {
+              const uploadTask = () => {
+                  auth.createUserWithEmailAndPassword(email.trim(), password)
+                      .then((authUser) => {
+                          authUser.user.updateProfile({
+                              photoURL: url,
+                              displayName: name
+                          })
+                        freeRegister(authUser.user.uid, url)
+                      })
+              }
+                return setUrl(url, uploadTask())})
+        }
+      )
+    }catch(err) {
+      throw new Error()
+    }
+  } 
 
-      const handleAuthRegister = () => {
-        auth.createUserWithEmailAndPassword(email.trim(), password)
-          .then((authUser) => {
-              authUser.user.updateProfile({
-                  displayName: name
-              })
-            freeRegister(authUser.user.uid)
+  const handleAuthRegister = () => {
+    try {
+      auth.createUserWithEmailAndPassword(email.trim(), password)
+      .then((authUser) => {
+          authUser.user.updateProfile({
+              displayName: name
           })
-      }
+        freeRegister(authUser.user.uid)
+      })
+    }catch(err) {
+      throw new Error()
+    }
+  }
 
-      console.log("$$$$$$", img)
+  console.log("$$$$$$", img)
 
-    return (
-        <KeyboardAvoidingView style={styles.container}>
-            <StatusBar style="light" />
-            <View style={styles.containerText}>
-                <Image source={{uri: hotelLogo}} style={{width: 150, height: 100, marginBottom: 20}} />
-                <Text style={styles.text}>{t("creation_compte")}</Text>
-            </View>    
-            <View style={styles.inputContainer}>
-            <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
-                <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginTop: 15}}>
-                    <Button containerStyle={styles.typeButton} title={t("male")} type={gender === "male" ? "solid" : "clear"} raised={true} onPress={() => setGender("male")} />
-                    <Button containerStyle={styles.typeButton} title={t("female")} type={gender === "female" ? "solid" : "clear"} raised={true} onPress={() => setGender("female")} />
+  return (
+      <KeyboardAvoidingView style={styles.container}>
+          <StatusBar style="light" />
+          <View style={styles.containerText}>
+              <Image source={{uri: hotelLogo}} style={{width: 150, height: 100, marginBottom: 20}} />
+              <Text style={styles.text}>{t("creation_compte")}</Text>
+          </View>    
+          <View style={styles.inputContainer}>
+          <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+              <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginTop: 15}}>
+                  <Button containerStyle={styles.typeButton} title={t("male")} type={gender === "male" ? "solid" : "clear"} raised={true} onPress={() => setGender("male")} />
+                  <Button containerStyle={styles.typeButton} title={t("female")} type={gender === "female" ? "solid" : "clear"} raised={true} onPress={() => setGender("female")} />
+              </View>
+            </View>
+              <Input style={{ outline: "none" }} placeholder={t("nom") + "*"} autofocus type="text" value={name} 
+              onChangeText={(text) => setName(text)} />
+              <Input style={{ outline: "none" }} placeholder={t("email") + "*"} type="email" value={email} 
+              onChangeText={(text) => setEmail(text)} />
+              <Input style={{ outline: "none" }} placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
+              onChangeText={(text) => setPassword(text)} />
+              <Input style={{ outline: "none" }} placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
+              onChangeText={(text) => setConfirmPassword(text)}  />
+              <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+                <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 10, marginTop: 10}}>
+                    <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => {
+                      setGuestCategory("tourisme")
+                      setGuestCategoryClone(t("tourisme"))
+                    }}
+                onSubmitEditing={freeRegister} />
+                    <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => {
+                      setGuestCategory("business")
+                      setGuestCategoryClone(t("business"))
+                    }}
+                onSubmitEditing={freeRegister} />
                 </View>
               </View>
-                <Input style={{ outline: "none" }} placeholder={t("nom") + "*"} autofocus type="text" value={name} 
-                onChangeText={(text) => setName(text)} />
-                <Input style={{ outline: "none" }} placeholder={t("email") + "*"} type="email" value={email} 
-                onChangeText={(text) => setEmail(text)} />
-                <Input style={{ outline: "none" }} placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
-                onChangeText={(text) => setPassword(text)} />
-                <Input style={{ outline: "none" }} placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
-                onChangeText={(text) => setConfirmPassword(text)}  />
-                <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
-                  <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 25}}>
-                      <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => {
-                        setGuestCategory("tourisme")
-                        setGuestCategoryClone(t("tourisme"))
-                      }}
-                  onSubmitEditing={freeRegister} />
-                      <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => {
-                        setGuestCategory("business")
-                        setGuestCategoryClone(t("business"))
-                      }}
-                  onSubmitEditing={freeRegister} />
-                  </View>
-                </View>
-            </View>
-            <View style={{marginBottom: 35}}>
-                <TouchableOpacity style={{flexDirection: "row wrap", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
-                <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
-                <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t("ajout_photo_profil")}</Text>
-                </TouchableOpacity>
-            </View>
-            <Button onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
-            <Button containerStyle={styles.button2} title={t("creation_compte")} onPress={(event) => {
-              if(name !== "" && email !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword) {
-                if(img !== null) {
-                  handleChangePhotoUrl(event)
-                }else{
-                  handleAuthRegister()
-                }
+          </View>
+          {img === null && <View style={{marginBottom: 15}}>
+              <TouchableOpacity style={{flexDirection: "row wrap", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
+              <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
+              <Text style={{fontSize: 20, color: "grey", marginTop: 5}}>{t("ajout_photo_profil")}</Text>
+              </TouchableOpacity>
+          </View>}
+          <Button onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
+          <Button containerStyle={styles.button2} title={t("creation_compte")} onPress={(event) => {
+            if(name !== "" && email !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword) {
+              if(img !== null) {
+                handleChangePhotoUrl(event)
               }else{
-                if(password !== confirmPassword) {
-                  setTimeout(() => {
-                    showMessage({
-                        message: t('conf_mdp_error'),
-                        type: "danger",
-                      })
-                }, 1000)
-                }else{
-                  setTimeout(() => {
-                    showMessage({
-                        message: t('register_error'),
-                        type: "danger",
-                      })
-                }, 1000)
-                }
+                handleAuthRegister()
               }
-                }} />
-        </KeyboardAvoidingView>
-    )
+            }else{
+              if(password !== confirmPassword) {
+                setTimeout(() => {
+                  showMessage({
+                      message: t('conf_mdp_error'),
+                      type: "danger",
+                    })
+              }, 1000)
+              }else{
+                setTimeout(() => {
+                  showMessage({
+                      message: t('register_error'),
+                      type: "danger",
+                    })
+              }, 1000)
+              }
+            }
+              }} />
+      </KeyboardAvoidingView>
+  )
 }
 
 export default Register
@@ -244,7 +264,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         padding: 10,
-        backgroundColor: "white"
+        backgroundColor: "white",
     },
     containerText: {
         marginBottom: 20,
@@ -266,7 +286,6 @@ const styles = StyleSheet.create({
     },
     button2: {
         width: 200,
-        marginTop: 10,
         borderRadius: 30,
         marginBottom: 30
     },

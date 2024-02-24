@@ -22,22 +22,22 @@ import { ModalChatPushNotification, ModalConfirmUpdateCheckout, ModalConfirmatio
 import ModalUpdateEmail from '../components/userProfileModals/modalUpdateEmail'
 
 const UserProfile = ({navigation}) => {
-    const [img, setImg] = useState(null)
-    const [user, setUser] = useState(auth.currentUser)
-    const {userDB, setUserDB} = useContext(UserContext)
-    const [updateRoom, setUpdateRoom] = useState(false)
-    const [updateMail, setUpdateMail] = useState(false)
-    const [updatePhoto, setUpdatePhoto] = useState(false)
-    const [updateCheckout, setUpdateCheckout] = useState(false)
-    const [date, setDate] = useState(new Date())
-    const [showDate, setShowDate] = useState(false)
-    const [chatResponse, setChatResponse] = useState([])
-    const [isForegrounding, setIsForegrounding] = useState(false)
-    const [conciergePanel, setConciergePanel] = useState(false)
-    const [showModalNotification, setShowModalNotification] = useState(false)
-    const [showWebsite, setShowWebsite] = useState(false)
-    const { t } = useTranslation()
+  const [img, setImg] = useState(null)
+  const [user, setUser] = useState(auth.currentUser)
+  const [updateRoom, setUpdateRoom] = useState(false)
+  const [updateMail, setUpdateMail] = useState(false)
+  const [updatePhoto, setUpdatePhoto] = useState(false)
+  const [updateCheckout, setUpdateCheckout] = useState(false)
+  const [date, setDate] = useState(new Date())
+  const [showDate, setShowDate] = useState(false)
+  const [chatResponse, setChatResponse] = useState([])
+  const [isForegrounding, setIsForegrounding] = useState(false)
+  const [conciergePanel, setConciergePanel] = useState(false)
+  const [showModalNotification, setShowModalNotification] = useState(false)
+  const [showWebsite, setShowWebsite] = useState(false)
+  const { t } = useTranslation()
 
+  const {userDB, setUserDB} = useContext(UserContext)
   const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                     navigator.userAgent &&
                     navigator.userAgent.indexOf('CriOS') == -1 &&
@@ -240,7 +240,7 @@ const UserProfile = ({navigation}) => {
 
   const handlePlatformDate = useCallback (() => {
     return (
-        <ModalWeb 
+      <ModalWeb 
         animationType="slide"
         isVisible={showDate} 
         style={styles.roomBoxView}
@@ -266,8 +266,8 @@ const UserProfile = ({navigation}) => {
                   setDate(day)
                   setUpdateCheckout(true)
                   setShowDate(false)}} />
-        </View>
-    </ModalWeb>
+          </View>
+      </ModalWeb>
     )  
   }, [showDate])
 
@@ -311,7 +311,7 @@ const UserProfile = ({navigation}) => {
 
   const handleCloseConciergePanel = () => setConciergePanel(false)
 
-  console.log("userDB", user)
+  console.log("userDB", userDB)
    
   if(isForegrounding) {
     return <View style={{width: '100%', height: '100%', flex: 1, flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>

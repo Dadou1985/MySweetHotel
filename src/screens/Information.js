@@ -24,13 +24,13 @@ const Information = ({ navigation, route }) => {
     const [formValue, setFormValue] = useState({username: "", email: "", region: "", departement: "", city: "", standing: "", phone: "", room: 0, code_postal: "", adress: "", website: "", mail: "", hotelId: "", hotelName: "", country: "", logo: ""})
     const [hotelName, setHotelName] = useState("Lancer la recherche")
     const [user, setUser] = useState(auth.currentUser)
-    const {userDB, setUserDB} = useContext(UserContext)
     const [showModalRoom, setShowModalRoom] = useState(false)
     const [inputRoom, setInputRoom] = useState(false)
     const [url, setUrl] = useState("")
     const [hotelId, setHotelId] = useState(currentHotelId)
     const [recap, setRecap] = useState(false)
 
+    const {userDB, setUserDB} = useContext(UserContext)
     const { t } = useTranslation()
 
     // console.log("USER+++++++++++++++", userDB)
@@ -169,7 +169,7 @@ const Information = ({ navigation, route }) => {
                         </>}
                     </View>
 
-            <ModalWeb 
+                <ModalWeb 
                     animationType="slide"
                     transparent={true}
                     isVisible={showDate} 
@@ -179,7 +179,7 @@ const Information = ({ navigation, route }) => {
                         alignItems: "center",
                         backgroundColor: "white",
                         width: "100%",
-                        height: "100%",
+                        height: "auto",
                         borderRadius: 5
                     }}>
                         <View style={{
@@ -382,9 +382,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 60,
-        backgroundColor: "white",
-        borderRadius: 5
       },
     datePickerButton: {
         width: 250,

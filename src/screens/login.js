@@ -14,9 +14,11 @@ import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const {userDB, setUserDB} = useContext(UserContext)
     const [showModalLanguage, setShowModalLanguage] = useState(false)
     const [showModalAdd2Screen, setshowModalAdd2Screen] = useState(false)
+
+    const {userDB, setUserDB} = useContext(UserContext)
+
 
     const { t } = useTranslation()
 
@@ -241,7 +243,7 @@ const Login = ({ navigation }) => {
         }
     }, [])
 
-    const Login = () => {
+    const handleLogin = () => {
         auth.signInWithEmailAndPassword(email.trim(), password)
         .then(() => {
             setEmail('') 
@@ -393,7 +395,7 @@ const Login = ({ navigation }) => {
                 </View>
             </View>
             <View style={{flex: 2}}>
-                <Button onPress={() => Login()} containerStyle={styles.button} title={t('connection')} />
+                <Button onPress={() => handleLogin()} containerStyle={styles.button} title={t('connection')} />
                 {userDB === null && <Button onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
             </View>
        
