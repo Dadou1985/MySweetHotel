@@ -100,6 +100,8 @@ const Information = ({ navigation, route }) => {
         return navigation.replace('My Sweet Hotel');
     }, [userDB])
 
+    
+
     const updateChatRoomname = () => {
         return db.collection('hotels')
           .doc(formValue.hotelId)
@@ -109,6 +111,17 @@ const Information = ({ navigation, route }) => {
             checkoutDate: moment(date.timestamp).format('L') 
         })      
       }
+
+      const isChatExist = async () => {
+        const doc = await db.collection('hotels')
+            .doc(formValue.hotelId)
+            .collection('chat')
+            .doc(user.displayName)
+            .get();
+        if (doc.exists) {
+            updateChatRoomname()
+        }
+    }
 
     const handleSubmit = async () => {
         await db.collection('guestUsers')
@@ -134,7 +147,6 @@ const Information = ({ navigation, route }) => {
             hotelPhone: formValue.phone,
             language: i18next.language,
             logo: formValue.logo,
-            newConnection: true,
             hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId),
             })
 
@@ -163,7 +175,7 @@ const Information = ({ navigation, route }) => {
                              icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
                              onPress={() => {
                                 handleSubmit()
-                                updateChatRoomname()
+                                isChatExist()
                             }} containerStyle={styles.button} title={t("accueil")} />
                         </View>
                         </>}
@@ -217,7 +229,7 @@ const Information = ({ navigation, route }) => {
                                         standing: hotel.classement,
                                         website: hotel.website,
                                         phone: hotel.phone,
-                                        logo: hotel.logo
+                                        logo: hotel.logo,
                                     })
                                 setHotelName(hotel.hotelName)
                                 setUrl(hotel.website)})

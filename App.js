@@ -24,6 +24,7 @@ import * as Sentry from 'sentry-expo';
 import { withTrans } from './i18n/withTrans'
 import ErrorBoundary from 'react-native-error-boundary'
 import Fallback from './src/utils/errorBoundaryFallback'
+import { useMediaQuery } from 'react-responsive'
 //import { messaging } from "./firebase"
 
 {/*Notifications.setNotificationHandler({
@@ -55,6 +56,8 @@ const App = () => {
   const responseListener = useRef();
   const [notification, setNotification] = useState(false);
   const loading = <Text style={{color: "white"}}>Loading...</Text>
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   const load = async () => {
     try{
@@ -129,44 +132,55 @@ const App = () => {
     }
   }, [])*/}
 
-
-  if(!isLoading) {
-   return <>
-      <UserContext.Provider value={{userDB, setUserDB}}>
-        <Suspense fallback={loading}>
-        <NavigationContainer>
-          <ErrorBoundary FallbackComponent={Fallback}>
-            <Stack.Navigator 
-            initialRouteName="Connexion"
-            screenOptions={globalScreenOptions}
-            >
-                <Stack.Screen name="Connexion" component={LoginScreen} options={{headerLeft: null, headerTitle: null}} />
-                <Stack.Screen name="Inscription" component={RegisterScreen} />
-                <Stack.Screen name="Chat" component={ChatScreen} />
-                <Stack.Screen name="Délogement" component={RoomChangeScreen} />
-                <Stack.Screen name="Maintenance" component={MaintenanceScreen} />
-                <Stack.Screen name="Réveil" component={TimerScreen} />
-                <Stack.Screen name="Taxi" component={TaxiScreen}/>
-                <Stack.Screen name="Information" component={Information} />
-                <Stack.Screen name="My Sweet Hotel" component={UserProfileScreen} />
-            </Stack.Navigator>
-          </ErrorBoundary>
-        </NavigationContainer>
-        </Suspense>
-      </UserContext.Provider>
-      <FlashMessage position="top" style={{zIndex: 10}} />
-      </>
-  }else{
+  if(isMobile) {
+    if(!isLoading) {
+      return <>
+         <UserContext.Provider value={{userDB, setUserDB}}>
+           <Suspense fallback={loading}>
+           <NavigationContainer>
+             <ErrorBoundary FallbackComponent={Fallback}>
+               <Stack.Navigator 
+               initialRouteName="Connexion"
+               screenOptions={globalScreenOptions}
+               >
+                   <Stack.Screen name="Connexion" component={LoginScreen} options={{headerLeft: null, headerTitle: null}} />
+                   <Stack.Screen name="Inscription" component={RegisterScreen} />
+                   <Stack.Screen name="Chat" component={ChatScreen} />
+                   <Stack.Screen name="Délogement" component={RoomChangeScreen} />
+                   <Stack.Screen name="Maintenance" component={MaintenanceScreen} />
+                   <Stack.Screen name="Réveil" component={TimerScreen} />
+                   <Stack.Screen name="Taxi" component={TaxiScreen}/>
+                   <Stack.Screen name="Information" component={Information} />
+                   <Stack.Screen name="My Sweet Hotel" component={UserProfileScreen} />
+               </Stack.Navigator>
+             </ErrorBoundary>
+           </NavigationContainer>
+           </Suspense>
+         </UserContext.Provider>
+         <FlashMessage position="top" style={{zIndex: 10}} />
+         </>
+     }else{
+       return <View style={styles.container}>
+         <Image id="flag" style={{backgroundColor: "#fff", width: "90%", height: "90%"}}
+         source={require('./assets/msh-splashScreen.png')} 
+         />
+         <View style={{flexDirection: "row", alignItems: "center"}}>
+           <AntDesign name="copyright" size={10} color="black" style={{marginRight: 5}} />
+           <Text>My Sweet Hotel</Text>
+         </View>
+       </View> 
+     }
+  } else {
     return <View style={styles.container}>
-      <Image id="flag" style={{backgroundColor: "#fff", width: "90%", height: "90%"}}
-      source={require('./assets/msh-splashScreen.png')} 
-      />
-      <View style={{flexDirection: "row", alignItems: "center"}}>
-        <AntDesign name="copyright" size={10} color="black" style={{marginRight: 5}} />
-        <Text>My Sweet Hotel</Text>
-      </View>
-    </View> 
+         <Image id="flag" style={{backgroundColor: "#fff", width: "20%", height: "70%"}}
+         source={require('./assets/splash-screen.png')} 
+         />
+         <View style={{flexDirection: "row", alignItems: "center"}}>
+           <Text style={{fontSize: "1.5rem"}}>Accessible uniquement sur mobile</Text>
+         </View>
+       </View> 
   }
+  
 }
 
 export default withTrans(App)
