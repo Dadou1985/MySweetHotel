@@ -33,7 +33,7 @@ const Information = ({ navigation, route }) => {
     const {userDB, setUserDB} = useContext(UserContext)
     const { t } = useTranslation()
 
-    // console.log("USER+++++++++++++++", userDB)
+    console.log("USER+++++++++++++++", userDB)
 
     const locales = () => {
         switch(i18next.language) {
@@ -87,7 +87,7 @@ const Information = ({ navigation, route }) => {
         }
     }, [hotelId])
         
-    const handleLoadUserDB = useCallback (async () => {
+    const handleLoadUserDB = async () => {
         const doc = await db.collection('guestUsers')
             .doc(user.uid)
             .get();
@@ -98,7 +98,7 @@ const Information = ({ navigation, route }) => {
             console.log("No such document!");
         }
         return navigation.replace('My Sweet Hotel');
-    }, [userDB])
+    }
 
     
 
@@ -124,33 +124,37 @@ const Information = ({ navigation, route }) => {
     }
 
     const handleSubmit = async () => {
-        await db.collection('guestUsers')
-        .doc(user.uid)
-        .update({
-            hotelId: formValue.hotelId,
-            hotelName: hotelName,
-            hotelRegion: formValue.region,
-            hotelDept: formValue.departement,
-            city: formValue.city,
-            classement: formValue.standing,            
-            room: currentRoom,
-            checkoutDate: moment(date.timestamp).format('L'),
-            towel: true,
-            soap: true,
-            toiletPaper: true,
-            hairDryer: true,
-            pillow: true,
-            blanket: true,
-            iron: true,
-            babyBed: true, 
-            website: formValue.website !== undefined ? formValue.website : "none",
-            hotelPhone: formValue.phone,
-            language: i18next.language,
-            logo: formValue.logo,
-            hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId),
-            })
+        try {
+            await db.collection('guestUsers')
+            .doc(user.uid)
+            .update({
+                hotelId: formValue.hotelId,
+                hotelName: hotelName,
+                hotelRegion: formValue.region,
+                hotelDept: formValue.departement,
+                city: formValue.city,
+                classement: formValue.standing,            
+                room: currentRoom,
+                checkoutDate: moment(date.timestamp).format('L'),
+                towel: true,
+                soap: true,
+                toiletPaper: true,
+                hairDryer: true,
+                pillow: true,
+                blanket: true,
+                iron: true,
+                babyBed: true, 
+                website: formValue.website !== undefined ? formValue.website : "none",
+                hotelPhone: formValue.phone,
+                language: i18next.language,
+                logo: formValue.logo,
+                hotelVisitedArray: specialFirestoreOptions.arrayUnion(formValue.hotelId),
+                })
 
-        return handleLoadUserDB()
+            return handleLoadUserDB()
+        } catch (error) {
+            throw new Error()
+        }
     }
 
     console.log(user.displayName)
