@@ -305,6 +305,8 @@ const UserProfile = ({navigation}) => {
       .then(() => {
         return handleLoadUserDB()
       })
+    } else {
+      console.log("journeyId already exists")
     }
 
   }, [userDB.journeyId])
