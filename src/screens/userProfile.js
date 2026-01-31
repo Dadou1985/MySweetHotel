@@ -80,7 +80,7 @@ const UserProfile = ({navigation}) => {
         <SimpleLineIcons 
         name="logout" 
         size={24} 
-        color="black" 
+        color="#B8860B" 
         style={{marginRight: 20}}
         onPress={() => {
             Logout()
@@ -130,26 +130,28 @@ const UserProfile = ({navigation}) => {
   }, [])
 
   useEffect(() => {
-    const toolOnAir = () => {
-      return db.collection('hotels')
-        .doc(userDB.hotelId)
-        .collection("chat")
-        .where("title", "==", user.displayName)
+    if(userDB.hotelId !== "") {
+      const toolOnAir = () => {
+        return db.collection('hotels')
+          .doc(userDB?.hotelId)
+          .collection("chat")
+          .where("title", "==", user?.displayName)
+      }
+  
+      let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
+          const snapInfo = []
+          snapshot.forEach(function(doc) {          
+            snapInfo.push({
+                id: doc.id,
+                ...doc.data()
+              })        
+            });
+            console.log(snapInfo)
+            setChatResponse(snapInfo)
+        });
+        return unsubscribe
     }
-
-    let unsubscribe = toolOnAir().onSnapshot(function(snapshot) {
-        const snapInfo = []
-        snapshot.forEach(function(doc) {          
-          snapInfo.push({
-              id: doc.id,
-              ...doc.data()
-            })        
-          });
-          console.log(snapInfo)
-          setChatResponse(snapInfo)
-      });
-      return unsubscribe
-  },[])
+  },[userDB.hotelId])
 
   const Logout = () => {
     auth.signOut()
@@ -166,16 +168,16 @@ const UserProfile = ({navigation}) => {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImg(result.uri);
       setUpdatePhoto(true)    
     }
 
   };
 
-  const handleLoadUserDB = useCallback (async () => {
+  const handleLoadUserDB =  async () => {
     const doc = await db.collection('guestUsers')
-      .doc(user.uid)
+      .doc(user?.uid)
       .get();
     if (doc.exists) {
       setUserDB(doc.data());
@@ -183,7 +185,7 @@ const UserProfile = ({navigation}) => {
       // doc.data() will be undefined in this case
       console.log("No such document!");
     }
-  }, [userDB])
+  }
 
   const handleLinkWebsite = async() => {
     return WebBrowser.openBrowserAsync(userDB.website)
@@ -210,7 +212,7 @@ const UserProfile = ({navigation}) => {
     return db.collection('hotels')
         .doc(userDB.hotelId)
         .collection('chat')
-        .doc(user.displayName)
+        .doc(user?.displayName)
         .update({
             hotelResponding: false,
         }) 
@@ -222,7 +224,7 @@ const UserProfile = ({navigation}) => {
       return db.collection("hotels")
           .doc(userDB.hotelId)
           .collection('chat')
-          .doc(user.displayName)
+          .doc(user?.displayName)
           .update({isChatting: true}) 
     } 
   }, [chatResponse])
@@ -254,13 +256,14 @@ const UserProfile = ({navigation}) => {
                     fontSize: 20,
                     paddingTop: 10, 
                     paddingBottom: 10,
-                    borderRadius: 5,
+                    borderTopLeftRadius: 5,
+                    borderTopRightRadius: 5,
                     textAlign: "center", 
-                    backgroundColor: "lightblue"
+                    backgroundColor: "#B8860B"
                     }}>{t('date_checkout')}</Text>
             <Calendar
                 minDate={moment(date).format()} 
-                renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
+                renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} color="#B8860B" /> : <AntDesign name="right" size={24} color="#B8860B" />}                            
                 pastScrollRange={0}
                 onDayPress={(day) => {
                   setDate(day)
@@ -279,7 +282,7 @@ const UserProfile = ({navigation}) => {
 
     const journeySettings = async() => {
       await db.collection("guestUsers")
-      .doc(user.uid)
+      .doc(user?.uid)
       .collection('journey')
       .doc(newJourneyId)
       .set({
@@ -294,7 +297,7 @@ const UserProfile = ({navigation}) => {
       })
 
       return db.collection('guestUsers')
-          .doc(user.uid)
+          .doc(user?.uid)
           .update({
             journeyId: newJourneyId
           })
@@ -313,7 +316,7 @@ const UserProfile = ({navigation}) => {
 
   const handleCloseConciergePanel = () => setConciergePanel(false)
 
-  console.log("userDB", userDB)
+  console.log("userDB", user)
    
   if(isForegrounding) {
     return <View style={{width: '100%', height: '100%', flex: 1, flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
@@ -326,24 +329,23 @@ const UserProfile = ({navigation}) => {
       <KeyboardAvoidingView style={styles.container}>
         <StatusBar style="light" />
         <View style={{flex: 2, width: "100%"}}>
-          {user.photoURL ? <ImageBackground source={{uri: user.photoURL}} style={styles.image}>
+          {user?.photoURL ? <ImageBackground source={{uri: user?.photoURL}} style={styles.image}>
           <TouchableOpacity style={{padding: 15}} onPress={pickImage}>
-                <MaterialIcons name="add-a-photo" size={35} color="grey" />                    
+                <MaterialIcons name="add-a-photo" size={35} color="black" />                    
               </TouchableOpacity>
           </ImageBackground> : 
           <ImageBackground source={require('../../img/avatar-client.png')} style={styles.image}>
             <TouchableOpacity style={{padding: 15}} onPress={pickImage}>
-                <MaterialIcons name="add-a-photo" size={35} color="grey" />                    
+                <MaterialIcons name="add-a-photo" size={35} color="black" />                    
               </TouchableOpacity>  
           </ImageBackground>}
         </View>
         <View style={{flexDirection: "column", width: "100%", padding: 10, alignItems: "center"}}>
-          <Text style={{fontSize: 30, fontWeight: "bold"}}>{user.displayName}</Text>    
-          <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "lightgray", borderBottomWidth: 1, paddingBottom: 10}}>
-            <Text style={{fontSize: 15, fontWeight: "bold", color: "gray"}}>{userDB.email}</Text>
+          <Text style={{fontSize: 30, fontWeight: "bold", color: "#B8860B"}}>{userDB?.username}</Text>    
+          <View style={{flexDirection: "row", justifyContent: "center", width: "90%", marginBottom: 20, borderBottomColor: "#B8860B", borderBottomWidth: 1, paddingBottom: 10}}>
+            <Text style={{fontSize: "0.7rem", fontWeight: "bold", color: "gray", marginRight: "1vw"}}>{userDB.email}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateMail(true)}>
-              <Ionicons name="pencil-outline" size={20} color="black" />
-            </TouchableOpacity>
+              <Ionicons name="add-circle" size={15} color="#B8860B" />            </TouchableOpacity>
           </View>
           <Text style={{fontSize: 15, marginBottom: userDB.website !== "none" ? 0 : 30, fontWeight: "bolder"}}>{userDB.hotelName}</Text>
           {userDB.website !== "none" ? <TouchableOpacity onPress={handleLinkWebsite}>
@@ -352,23 +354,21 @@ const UserProfile = ({navigation}) => {
                     fontSize: 12,
                     marginBottom: 20,
                     textAlign: "center",
-                    fontWeight: "bold",
+                    color: "grey"
                     }}>
-                      <Fontisto name="world" size={15} color="black" style={{marginRight: 5}} />
+                      <Fontisto name="world" size={15} color="grey" style={{marginRight: 5}} />
                       {t("website")}
             </Text>
           </TouchableOpacity> : <></>}
           <View style={{flexDirection: "row", justifyContent: userDB.room ? "space-around" : "center", mawWidth: "90%"}}>
-          {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 12, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center"}}>{t('enter_room_number')}</Text></TouchableOpacity>}
+          {userDB.room ? <Text style={{fontSize: 15, marginBottom: 10, marginRight: "1vw"}}>{t('occupation_chbre')} {userDB.room}</Text> : <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}><Text style={{fontSize: 12, marginBottom: 10, fontWeight: "bolder", width: "100%", textAlign: "center", marginRight: "1vw"}}>{t('enter_room_number')}</Text></TouchableOpacity>}
             {userDB.room ? <TouchableOpacity activeOpacity={0.5} onPress={() => setUpdateRoom(true)}>
-              <Ionicons name="pencil-outline" size={20} color="black" />
-            </TouchableOpacity> : null}
+              <Ionicons name="add-circle" size={15} color="#B8860B" />            </TouchableOpacity> : null}
           </View>
           <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%", marginBottom: "5%"}}>
-            <Text style={{fontSize: 14, marginBottom: 20}}>{t('checkout_prevu')} {userDB.checkoutDate}</Text>
+            <Text style={{fontSize: 14, marginBottom: 20, marginRight: "1vw"}}>{t('checkout_prevu')} {userDB.checkoutDate}</Text>
             <TouchableOpacity activeOpacity={0.5} onPress={() => {setShowDate(true)}}>
-              <Ionicons name="pencil-outline" size={20} color="black" />
-            </TouchableOpacity>
+              <Ionicons name="add-circle" size={15} color="#B8860B" />            </TouchableOpacity>
           </View>
           <Filter effects={{"drop-shadow": "1px 2px 3px"}} style={{width: "100%"}}>
             <View style={{
@@ -377,7 +377,7 @@ const UserProfile = ({navigation}) => {
               justifyContent: "space-around", 
               width: "100%", 
               borderColor: "transparent", 
-              backgroundColor: "whitesmoke",
+              backgroundColor: "black",
               borderWidth: "1px",
               borderRadius: 30,
               padding: "2%",
@@ -391,7 +391,7 @@ const UserProfile = ({navigation}) => {
                   inChat()
                 }
                 }}>
-                <Entypo name="chat" size={30} color="black" /> 
+                <Entypo name="chat" size={30} color="#B8860B" /> 
                 {chatResponse.map(response => {
                   if(response.hotelResponding) {
                     return <Text style={{fontWeight: "bold", color: "red", marginLeft: 5, fontSize: 20}}>!</Text>
@@ -399,21 +399,21 @@ const UserProfile = ({navigation}) => {
                 })}                   
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Délogement')}>
-                <MaterialIcons name="room-preferences" size={35} color={userDB.room ? "black" : "gray"} />                
+                <MaterialIcons name="room-preferences" size={35} color={userDB.room ? "#B8860B" : "gray"} />                
             </TouchableOpacity>            
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Maintenance')}>
-              <FontAwesome5 name="tools" size={25} color={userDB.room ? "black" : "gray"} />
+              <Entypo name="tools" size={35} color={userDB.room ? "#B8860B" : "gray"} />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Réveil')}>
-              <Ionicons name="alarm" size={35} color={userDB.room ? "black" : "gray"} />
+              <Ionicons name="alarm" size={35} color={userDB.room ? "#B8860B" : "gray"} />
             </TouchableOpacity>           
             <TouchableOpacity activeOpacity={0.5}  onPress={() => handleNavigate('Taxi')}>
-              <FontAwesome5 name="taxi" size={35} color={userDB.room ? "black" : "gray"} />
+              <FontAwesome5 name="taxi" size={35} color={userDB.room ? "#B8860B" : "gray"} />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.5}  onPress={() => {
               setConciergePanel(true)
               fadeIn()}}>
-              <MaterialCommunityIcons name="broom" size={35} color={userDB.room ? "black" : "gray"} />
+              <MaterialCommunityIcons name="broom" size={35} color={userDB.room ? "#B8860B" : "gray"} />
             </TouchableOpacity>
             </View>
           </Filter>

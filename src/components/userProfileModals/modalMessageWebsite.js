@@ -56,12 +56,22 @@ const ModalMessageWebsite = ({user, userDB, showWebsite, setShowWebsite}) => {
                     alignItems: "center",
                     width: "80%",
                     marginBottom: 20}}>
-                    <Button containerStyle={styles.button2} type="clear" title={t("oui")} onPress={() => {
+                    <Button 
+                    containerStyle={styles.button2} 
+                    titleStyle={{color: "#B8860B"}}
+                    type="clear" 
+                    title={t("oui")} 
+                    onPress={() => {
                     handleLinkWebsite()
                     setShowWebsite(false)
                     handleNewwConnection()
                     }} />
-                    <Button containerStyle={styles.button2} title={t("non")} onPress={() => {
+                    <Button 
+                    containerStyle={styles.button2} 
+                    title={t("non")} 
+                    buttonStyle={{backgroundColor: "#B8860B"}} 
+                    titleStyle={{color: "black"}}
+                    onPress={() => {
                     setShowWebsite(false)
                     handleNewConnection()}} />
                 </View>
@@ -96,5 +106,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    borderColor: "#B8860B", borderWidth: 1
   }
   })

@@ -106,6 +106,7 @@ const Login = ({ navigation }) => {
             .doc(userId)
             .get()
         if (doc.exists) {
+            console.log("userLogin@@@@@@@@@@@@@@", doc.data())
             setUserDB(doc.data())
             if (doc.data().checkoutDate !== "") {
                 navigation.replace('My Sweet Hotel')

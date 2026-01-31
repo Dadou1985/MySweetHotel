@@ -76,7 +76,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <AntDesign name="closecircle" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "90%", alignItems: "center"}}>
+                <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "100%", alignItems: "center", borderBottomColor: "#B8860B", borderBottomWidth: 1, paddingBottom: "2vh"}}>
                     <Text style={{textAlign: 'center'}}>{t('besoins')}</Text>
                     <TouchableOpacity activeOpacity={0.5} onPress={fadeOut}>
                         <AntDesign name="infocirlce" size={15} color="black" style={{marginLeft: 5}} onPress={() => setShowModal(true)} />
@@ -185,7 +185,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <TouchableOpacity style={{flexDirection: "column", alignItems: "center"}} activeOpacity={0.5} onPress={() => {
                             navigation.navigate('Chat')
                             }}>
-                            <Entypo name="chat" size={40} color="black" />                   
+                            <Entypo name="chat" size={40} color="#B8860B" />                   
                             <Text>{t('conciergerie_message_fin')}</Text>
                         </TouchableOpacity>}
                 </View>
@@ -198,7 +198,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                         <View style={{flexDirection: "row", justifyContent: "flex-end", width: "90%", alignItems: "center", marginBottom: 10}}>
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
                                 setShowModal(false)}} style={{marginLeft: 100}}>
-                                <AntDesign name="closecircle" size={15} color="black" />
+                                <AntDesign name="closecircle" size={15} color="#B8860B" />
                             </TouchableOpacity>
                         </View>
                         <Text style={{
@@ -211,7 +211,7 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                             borderTopWidth: 1,
                             paddingTop: 10,
                             paddingBottom: 10
-                            }}><AntDesign name="infocirlce" size={15} color="black" style={{marginRight: 15}} />
+                            }}><AntDesign name="infocirlce" size={15} color="#B8860B" style={{marginRight: 15}} />
                             {t('conciergerie_conditions_titre')}</Text>
                             <Text style={{textAlign: "center"}}>{t('conciergerie_conditions_para1')}</Text>
                     </View>
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
         margin: 20,
         marginTop: 265,
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: "#B8860B",        
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {

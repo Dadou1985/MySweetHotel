@@ -56,15 +56,21 @@ return db.collection('hotels')
                 fontSize: 20,
                 paddingTop: 10, 
                 paddingBottom: 10,
-                borderRadius: 5,
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
                 textAlign: "center", 
-                backgroundColor: "lightblue"
+                backgroundColor: "#B8860B"
                 }}>{t('actualisation_chbre')}</Text>
         <View style={styles.inputContainer}>
-            <Input placeholder={t('num_chbre')} type="number" value={room} style={{textAlign: "center", outline: "none"}} 
+            <Input placeholder={t('num_chbre')} inputContainerStyle={{borderBottomWidth: 0}} type="number" value={room} style={{textAlign: "center", outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1}} 
             onChangeText={(text) => setRoom(text)} />
         </View>
-        <Button title={t('actualiser')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
+        <Button 
+        title={t('actualiser')} 
+        containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} 
+        buttonStyle={{backgroundColor: "#B8860B"}} 
+        titleStyle={{color: "black"}}
+        onPress={() => {
             handleChangeRoom()
             handleChangeRoomChat()
             }} />

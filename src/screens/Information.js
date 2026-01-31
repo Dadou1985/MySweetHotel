@@ -33,7 +33,7 @@ const Information = ({ navigation, route }) => {
     const {userDB, setUserDB} = useContext(UserContext)
     const { t } = useTranslation()
 
-    console.log("USER+++++++++++++++", userDB)
+    console.log("USER+++++++++++++++", user)
 
     const locales = () => {
         switch(i18next.language) {
@@ -57,6 +57,16 @@ const Information = ({ navigation, route }) => {
     LocaleConfig.locales[i18next.language] = locales()
     LocaleConfig.defaultLocale = userDB && userDB.language && userDB.language;
 
+    useEffect(() => {
+        
+        let unsubscribe = auth.onAuthStateChanged(function(user) {
+            if (user) {
+                setUser(user)
+            } 
+          });
+        return unsubscribe
+    }, [])
+
     useLayoutEffect(() => {
         navigation.setOptions({
             title: "RoomChange",
@@ -72,7 +82,7 @@ const Information = ({ navigation, route }) => {
     }, [navigation])
 
     useEffect(() => {
-        if(hotelId !== null){
+        if(hotelId){
             return db.collection("hotels")
                 .doc(hotelId)
                 .onSnapshot((doc) => {
@@ -89,7 +99,7 @@ const Information = ({ navigation, route }) => {
         
     const handleLoadUserDB = async () => {
         const doc = await db.collection('guestUsers')
-            .doc(user.uid)
+            .doc(user?.uid)
             .get();
         if (doc.exists) {
             setUserDB(doc.data());
@@ -116,7 +126,7 @@ const Information = ({ navigation, route }) => {
         const doc = await db.collection('hotels')
             .doc(formValue.hotelId)
             .collection('chat')
-            .doc(user.displayName)
+            .doc(user?.displayName)
             .get();
         if (doc.exists) {
             updateChatRoomname()
@@ -126,7 +136,7 @@ const Information = ({ navigation, route }) => {
     const handleSubmit = async () => {
         try {
             await db.collection('guestUsers')
-            .doc(user.uid)
+            .doc(user?.uid)
             .update({
                 hotelId: formValue.hotelId,
                 hotelName: hotelName,
@@ -157,7 +167,7 @@ const Information = ({ navigation, route }) => {
         }
     }
 
-    console.log(user.displayName)
+    console.log("test++++++++++++++++", user?.displayName)
 
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -171,16 +181,23 @@ const Information = ({ navigation, route }) => {
                             <Text style={{fontSize: 18, marginBottom: 20}}>{t("checkout_prevu")} {moment(date.timestamp).format('L')}</Text>
                         </View>
                         <View style={styles.buttonView}>   
-                            <Button type="clear" onPress={() => {
-                                setShowDate(true)
-                                setRecap(false)
-                            }} containerStyle={styles.button} title={t("recommencer")} />
                             <Button
-                             icon={<Feather name="check-circle" size={25} color="black" style={{marginRight: 5}} />}
+                             icon={<Feather name="check-circle" size={25} 
+                             color="black" style={{marginRight: 5}} 
+                             />}
+                             buttonStyle={{backgroundColor: "#B8860B"}}
+                             titleStyle={{color: "black"}}
                              onPress={() => {
                                 handleSubmit()
                                 isChatExist()
                             }} containerStyle={styles.button} title={t("accueil")} />
+                            <Button type="clear" 
+                                      titleStyle={{color: "#B8860B"}}
+                                      onPress={() => {
+                                setShowDate(true)
+                                setRecap(false)
+                                
+                            }} containerStyle={styles.button} title={t("recommencer")} />
                         </View>
                         </>}
                     </View>
@@ -206,7 +223,7 @@ const Information = ({ navigation, route }) => {
                             marginBottom: 10, 
                             paddingTop: 10, 
                             paddingBottom: 10, 
-                            backgroundColor: "lightblue",
+                            backgroundColor: "#B8860B",
                             borderTopLeftRadius: 5,
                             borderTopRightRadius: 5}}>
                             <Text style={{fontSize: 20}}>{t('date_checkout')}</Text>
@@ -215,10 +232,10 @@ const Information = ({ navigation, route }) => {
                             minDate={new Date()} 
                             pastScrollRange={0}
                             renderArrow={(direction) => {
-                                if(direction === 'left') return <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
-                                if(direction === 'right') return <AntDesign name="right" size={24} color="black" style={{marginLeft: 5}} />
+                                if(direction === 'left') return <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                                if(direction === 'right') return <AntDesign name="right" size={24} color="#B8860B" style={{marginLeft: 5}} />
                             }}
-                            markedDates={{[date.dateString]: {selected: true, marked: true, selectedColor: "#00adf5"}}}
+                            markedDates={{[date.dateString]: {selected: true, marked: true, selectedColor: "#B8860B"}}}
                             onDayPress={(day) => {
                                 setDate(day)
                                 info.map(hotel => {
@@ -258,23 +275,39 @@ const Information = ({ navigation, route }) => {
                         fontSize: 20,
                         paddingTop: 10, 
                         paddingBottom: 10,
-                        borderRadius: 5,
+                        borderTopLeftRadius: 5,
+                        borderTopRightRadius: 5,
                         textAlign: "center", 
-                        backgroundColor: "lightblue"
+                        backgroundColor: "#B8860B"
                         }}>{t("num_chbre")}</Text>
                         <Input 
                             placeholder={t("entre_num_chbre")} 
                             type="number" 
                             value={currentRoom !== "Numéro de chambre" ? currentRoom : ""} 
-                            onChangeText={(text) => setCurrentRoom(text)} style={{textAlign: "center", marginBottom: 5, outline: "none"}} />  
-                        <Button raised={true} onPress={() => {
+                            onChangeText={(text) => setCurrentRoom(text)}
+                            inputContainerStyle={{borderBottomWidth: 0}} style={{textAlign: "center", outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1, marginBottom: "3vh"}} />  
+                        <Button 
+                        raised={true} 
+                        onPress={() => {
                             setShowModalRoom(false)
                             setShowDate(false)
-                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t("validation")} />
-                        <Button raised={true} type="clear" onPress={() => {
+                            setRecap(true)}} 
+                            containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} 
+                            buttonStyle={{backgroundColor: "#B8860B", borderRadius: 20}} 
+                            title={t("validation")}
+                            titleStyle={{color: "black"}}
+                            />
+                        <Button 
+                        raised={true} 
+                        type="clear" 
+                        onPress={() => {
                             setShowModalRoom(false)
                             setShowDate(false)
-                            setRecap(true)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15}} title={t('no_room')} />
+                            setRecap(true)}} 
+                            containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, borderColor: "#B8860B", borderWidth: 1}} 
+                            title={t('no_room')}
+                            titleStyle={{color: "#B8860B"}}
+                            />
                     </View>
                 </ModalWeb>
            
@@ -318,6 +351,7 @@ const styles = StyleSheet.create({
         width: "80%",
         marginTop: 10,
         borderRadius: 30,
+        borderColor: "#B8860B", borderWidth: 1
     },
     button2: {
         width: 350,

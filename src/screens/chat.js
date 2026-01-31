@@ -76,29 +76,33 @@ const Chat = ({ navigation }) => {
     }, [navigation])
 
     useEffect(() => {
-        const getMessages = () => {
-            return db.collection("hotels")
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(user.displayName)
-            .collection("chatRoom")
-            .orderBy("markup", "desc")
-            .limit(50)
-        }
+        if(userDB.hotelId !== "") {
+            const getMessages = () => {
+                console.log("BUG************", user, userDB)
 
-        let unsubscribe = getMessages().onSnapshot(function(snapshot) {
-            const snapInfo = []
-          snapshot.forEach(function(doc) {          
-            snapInfo.push({
-                id: doc.id,
-                ...doc.data()
-              })        
+                return db.collection("hotels")
+                .doc(userDB?.hotelId)
+                .collection('chat')
+                .doc(userDB?.username)
+                .collection("chatRoom")
+                .orderBy("markup", "desc")
+                .limit(50)
+            }
+    
+            let unsubscribe = getMessages().onSnapshot(function(snapshot) {
+                const snapInfo = []
+              snapshot.forEach(function(doc) {          
+                snapInfo.push({
+                    id: doc.id,
+                    ...doc.data()
+                  })        
+                });
+                console.log(snapInfo)
+                setMessages(snapInfo)
             });
-            console.log(snapInfo)
-            setMessages(snapInfo)
-        });
-        return unsubscribe
-    }, [])
+            return unsubscribe
+        } 
+    }, [userDB.hotelId])
 
     const outChat = () => {
       if(chatRoom.length > 0) {
@@ -179,7 +183,7 @@ const Chat = ({ navigation }) => {
         }
       }
 
-    console.log("Chatroom-----", messages)
+    console.log("Chatroom-----", user && user)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>

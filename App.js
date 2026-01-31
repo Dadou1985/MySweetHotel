@@ -157,16 +157,16 @@ const App = () => {
            </NavigationContainer>
            </Suspense>
          </UserContext.Provider>
-         <FlashMessage position="top" style={{zIndex: 10}} />
+         <FlashMessage position="top" style={{zIndex: 10,backgroundColor: "#B8860B"}} />
          </>
      }else{
        return <View style={styles.container}>
-         <Image id="flag" style={{backgroundColor: "#fff", width: "90%", height: "90%"}}
+         <Image id="flag" style={{ width: "100%", height: "90%"}}
          source={require('./assets/msh-splashScreen.png')} 
          />
-         <View style={{flexDirection: "row", alignItems: "center"}}>
+         <View style={{flexDirection: "row", alignItems: "center", backgroundColor: "#B8860B", width: "100vw", justifyContent: "center", padding: "3%"}}>
            <AntDesign name="copyright" size={10} color="black" style={{marginRight: 5}} />
-           <Text>My Sweet Hotel</Text>
+           <Text style={{color: "black"}}>My Sweet Hotel</Text>
          </View>
        </View> 
      }
@@ -188,9 +188,10 @@ export default withTrans(App)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    backgroundColor: '#000',
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
   },
 });
 

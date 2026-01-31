@@ -50,11 +50,16 @@ const ModalConfirmUpdateCheckout = ({user, userDB, date, handleLoadUserDB, updat
                 fontSize: 15,
                 paddingTop: 10, 
                 paddingBottom: 10,
-                borderRadius: 5,
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
                 textAlign: "center", 
-                backgroundColor: "lightblue"
+                backgroundColor: "#B8860B"
                 }}>{t('message_confirmation_actualisation_checkout')}</Text>
-        <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={() => {
+        <Button title={t('confirmer')} 
+        containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} 
+        buttonStyle={{backgroundColor: "#B8860B"}} 
+        titleStyle={{color: "black"}}
+        onPress={() => {
             handleCheckoutDateChange()
             handleChangeCheckoutDateChat()
             return setUpdateCheckout(false)
