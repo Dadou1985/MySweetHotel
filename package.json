@@ -16,7 +16,7 @@
     "@monchilin/react-native-dropdown": "^0.2.3",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/datetimepicker": "7.2.0",
-    "@react-native-community/masked-view": "0.1.10",
+    "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-native-picker/picker": "2.4.10",
     "@react-navigation/drawer": "^5.12.4",
     "@react-navigation/native": "^7.0.0-alpha.7",
