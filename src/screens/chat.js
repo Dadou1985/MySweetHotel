@@ -49,15 +49,15 @@ const Chat = ({ navigation }) => {
             headerTitleAlign: "right",
             headerTitle: () =>(
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Entypo name="chat" size={24} color="black" />            
-                    <Text style={{ color: "black", marginLeft: 10, fontWeight : "bold", fontSize: 20}}>Chat {t('reception')}</Text>
+                    <Entypo name="chat" size={24} color="#B8860B" />            
+                    <Text style={{ color: "#B8860B", marginLeft: 10, fontWeight : "bold", fontSize: 20}}>Chat {t('reception')}</Text>
                 </View>
             ),
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 outChat()
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
                 </TouchableOpacity>
             ),
             headerRight: () => (
@@ -66,7 +66,7 @@ const Chat = ({ navigation }) => {
                     <Ionicons 
                         name="notifications-off-circle" 
                         size={24} 
-                        color="black" 
+                        color="#B8860B" 
                         style={{marginRight: 20}}
                          /> : null
                     }
@@ -295,7 +295,7 @@ const Chat = ({ navigation }) => {
                             .then(sendMessage())
                         }
                         }}>
-                        <FontAwesome name="send" size={24} color="black" />
+                        <FontAwesome name="send" size={24} color="#B8860B" />
                     </TouchableOpacity>
 
                 </View>
@@ -317,10 +317,11 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 15,
         borderColor: "transparent",
-        backgroundColor: "#ECECEC",
+        backgroundColor: "black",
         borderWidth: 1,
-        padding: 10,
-        color: "black",
+        paddingVertical: 10,
+        paddingHorizontal: "5vw",
+        color: "#B8860B",
         borderRadius: 30, 
     },
     footer: {

@@ -33,14 +33,14 @@ const RoomChange = ({ navigation }) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                  <MaterialIcons name="room-preferences" size={24} color="black" />                
-                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('delogement')}</Text>
+                  <MaterialIcons name="room-preferences" size={24} color="#B8860B" />                
+                  <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('delogement')}</Text>
               </View>
           ),
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("My Sweet Hotel")}}>
-                  <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
               </TouchableOpacity>
           )
       })
@@ -126,33 +126,34 @@ const RoomChange = ({ navigation }) => {
         )
       } 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault()
       setType('')
       setTypeClone('')
       setDetails('')
-      return db.collection("hotels")
-              .doc(userDB.hotelId)
-              .collection('roomChange')
-              .add({
-                  author: "effectué par le client",
-                  date: new Date(),
-                  client: user.displayName,
-                  fromRoom: userDB.room,
-                  toRoom: "",
-                  state: "",
-                  reason: type,
-                  reasonClone: typeClone, 
-                  details: details,
-                  markup: Date.now(),
-                  img: url,
-                  status: true,
-                  userId: userDB.userId
-              }).then(function(docRef){
-                  console.log(docRef.id)
-              }).catch(function(error) {
-                  console.error(error)
-              })
+      try {
+        const docRef = await db.collection("hotels")
+          .doc(userDB.hotelId)
+          .collection('roomChange')
+          .add({
+            author: "effectué par le client",
+            date: new Date(),
+            client: user.displayName,
+            fromRoom: userDB.room,
+            toRoom: "",
+            state: "",
+            reason: type,
+            reasonClone: typeClone,
+            details: details,
+            markup: Date.now(),
+            img: url,
+            status: true,
+            userId: userDB.userId
+          });
+        console.log(docRef.id);
+      } catch (error) {
+        console.error(error);
+      }
     } 
 
     const handleItemToJourney = () => {
@@ -180,19 +181,33 @@ const RoomChange = ({ navigation }) => {
             </View>
             <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input style={{ outline: "none" }} placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} type="text" value={typeClone} 
+                  <Input 
+                  style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} 
+                  inputContainerStyle={{borderBottomWidth: 0}}
+                  inputStyle={{fontSize: "1em"}}
+                  placeholder={typeClone !== "" ? typeClone : t('motif_delogement')} 
+                  type="text" 
+                  value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
-                <Input style={{ outline: "none" }} placeholder={t('details')}  type="text" value={details} 
+                <Input 
+                style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} 
+                inputContainerStyle={{borderBottomWidth: 0}}
+                inputStyle={{fontSize: "1em"}} 
+                placeholder={t('details')}  
+                type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
-            <View style={{marginBottom: 55, marginTop: 25}}>
-                <TouchableOpacity style={{flexDirection: "row", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
-                <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
-                <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t('ajout_photo')}</Text>
+            <View style={{marginBottom: "7vh", marginTop: "5vh"}}>
+                <TouchableOpacity style={{flexDirection: "column", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
+                <MaterialIcons name="add-a-photo" size={24} color="black" />                    
+                <Text style={{fontSize: 11, color: "black", marginLeft: 10}}>{t('ajout_photo')}</Text>
                 </TouchableOpacity>
             </View>
-            <Button onPress={(event) => {
+            <Button 
+            buttonStyle={{backgroundColor: "#B8860B"}} 
+            titleStyle={{color: "black"}}
+            onPress={(event) => {
               if(img !== null) {
                   handleChangePhotoUrl(event)
                   handleItemToJourney()
@@ -214,6 +229,7 @@ const RoomChange = ({ navigation }) => {
           animationType="slide"
           transparent={true}
           isVisible={showModal} 
+          onBackdropPress={() => setShowModal(false)}
           style={GlobalCameraFeatureStyle.roomBoxView}>
               <View style={GlobalCameraFeatureStyle.modalRoom}>
                   <Text style={{
@@ -223,7 +239,7 @@ const RoomChange = ({ navigation }) => {
                       textAlign: "center",
                       fontWeight: "bold",
                       paddingTop: 10,
-                      backgroundColor: "lightgrey",
+                      backgroundColor: "#B8860B",
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15
                       }}>{t('choose_reason')}</Text>
@@ -233,35 +249,35 @@ const RoomChange = ({ navigation }) => {
                           setType("noise")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_noise')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_noise')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_room_change.r_reason.r_temperature'))
                           setType("temperature")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_temperature')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_temperature')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_room_change.r_reason.r_maintenance'))
                           setType("maintenance")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_maintenance')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_maintenance')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_room_change.r_reason.r_cleaning'))
                           setType("cleaning")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_cleaning')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_cleaning')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_room_change.r_reason.r_others'))
                           setType("others")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_others')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_room_change.r_reason.r_others')}</Text>
                         </TouchableOpacity>
                       </View>
               </View>

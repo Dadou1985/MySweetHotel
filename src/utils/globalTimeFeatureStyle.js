@@ -17,6 +17,7 @@ export default StyleSheet.create({
         marginBottom: 50, 
         borderColor: "white",
         borderRadius: 30,
+        filter: "drop-shadow(1px 1px 1px)"
     },
     datePickerButton: {
         width: 250,
@@ -68,7 +69,7 @@ export default StyleSheet.create({
       },
       modalRoom: {
           margin: 20,
-          borderRadius: 10,
+          borderRadius: 15,
           backgroundColor: 'white',
           alignItems: 'center',
           shadowColor: '#000',

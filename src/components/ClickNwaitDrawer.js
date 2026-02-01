@@ -68,18 +68,18 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
 
     return (
         <Animated.View style={[styles.fadingContainer, {bottom: fadeAnim}]}>
-                <View style={{flexDirection: "row", justifyContent: "flex-end", maxWidth: "90%", alignItems: "center"}}>
-                    <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 120}}>{t('conciergerie')}</Text>
+                <View style={{flexDirection: "row", justifyContent: "center", width: "100vw", alignItems: "center", backgroundColor: "#B8860B", paddingHorizontal: "2%", paddingVertical: "2%", marginBottom: "1vh", position: "relative"}}>
+                    <Text style={{fontSize: 20, fontWeight: "bold"}}>{t('conciergerie')}</Text>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => {
                         fadeOut()
-                        closePanel()}} style={{marginLeft: 100}}>
+                        closePanel()}} style={{position: "absolute", right: "3vw"}}>
                         <AntDesign name="closecircle" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "100%", alignItems: "center", borderBottomColor: "#B8860B", borderBottomWidth: 1, paddingBottom: "2vh"}}>
-                    <Text style={{textAlign: 'center'}}>{t('besoins')}</Text>
+                <View style={{flexDirection: "row", justifyContent: "space-around", mawWidth: "100%", alignItems: "center"}}>
+                    <Text style={{textAlign: 'center', fontSize: "0.7em", color: "grey"}}>{t('besoins')}</Text>
                     <TouchableOpacity activeOpacity={0.5} onPress={fadeOut}>
-                        <AntDesign name="infocirlce" size={15} color="black" style={{marginLeft: 5}} onPress={() => setShowModal(true)} />
+                        <AntDesign name="infocirlce" size={15} color="#B8860B" style={{marginLeft: 5}} onPress={() => setShowModal(true)} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.cncContainer}>
@@ -193,27 +193,20 @@ const ClickNwaitDrawer = ({fadeAnim, fadeOut, navigation, closePanel}) => {
                 animationType="slide"
                 transparent={true}
                 isVisible={showModal} 
+                onBackdropPress={() => setShowModal(false)}
                 style={styles.centeredView}>
                     <View style={styles.modal}>
-                        <View style={{flexDirection: "row", justifyContent: "flex-end", width: "90%", alignItems: "center", marginBottom: 10}}>
-                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                                setShowModal(false)}} style={{marginLeft: 100}}>
-                                <AntDesign name="closecircle" size={15} color="#B8860B" />
-                            </TouchableOpacity>
-                        </View>
                         <Text style={{
                             width: "100%", 
                             fontSize: 15,
-                            paddingBottom: 10,
                             textAlign: "center",
                             fontWeight: "bold",
-                            borderTopColor: "grey",
-                            borderTopWidth: 1,
-                            paddingTop: 10,
-                            paddingBottom: 10
+                            borderBottomColor: "#B8860B",
+                            borderBottomWidth: 1,
+                            padding: "2%"
                             }}><AntDesign name="infocirlce" size={15} color="#B8860B" style={{marginRight: 15}} />
                             {t('conciergerie_conditions_titre')}</Text>
-                            <Text style={{textAlign: "center"}}>{t('conciergerie_conditions_para1')}</Text>
+                            <Text style={{textAlign: "center", padding: "2%"}}>{t('conciergerie_conditions_para1')}</Text>
                     </View>
                 </ModalWeb>
         </Animated.View>
@@ -240,7 +233,7 @@ const styles = StyleSheet.create({
         position: "absolute", 
         backgroundColor: "white",
         bottom: 0, 
-        padding: 20,
+        // padding: 20,
         width: "100%"
     },
     cncContainer: {
@@ -261,7 +254,7 @@ const styles = StyleSheet.create({
         margin: 20,
         marginTop: 265,
         borderRadius: 10,
-        backgroundColor: "#B8860B",        
+        backgroundColor: "#fff",        
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {

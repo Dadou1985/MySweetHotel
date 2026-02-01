@@ -9,7 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign, Octicons, FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign, Octicons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
 
@@ -32,14 +32,14 @@ const Maintenance = ({ navigation }) => {
           headerTitleAlign: "right",
           headerTitle: () =>(
               <View style={{flexDirection: "row", alignItems: "center"}}>
-                  <FontAwesome5 name="tools" size={20} color="black" />
-                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('maintenance')}</Text>
+                  <Entypo name="tools" size={35} color="#B8860B" />
+                  <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('maintenance')}</Text>
               </View>
           ),
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("My Sweet Hotel")}}>
-                  <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
               </TouchableOpacity>
           )
       })
@@ -92,15 +92,16 @@ const Maintenance = ({ navigation }) => {
               .child(type)
               .getDownloadURL()
               .then(url => {
-                const uploadTask = () => {
+                const uploadTask = async () => {
                     setType('')
                     setTypeClone('')
                     setDetails('')
                     
-                    return db.collection("hotels")
-                    .doc(userDB.hotelId)
-                    .collection('maintenance')
-                    .add({
+                    try {
+                    const docRef = await db.collection("hotels")
+                      .doc(userDB.hotelId)
+                      .collection('maintenance')
+                      .add({
                         author: "effectué par le client",
                         date: new Date(),
                         client: user.displayName,
@@ -111,41 +112,42 @@ const Maintenance = ({ navigation }) => {
                         markup: Date.now(),
                         img: url,
                         status: true
-                    }).then(function(docRef){
-                        console.log(docRef.id)
-                    }).catch(function(error) {
-                        console.error(error)
-                    })
+                      });
+                    console.log(docRef.id);
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }
                   return setUrl(url, uploadTask())})
           }
         )
       }, [img])
 
-      const handleSubmit = (event) => {
+      const handleSubmit = async (event) => {
         event.preventDefault()
         setType('')
         setTypeClone('')
         setDetails('')
-        return db.collection("hotels")
-                .doc(userDB.hotelId)
-                .collection('maintenance')
-                .add({
-                    author: "effectué par le client",
-                    date: new Date(),
-                    client: user.displayName,
-                    room: userDB.room,
-                    type: type,
-                    typeClone: typeClone,
-                    details: details,
-                    markup: Date.now(),
-                    img: url,
-                    status: true
-                }).then(function(docRef){
-                    console.log(docRef.id)
-                }).catch(function(error) {
-                    console.error(error)
-                })
+        try {
+          const docRef = await db.collection("hotels")
+            .doc(userDB.hotelId)
+            .collection('maintenance')
+            .add({
+              author: "effectué par le client",
+              date: new Date(),
+              client: user.displayName,
+              room: userDB.room,
+              type: type,
+              typeClone: typeClone,
+              details: details,
+              markup: Date.now(),
+              img: url,
+              status: true
+            });
+          console.log(docRef.id);
+        } catch (error) {
+          console.error(error);
+        }
       } 
 
       const handleItemToJourney = () => {
@@ -176,19 +178,26 @@ const Maintenance = ({ navigation }) => {
             </View>
             <View style={GlobalCameraFeatureStyle.inputContainer}>
                 <TouchableOpacity style={{width: "100%"}} onPress={() => setShowModal(true)}>
-                  <Input style={{ outline: "none" }} placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
+                  <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} 
+                  inputContainerStyle={{borderBottomWidth: 0}}
+                  inputStyle={{fontSize: "1em"}} placeholder={typeClone !== "" ? typeClone : t('maintenance_type')} type="text" value={typeClone} 
                   onChangeText={(text) => setTypeClone(text)} />
                 </TouchableOpacity>
-                <Input style={{ outline: "none" }} placeholder={t('details')}  type="text" value={details} 
+                <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} 
+                  inputContainerStyle={{borderBottomWidth: 0}}
+                  inputStyle={{fontSize: "1em"}} placeholder={t('details')}  type="text" value={details} 
                 onChangeText={(text) => setDetails(text)} />
             </View>
-            <View style={{marginBottom: 55, marginTop: 25}}>
-                <TouchableOpacity style={{flexDirection: "row", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
-                <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
-                <Text style={{fontSize: 20, color: "grey", marginLeft: 10}}>{t('ajout_photo')}</Text>
+            <View style={{marginBottom: "7vh", marginTop: "5vh"}}>
+                <TouchableOpacity style={{flexDirection: "column", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
+                <MaterialIcons name="add-a-photo" size={24} color="black" />                    
+                <Text style={{fontSize: 11, color: "black", marginLeft: 10}}>{t('ajout_photo')}</Text>
                 </TouchableOpacity>
             </View>
-            <Button onPress={(event) => {
+            <Button 
+            buttonStyle={{backgroundColor: "#B8860B"}} 
+            titleStyle={{color: "black"}}
+            onPress={(event) => {
               if(img !== null) {
                 handleChangePhotoUrl(event)
                 handleItemToJourney()
@@ -210,6 +219,7 @@ const Maintenance = ({ navigation }) => {
           animationType="slide"
           transparent={true}
           isVisible={showModal} 
+          onBackdropPress={() => setShowModal(false)}
           style={GlobalCameraFeatureStyle.roomBoxView}>
               <View style={GlobalCameraFeatureStyle.modalRoom}>
                   <Text style={{
@@ -219,7 +229,7 @@ const Maintenance = ({ navigation }) => {
                       textAlign: "center",
                       fontWeight: "bold",
                       paddingTop: 10,
-                      backgroundColor: "lightgrey",
+                      backgroundColor: "#B8860B",
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15
                       }}>{t('choose_reason')}</Text>
@@ -236,28 +246,28 @@ const Maintenance = ({ navigation }) => {
                           setType("plumbery")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_plumbery')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_plumbery')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_maintenance.m_type.t_electricity'))
                           setType("electricity")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_electricity')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_electricity')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_maintenance.m_type.t_cleaning'))
                           setType("cleaning")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_cleaning')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_cleaning')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: "100%"}} onPress={() => {
                           setTypeClone(t('msh_maintenance.m_type.t_other'))
                           setType("others")
                           setShowModal(false)
                         }}>
-                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "lightgrey", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_other')}</Text>
+                          <Text style={{textAlign: "center", paddingBottom: 10, paddingTop: 10, width: "100%", borderTopColor: "#B8860B", borderTopWidth: 1}}>{t('msh_maintenance.m_type.t_other')}</Text>
                         </TouchableOpacity>
                       </View>
               </View>

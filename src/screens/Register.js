@@ -209,13 +209,13 @@ const Register = ({ navigation, route }) => {
                   onPress={() => setGender("female")} />
               </View>
             </View>
-              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("nom") + "*"} autofocus type="text" value={name} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("nom")} autofocus type="text" value={name} 
               onChangeText={(text) => setName(text)} />
-              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("email") + "*"} type="email" value={email} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("email")} type="email" value={email} 
               onChangeText={(text) => setEmail(text)} />
-              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("mot_de_passe")} secureTextEntry type="password" value={password} 
               onChangeText={(text) => setPassword(text)} />
-              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("confirmation_mdp")} secureTextEntry type="password" value={confirmPassword} 
               onChangeText={(text) => setConfirmPassword(text)}  />
               <View style={{marginBottom: "5vh", flexDirection: "column", alignItems: "center"}}>
                 <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 10, marginTop: 10}}>
