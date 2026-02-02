@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import { UserContext } from '../components/userContext'
-
+import globalStyle from '../utils/globalStyle';
 
 const Register = ({ navigation, route }) => {
     const { t } = useTranslation()
@@ -38,15 +38,18 @@ const Register = ({ navigation, route }) => {
           title: "Inscription",
           headerBackTitleVisible: false,
           headerTitleAlign: "right",
+          headerBackground: () => (
+            <View style={globalStyle.headerShadow} />
+          ),
           headerTitle: () =>(
-              <View style={{flexDirection: "row", alignItems: "center"}}>
-                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('inscription_titre')}</Text>
+              <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
+                  <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20}}>{t('inscription_titre')}</Text>
               </View>
           ),
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("Connexion")}}>
-                  <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
               </TouchableOpacity>
           )
       })
@@ -187,32 +190,58 @@ const Register = ({ navigation, route }) => {
       <KeyboardAvoidingView style={styles.container}>
           <StatusBar style="light" />
           <View style={styles.containerText}>
-              <Image source={{uri: hotelLogo}} style={{width: 150, height: 100, marginBottom: 20}} />
+              {hotelLogo ? <Image source={{uri: hotelLogo}} style={{width: 150, height: 100, marginBottom: 20}} /> : <Image source={require('../../img/new-logo-msh.png')} style={{width: 150, height: 100, marginLeft: 20, resizeMode: "contain"}} />}
               <Text style={styles.text}>{t("creation_compte")}</Text>
           </View>    
           <View style={styles.inputContainer}>
           <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
               <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginTop: 15}}>
-                  <Button containerStyle={styles.typeButton} title={t("male")} type={gender === "male" ? "solid" : "clear"} raised={true} onPress={() => setGender("male")} />
-                  <Button containerStyle={styles.typeButton} title={t("female")} type={gender === "female" ? "solid" : "clear"} raised={true} onPress={() => setGender("female")} />
+                  <Button 
+                  containerStyle={styles.typeButton} 
+                  buttonStyle={{backgroundColor: gender === "male" && "black"}}
+                  title={t("male")} type={gender === "male" ? "solid" : "clear"} 
+                  titleStyle={{color: gender === "male" ? "#B8860B" : "black"}}
+                  raised={true} 
+                  onPress={() => setGender("male")} />
+                  <Button 
+                  containerStyle={styles.typeButton} 
+                  buttonStyle={{backgroundColor: gender === "female" && "black"}}
+                  title={t("female")} type={gender === "female" ? "solid" : "clear"} 
+                  titleStyle={{color: gender === "female" ? "#B8860B" : "black"}}
+                  raised={true} 
+                  onPress={() => setGender("female")} />
               </View>
             </View>
-              <Input style={{ outline: "none" }} placeholder={t("nom") + "*"} autofocus type="text" value={name} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("nom")} autofocus type="text" value={name} 
               onChangeText={(text) => setName(text)} />
-              <Input style={{ outline: "none" }} placeholder={t("email") + "*"} type="email" value={email} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("email")} type="email" value={email} 
               onChangeText={(text) => setEmail(text)} />
-              <Input style={{ outline: "none" }} placeholder={t("mot_de_passe") + "*"} secureTextEntry type="password" value={password} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("mot_de_passe")} secureTextEntry type="password" value={password} 
               onChangeText={(text) => setPassword(text)} />
-              <Input style={{ outline: "none" }} placeholder={t("confirmation_mdp") + "*"} secureTextEntry type="password" value={confirmPassword} 
+              <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t("confirmation_mdp")} secureTextEntry type="password" value={confirmPassword} 
               onChangeText={(text) => setConfirmPassword(text)}  />
-              <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
+              <View style={{marginBottom: "5vh", flexDirection: "column", alignItems: "center"}}>
                 <View style={{flexDirection: "row", width: 400, justifyContent: "center", marginBottom: 10, marginTop: 10}}>
-                    <Button containerStyle={styles.typeButton} title={t("tourisme")} type={guestCategory === "tourisme" ? "solid" : "clear"} raised={true} onPress={() => {
+                    <Button 
+                    containerStyle={styles.typeButton} 
+                    buttonStyle={{backgroundColor: guestCategory === "tourisme" && "black"}}
+                    title={t("tourisme")} 
+                    titleStyle={{color: guestCategory === "tourisme" ? "#B8860B" : "black"}}
+                    type={guestCategory === "tourisme" ? "solid" : "clear"} 
+                    raised={true} 
+                    onPress={() => {
                       setGuestCategory("tourisme")
                       setGuestCategoryClone(t("tourisme"))
                     }}
                 onSubmitEditing={freeRegister} />
-                    <Button containerStyle={styles.typeButton} title={t("business")} type={guestCategory === "business" ? "solid" : "clear"} raised={true} onPress={() => {
+                    <Button 
+                    containerStyle={styles.typeButton} 
+                    buttonStyle={{backgroundColor: guestCategory === "business" && "black"}}
+                    title={t("business")} 
+                    titleStyle={{color: guestCategory === "business" ? "#B8860B" : "black"}}
+                    type={guestCategory === "business" ? "solid" : "clear"} 
+                    raised={true} 
+                    onPress={() => {
                       setGuestCategory("business")
                       setGuestCategoryClone(t("business"))
                     }}
@@ -220,14 +249,18 @@ const Register = ({ navigation, route }) => {
                 </View>
               </View>
           </View>
-          {img === null && <View style={{marginBottom: 15}}>
+          {img === null && <View style={{marginBottom: "8vh"}}>
               <TouchableOpacity style={{flexDirection: "row wrap", width: 300, alignItems: "center", justifyContent: "center"}} onPress={pickImage}>
-              <MaterialIcons name="add-a-photo" size={24} color="grey" />                    
-              <Text style={{fontSize: 20, color: "grey", marginTop: 5}}>{t("ajout_photo_profil")}</Text>
+              <MaterialIcons name="add-a-photo" size={24} color="black" />                    
+              <Text style={{fontSize: 20, color: "black", marginTop: 5}}>{t("ajout_photo_profil")}</Text>
               </TouchableOpacity>
           </View>}
-          <Button onPress={() => navigation.navigate('Connexion')} containerStyle={styles.button} title={t("connection")} type="clear" />
-          <Button containerStyle={styles.button2} title={t("creation_compte")} onPress={(event) => {
+          <Button 
+          containerStyle={styles.button2} 
+          buttonStyle={{backgroundColor: "#B8860B"}} 
+          titleStyle={{color: "black"}}
+          title={t("creation_compte")} 
+          onPress={(event) => {
             if(name !== "" && email !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword) {
               if(img !== null) {
                 handleChangePhotoUrl(event)
@@ -252,6 +285,12 @@ const Register = ({ navigation, route }) => {
               }
             }
               }} />
+          <Button 
+          onPress={() => navigation.navigate('Connexion')} 
+          containerStyle={styles.button} 
+          title={t("connection")} 
+          titleStyle={{color: "#B8860B"}}
+          type="clear" />
       </KeyboardAvoidingView>
   )
 }
@@ -274,20 +313,25 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 30,
-        textAlign: "center"
+        textAlign: "center",
+        borderBottomColor: "#B8860B",
+        borderBottomWidth: 1
     },
     inputContainer: {
         width: 300
     },
     button: {
         width: 200,
-        marginTop: 10,
+        marginBottom: 30,
         borderRadius: 30,
+        borderColor: "#B8860B", borderWidth: 1
     },
     button2: {
         width: 200,
         borderRadius: 30,
-        marginBottom: 30
+        marginBottom: 10,
+        borderColor: "#B8860B", borderWidth: 1,        
+        filter: "drop-shadow(1px 1px 1px)"
     },
     typeButton: {
       width: 125,

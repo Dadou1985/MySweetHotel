@@ -4,13 +4,14 @@ import { Avatar } from "react-native-paper"
 import moment from 'moment'
 import 'moment/locale/fr';
 import { auth } from "../../firebase"
+import globalStyle from '../utils/globalStyle';
 
 const ChatMessage = ({author, photo, text, translation, markup}) => {
     const [user, setUser] = useState(auth.currentUser)
 
     if(author === user.displayName){
         if(moment(markup).format('L') === moment(new Date()).format('L')) {
-           return <View style={{
+           return <View style={[{
                 color: "white",
                 alignSelf: 'flex-end',
                 alignItems: "flex-end",
@@ -18,8 +19,9 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 marginRight: 15,
                 marginBottom: 5,
                 maxWidth: "80%",
-                position: "relative"
-            }}>
+                position: "relative",
+                minWidth: 70
+            }, globalStyle.chatMessageShadow]}>
                 <Avatar.Image
                 position="absolute"
                 rounded
@@ -32,24 +34,25 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 }} />
                 <View style={{
                 padding: 15,
-                backgroundColor: "lightblue",
+                backgroundColor: "#B8860B",
                 borderRadius: 10,
                 width: "100%"
                 }}>
                     <Text style={{marginBottom: 5}}>{translation || text}</Text>
-                    <Text style={styles.time}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={styles.time}>{moment(markup).format('LT')}</Text>
                 </View>
             </View>
         }else{
-            return <View style={{
+            return <View style={[{
                 color: "white",
                 alignSelf: 'flex-end',
                 alignItems: "flex-end",
                 marginRight: 15,
                 marginBottom: 5,
                 maxWidth: "80%",
-                position: "relative"
-            }}>
+                position: "relative",
+                minWidth: 70
+            }, globalStyle.chatMessageShadow]}>
                 <Avatar.Image
                 position="absolute"
                 rounded
@@ -67,21 +70,22 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 width: "100%"
                 }}>
                     <Text style={{marginBottom: 5}}>{translation || text}</Text>
-                    <Text style={styles.time}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={styles.time2}>{moment(markup).format('LT')}</Text>
                 </View>
             </View>
         }
     }else{
         if(moment(markup).format('L') === moment(new Date()).format('L')) {
-            return <View style={{
+            return <View style={[{
                 color: "white",
                 alignSelf: 'flex-start',
                 alignItems: "flex-start",
                 marginLeft: 15,
                 marginBottom: 5,
                 maxWidth: "80%",
-                position: "relative"
-            }}>
+                position: "relative",
+                minWidth: 70
+            }, globalStyle.chatMessageShadow]}>
                 <Avatar.Image
                 position="absolute"
                 rounded
@@ -94,16 +98,16 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 }} />
                 <View style={{
                     padding: 15,
-                    backgroundColor: "purple",
+                    backgroundColor: "rgb(123, 22, 22)",
                     borderRadius: 10,
                     width: "100%"
                 }}>
                     <Text style={{marginBottom: 5, color: "white"}}>{translation ? translation : text}</Text>
-                    <Text style={styles.time2}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={styles.time2}>{moment(markup).format('LT')}</Text>
                 </View>
             </View>
         }else{
-            return <View style={{
+            return <View style={[{
                 color: "white",
                 alignSelf: 'flex-start',
                 alignItems: "flex-start",
@@ -111,7 +115,8 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 marginBottom: 20,
                 maxWidth: "80%",
                 position: "relative",
-            }}>
+                minWidth: 70
+            }, globalStyle.chatMessageShadow]}>
                 <Avatar.Image
                 position="absolute"
                 rounded
@@ -129,7 +134,7 @@ const ChatMessage = ({author, photo, text, translation, markup}) => {
                 width: "100%"
                 }}>
                     <Text style={{marginBottom: 5, color: "white"}}>{translation ? translation : text}</Text>
-                    <Text style={styles.time2}>{moment(markup).startOf('hour').fromNow()}</Text>
+                    <Text style={styles.time2}>{moment(markup).format('LT')}</Text>
                 </View>
             </View>
         }
@@ -140,13 +145,13 @@ export default memo(ChatMessage)
 
 const styles = StyleSheet.create({
     time: {
-        color: "black",
+        color: "lightgrey",
         fontSize: 10,
         flexDirection: "row",
         justifyContent: "flex-end"
     },
     time2: {
-        color: "lightgray",
+        color: "gray",
         fontSize: 10,
         flexDirection: "row",
         justifyContent: "flex-end"

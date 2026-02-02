@@ -10,11 +10,12 @@ import 'moment/locale/fr';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import { fr, pt, en, de, es, it } from '../locales/config'
 import GlobalTimeFeatureStyle from '../utils/globalTimeFeatureStyle'
+import globalStyle from '../utils/globalStyle';
 
 const Timer = ({navigation}) => {
     const [date, setDate] = useState(new Date())
@@ -58,16 +59,19 @@ const Timer = ({navigation}) => {
             title: "Timer",
             headerBackTitleVisible: false,
             headerTitleAlign: "right",
+            headerBackground: () => (
+                <View style={globalStyle.headerShadow} />
+              ),
             headerTitle: () =>(
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Ionicons name="alarm" size={24} color="black" />
-                    <Text style={{ color: "black", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('reveil_titre')}</Text>
+                <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
+                    <Ionicons name="alarm" size={24} color="#B8860B" />
+                    <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('reveil_titre')}</Text>
                 </View>
             ),
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5}, globalStyle.shadow]} />
                 </TouchableOpacity>
             )
         })
@@ -123,35 +127,32 @@ const Timer = ({navigation}) => {
         <KeyboardAvoidingView behavior="padding" style={GlobalTimeFeatureStyle.container}>
             <StatusBar style="light" />
             <View style={GlobalTimeFeatureStyle.containerText}>
-            <ImageBackground source={ require('../../img/pic_timer.png') } style={{
-                flex: 1,
-                resizeMode: "contain",
-                justifyContent: "center",
-                width: "100%"}}>
+                <ImageBackground source={ require('../../img/pic_timer4.png') } style={{
+                    flex: 1,
+                    width: "100%"}}>
                 </ImageBackground>
             </View>
-            <View style={{width: 300, marginTop: 90, marginBottom: 20}}>
+            <View style={{width: 300, marginTop: 40, marginBottom: 20}}>
                 <View style={{flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
                     <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                         <Text style={{fontSize: 15}}>{t('jour')}</Text>
-                        {date.timestamp ? <Button type="clear" title={moment(date.timestamp).format('L')}
-                            onPress={handleShowDate} /> : <Button type="clear" title={moment(date).format('L')}
-                            onPress={handleShowDate} />}
+                        <TouchableOpacity style={{flexDirection: "column", width: "fit-content", alignItems: "center", justifyContent: "center", marginTop: "1vh"}} onPress={handleShowDate}>
+                        <Entypo name="calendar" size={24} color="#B8860B" />                  
+                        </TouchableOpacity>
                     </View>
                     <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
                         <Text style={{fontSize: 15}}>{t('heure')}</Text>
-                        <Button type="clear" title={time !== "" ? time : moment(new Date()).format('LT')}
-                            onPress={handleShowTime} />
+                        <TouchableOpacity style={{flexDirection: "column", width: "fit-content", alignItems: "center", justifyContent: "center", marginTop: "1vh"}} onPress={handleShowTime}>
+                        <MaterialCommunityIcons name="clock" size={24} color="#B8860B" />                 
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View style={{marginBottom: 20, flexDirection: "column", alignItems: "center"}}>
-                    <Text style={{fontSize: 15}}>{t('timer_num_tel')}</Text>
-                    <Button type="clear" title={phoneNumber !== "" ? phoneNumber : t("clic")}
-                        onPress={() => setshowPhoneNumber(true)} />
                 </View>
             </View> 
            
-            <Button onPress={() => {
+            <Button 
+            buttonStyle={{backgroundColor: "#B8860B"}} 
+            titleStyle={{color: "black"}}
+            onPress={() => {
                 handleSubmit()
                 handleItemToJourney()
                 showMessage({
@@ -173,9 +174,10 @@ const Timer = ({navigation}) => {
                         fontSize: 20,
                         paddingTop: 10, 
                         paddingBottom: 10,
-                        borderRadius: 5,
+                        borderTopLeftRadius: 15,
+                        borderTopRightRadius: 15,
                         textAlign: "center", 
-                        backgroundColor: "lightblue"
+                        backgroundColor: "#B8860B"
                         }}>{t("heure")}</Text>
                         <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center", width: "90%"}}>
                             <Input
@@ -184,8 +186,9 @@ const Timer = ({navigation}) => {
                             value={hour} 
                             maxLength="2"
                             onChangeText={(text) => setHour(text)} 
+                            inputStyle={{width: "15%", outline: "none"}}
                             containerStyle={{width: "15%"}}
-                            style={{ outline: "none" }} /> 
+                            inputContainerStyle={{ width: "100%", outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} /> 
                             :
                             <Input 
                             placeholder="00" 
@@ -193,10 +196,14 @@ const Timer = ({navigation}) => {
                             value={minute} 
                             maxLength="2"
                             onChangeText={(text) => setMinute(text)} 
+                            inputStyle={{width: "15%", outline: "none"}}
                             containerStyle={{width: "15%"}}
-                            style={{ outline: "none" }} />  
+                            inputContainerStyle={{ width: "100%", outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} />  
                         </View>
-                        <Button onPress={() => {
+                        <Button
+                        buttonStyle={{backgroundColor: "#B8860B"}} 
+                        titleStyle={{color: "black"}}
+                        onPress={() => {
                             setTime(`${hour}:${minute}`)
                             setShowTime(false)}} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
                     </View>
@@ -215,16 +222,21 @@ const Timer = ({navigation}) => {
                             fontSize: 20,
                             paddingTop: 10, 
                             paddingBottom: 10,
-                            borderRadius: 5,
+                            borderTopLeftRadius: 15,
+                            borderTopRightRadius: 15,
                             textAlign: "center", 
-                            backgroundColor: "lightblue"
+                            backgroundColor: "#B8860B"
                             }}>{t('timer_num_tel')}</Text>
                             <Input 
                             placeholder={t("timer_num_tel")} 
                             type="number" 
                             value={phoneNumber} 
-                            onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5, outline: "none"}} />  
-                        <Button onPress={() => setshowPhoneNumber(false)} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
+                            onChangeText={(text) => setPhoneNumber(text)} style={{textAlign: "center", marginBottom: 5, outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1}}
+                            inputContainerStyle={{borderBottomWidth: 0}} />  
+                        <Button
+                        buttonStyle={{backgroundColor: "#B8860B"}} 
+                        titleStyle={{color: "black"}}
+                        onPress={() => setshowPhoneNumber(false)} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} title={t("validation")} />
                         </View>
                     </ModalWeb>
 
@@ -241,13 +253,14 @@ const Timer = ({navigation}) => {
                             fontSize: 20,
                             paddingTop: 10, 
                             paddingBottom: 10,
-                            borderRadius: 5,
+                            borderTopLeftRadius: 15,
+                            borderTopRightRadius: 15,
                             textAlign: "center", 
-                            backgroundColor: "lightblue"
+                            backgroundColor: "#B8860B"
                             }}>{t("jour")}</Text>
                             <Calendar
                             minDate={moment(date).format()} 
-                            renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" size={24} /> : <AntDesign name="right" size={24} />}                            
+                            renderArrow={(direction) => direction === 'left' ? <AntDesign name="left" color="#B8860B" size={24} /> : <AntDesign name="right" color="#B8860B" size={24} />}                            
                             pastScrollRange={0}
                             onDayPress={(day) => {
                                 setDate(day)

@@ -10,6 +10,7 @@ import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import globalStyle from '../utils/globalStyle';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
@@ -106,6 +107,7 @@ const Login = ({ navigation }) => {
             .doc(userId)
             .get()
         if (doc.exists) {
+            console.log("userLogin@@@@@@@@@@@@@@", doc.data())
             setUserDB(doc.data())
             if (doc.data().checkoutDate !== "") {
                 navigation.replace('My Sweet Hotel')
@@ -280,18 +282,19 @@ const Login = ({ navigation }) => {
             animationType="slide"
             transparent={true}
             visible={showModalLanguage} 
-            style={styles.centeredView}>
+            style={styles.centeredView}
+            >
                 <ScrollView contentContainerStyle={styles.modalView}>
                     <View style={{
                         flexDirection: "row", 
-                        width: 420, 
+                        width: "100%", 
                         alignItems: "center", 
                         justifyContent: "center", 
                         marginBottom: 10, 
                         paddingTop: 10, 
                         paddingBottom: 10, 
-                        backgroundColor: "lightblue"}}>
-                        <Text style={{fontSize: 25, marginRight: 20}}>{t('selection_langue')}</Text>
+                        backgroundColor: "#B8860B"}}>
+                        <Text style={{fontSize: 25, marginRight: 20, color: "black"}}>{t('selection_langue')}</Text>
                         <TouchableOpacity>
                             <AntDesign name="closecircle" size={24} color="black" onPress={() => setShowModalLanguage(false)} />
                         </TouchableOpacity>
@@ -300,7 +303,7 @@ const Login = ({ navigation }) => {
                     <View style={{
                         padding: 15, 
                         marginBottom: 30}}>
-                            <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}} onPress={() => {
+                            <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", alignItems: "center"}} onPress={() => {
                                 setShowModalLanguage(false)
                                 i18next.changeLanguage(data.value)
                             }}>
@@ -329,8 +332,8 @@ const Login = ({ navigation }) => {
                             marginBottom: 10, 
                             paddingTop: 10, 
                             paddingBottom: 10, 
-                            backgroundColor: "lightblue"}}>
-                            <Text style={{fontSize: 25, marginRight: 20}}>{t('selection_langue')}</Text>
+                            backgroundColor: "#B8860B"}}>
+                            <Text style={{fontSize: 25, marginRight: 20, color: "black"}}>{t('selection_langue')}</Text>
                             <TouchableOpacity>
                                 <AntDesign name="closecircle" size={24} color="black" onPress={() => setShowModalLanguage(false)} />
                             </TouchableOpacity>
@@ -339,7 +342,7 @@ const Login = ({ navigation }) => {
                         <View style={{
                             padding: 15, 
                             marginBottom: 30}}>
-                                <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row", justifyContent: "center"}} onPress={() => {
+                                <TouchableOpacity activeOpacity={0.5} style={{flexDirection: "row"}} onPress={() => {
                                     setShowModalLanguage(false)
                                     i18next.changeLanguage(data.value)
                                 }}>
@@ -366,8 +369,13 @@ const Login = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <View style={{flexDirection: "row", width: "90vw", paddingTop: "1%"}}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => setShowModalLanguage(true)} style={{width: "fit-content"}}>
+                    {renderSwitchFlag()}
+                </TouchableOpacity>
+            </View>
             <StatusBar style="light" />
-            {hotelLogo !== null ? 
+            {hotelLogo ? 
             <View style={styles.containerText}>
                 <Image source={{uri: hotelLogo}} style={{
                 flex: 1,
@@ -380,23 +388,33 @@ const Login = ({ navigation }) => {
                 resizeMode: "contain",
                 justifyContent: "center",
                 width: "100%",
-                marginLeft: 50}} />
+                marginLeft: "11vw"}} />
             </View>}
             <View style={styles.inputContainer}>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <MaterialIcons name="email" size={24} color="gray" />
-                    <Input style={{ outline: "none" }} placeholder={t('email')} autofocus type="email" value={email} 
+                    <MaterialIcons name="email" size={24} color="#B8860B" style={globalStyle.shadow} />
+                    <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t('email')} autofocus type="email" value={email} 
                     onChangeText={(text) => setEmail(text)} />
                 </View>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <FontAwesome name="lock" size={24} color="gray" style={{marginLeft: 5, marginRight: 5}} />
-                    <Input style={{ outline: "none" }} placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
+                    <FontAwesome name="lock" size={24} color="#B8860B" style={[{marginLeft: 5, marginRight: 5}, globalStyle.shadow]} />
+                    <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1  }} placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
                     onChangeText={(text) => setPassword(text)} />
                 </View>
             </View>
             <View style={{flex: 2}}>
-                <Button onPress={() => handleLogin()} containerStyle={styles.button} title={t('connection')} />
-                {userDB === null && <Button onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} containerStyle={styles.button} title={t('creation_compte')} type="clear" />}
+                <Button 
+                onPress={() => handleLogin()} 
+                buttonStyle={{backgroundColor: "#B8860B"}} 
+                containerStyle={styles.button} 
+                title={t('connection')}
+                titleStyle={{color: "black"}} />
+                {userDB === null && <Button 
+                onPress={() => navigation.navigate('Inscription', { hotelLogo: hotelLogo, currentHotelId:hotelId })} 
+                containerStyle={styles.button2} 
+                title={t('creation_compte')} 
+                titleStyle={{color: "#B8860B"}}
+                type="clear" />}
             </View>
        
        {showModalLanguage && modalLanguage()}
@@ -431,10 +449,16 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 200,
-        marginTop: 10, 
-        borderColor: "white",
-        borderRadius: 30
- 
+        marginBottom: 10, 
+        borderRadius: 30, 
+        filter: "drop-shadow(1px 1px 1px)",
+        borderColor: "#B8860B", borderWidth: 1
+    },
+    button2: {
+        width: 200,
+        marginBottom: 10, 
+        borderRadius: 30, 
+        borderColor: "#B8860B", borderWidth: 1
     },
     centeredView: {
         flex: 1,
@@ -443,9 +467,7 @@ const styles = StyleSheet.create({
         marginTop: 22,
       },
     modalView: {
-        marginTop: 40,
         backgroundColor: 'white',
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -454,10 +476,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width: "100vw",
+        height: "100%"
     },
     modal: {
         padding: 10,
-        margin: 20,
         borderRadius: 10,
         backgroundColor: 'white',
         alignItems: 'center',

@@ -17,7 +17,7 @@ export default StyleSheet.create({
     },
     inputContainer: {
         width: "80%",
-        marginTop: 70, 
+        marginTop: 40, 
     },
     button: {
         width: "80%",

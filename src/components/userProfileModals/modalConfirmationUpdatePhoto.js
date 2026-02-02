@@ -48,11 +48,16 @@ const ModalConfirmationUpdatePhoto = ({user, updatePhoto, setUpdatePhoto, img}) 
                 fontSize: 15,
                 paddingTop: 10, 
                 paddingBottom: 10,
-                borderRadius: 5,
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
                 textAlign: "center", 
-                backgroundColor: "lightblue"
+                backgroundColor: "#B8860B"
                 }}>{t('message_confirmation_actualisation_photo')}</Text>
-        <Button title={t('confirmer')} containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} onPress={(event) => {
+        <Button title={t('confirmer')} 
+        containerStyle={{width: "90%", borderRadius: 20, marginBottom: 15, marginTop: 15}} 
+        buttonStyle={{backgroundColor: "#B8860B"}} 
+        titleStyle={{color: "black"}}
+        onPress={(event) => {
             handleChangePhotoUrl(event)
             setUpdatePhoto(false)
             showMessage({

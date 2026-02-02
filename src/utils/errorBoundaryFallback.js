@@ -7,18 +7,20 @@ const CustomFallback = (props) => {
   const user = useContext(UserContext)
   const { t } = useTranslation()
 
-  console.log("USER+++++++++++++++", props)
+  console.log("USER+++++++++++++++", user)
   
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
-        <Image source={{uri: user && user.userDB.logo}} 
+        {user?.userDB.logo ? <Image source={{uri: user.userDB.logo}} 
           style={{
             flex: 1,
-            width: '100%',
-            resizeMode:"contain",
+            resizeMode: "contain",
+                justifyContent: "center",
+                width: "100%",
+                marginLeft: 50,
             borderRadius: 5}}>
-        </Image>
+        </Image> : <Image source={require('../../img/new-logo-msh.png')} style={{width: "90vw", height: "50vh", marginLeft: "20vw", resizeMode: "contain"}} />}
       </View>
       <Text style={styles.title}>{t("boundary_error_message_begining")}</Text>
       <Text style={styles.text}>{t("boundary_error_message_ending")}</Text>
@@ -37,9 +39,9 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     },
     logo: {
-      flex: 4,
-      width: '100%',
-      height: '40%',
+      flex: 3,
+      width: "auto",
+      height: "auto"
     },
     title: {
       // flex: 2,

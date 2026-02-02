@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import DefaultAvatar from "../../img/avatar-client.png"
-
+import globalStyle from '../utils/globalStyle';
 
 {/*YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -47,17 +47,20 @@ const Chat = ({ navigation }) => {
             title: "Chat",
             headerBackTitleVisible: false,
             headerTitleAlign: "right",
+            headerBackground: () => (
+                <View style={globalStyle.headerShadow} />
+              ),
             headerTitle: () =>(
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Entypo name="chat" size={24} color="black" />            
-                    <Text style={{ color: "black", marginLeft: 10, fontWeight : "bold", fontSize: 20}}>Chat {t('reception')}</Text>
+                <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
+                    <Entypo name="chat" size={24} color="#B8860B" />            
+                    <Text style={{ color: "#B8860B", marginLeft: 10, fontWeight : "bold", fontSize: 20}}>Chat {t('reception')}</Text>
                 </View>
             ),
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 outChat()
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5} , globalStyle.shadow]} />
                 </TouchableOpacity>
             ),
             headerRight: () => (
@@ -66,7 +69,7 @@ const Chat = ({ navigation }) => {
                     <Ionicons 
                         name="notifications-off-circle" 
                         size={24} 
-                        color="black" 
+                        color="#B8860B" 
                         style={{marginRight: 20}}
                          /> : null
                     }
@@ -76,29 +79,33 @@ const Chat = ({ navigation }) => {
     }, [navigation])
 
     useEffect(() => {
-        const getMessages = () => {
-            return db.collection("hotels")
-            .doc(userDB.hotelId)
-            .collection('chat')
-            .doc(user.displayName)
-            .collection("chatRoom")
-            .orderBy("markup", "desc")
-            .limit(50)
-        }
+        if(userDB.hotelId !== "") {
+            const getMessages = () => {
+                console.log("BUG************", user, userDB)
 
-        let unsubscribe = getMessages().onSnapshot(function(snapshot) {
-            const snapInfo = []
-          snapshot.forEach(function(doc) {          
-            snapInfo.push({
-                id: doc.id,
-                ...doc.data()
-              })        
+                return db.collection("hotels")
+                .doc(userDB?.hotelId)
+                .collection('chat')
+                .doc(userDB?.username)
+                .collection("chatRoom")
+                .orderBy("markup", "desc")
+                .limit(50)
+            }
+    
+            let unsubscribe = getMessages().onSnapshot(function(snapshot) {
+                const snapInfo = []
+              snapshot.forEach(function(doc) {          
+                snapInfo.push({
+                    id: doc.id,
+                    ...doc.data()
+                  })        
+                });
+                console.log(snapInfo)
+                setMessages(snapInfo)
             });
-            console.log(snapInfo)
-            setMessages(snapInfo)
-        });
-        return unsubscribe
-    }, [])
+            return unsubscribe
+        } 
+    }, [userDB.hotelId])
 
     const outChat = () => {
       if(chatRoom.length > 0) {
@@ -179,7 +186,7 @@ const Chat = ({ navigation }) => {
         }
       }
 
-    console.log("Chatroom-----", messages)
+    console.log("Chatroom-----", user && user)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
@@ -278,7 +285,7 @@ const Chat = ({ navigation }) => {
                         onChangeText={(text) => setInput(text)}
                         onSubmitEditing={sendMessage}
                         placeholder={t('envoi_message')}
-                        style={[styles.input, { outline: "none"}]}
+                        style={[styles.input, globalStyle.shadow, { outline: "none"}]}
                     />
                     <TouchableOpacity
                     activeOpacity={0.5}
@@ -291,7 +298,7 @@ const Chat = ({ navigation }) => {
                             .then(sendMessage())
                         }
                         }}>
-                        <FontAwesome name="send" size={24} color="black" />
+                        <FontAwesome name="send" size={24} color="#B8860B" />
                     </TouchableOpacity>
 
                 </View>
@@ -312,12 +319,13 @@ const styles = StyleSheet.create({
         height: 40,
         flex: 1,
         marginRight: 15,
-        borderColor: "transparent",
-        backgroundColor: "#ECECEC",
-        borderWidth: 1,
-        padding: 10,
-        color: "black",
-        borderRadius: 30, 
+        borderColor: "#B8860B",
+        backgroundColor: "black",
+        borderWidth: 2,
+        paddingVertical: 10,
+        paddingHorizontal: "5vw",
+        color: "#B8860B",
+        borderRadius: 30
     },
     footer: {
         flexDirection: "row",
