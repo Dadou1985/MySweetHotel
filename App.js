@@ -161,7 +161,9 @@ const App = () => {
          </>
      }else{
        return <View style={styles.container}>
-         <Image id="flag" style={{ width: "100%", height: "90%"}}
+         <Image id="flag" style={{ width: "100%", height: "90%", flex: 1,
+                resizeMode: "contain",
+                justifyContent: "center"}}
          source={require('./assets/msh-splashScreen.png')} 
          />
          <View style={{flexDirection: "row", alignItems: "center", backgroundColor: "#B8860B", width: "100vw", justifyContent: "center", padding: "3%"}}>

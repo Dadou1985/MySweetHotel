@@ -12,6 +12,7 @@ import i18next from 'i18next'
 import { AntDesign, Octicons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
+import globalStyle from '../utils/globalStyle';
 
 const Maintenance = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -30,8 +31,11 @@ const Maintenance = ({ navigation }) => {
           title: "Maintenance",
           headerBackTitleVisible: false,
           headerTitleAlign: "right",
+          headerBackground: () => (
+            <View style={globalStyle.headerShadow} />
+          ),
           headerTitle: () =>(
-              <View style={{flexDirection: "row", alignItems: "center"}}>
+              <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                   <Entypo name="tools" size={35} color="#B8860B" />
                   <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('maintenance')}</Text>
               </View>
@@ -39,7 +43,7 @@ const Maintenance = ({ navigation }) => {
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("My Sweet Hotel")}}>
-                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5}, globalStyle.shadow]} />
               </TouchableOpacity>
           )
       })

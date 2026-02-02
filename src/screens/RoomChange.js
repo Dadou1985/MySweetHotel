@@ -13,6 +13,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Filter from 'react-css-filter'
 import ModalWeb from 'modal-enhanced-react-native-web';
 import GlobalCameraFeatureStyle from '../utils/globalCameraFeatureStyle'
+import globalStyle from '../utils/globalStyle';
 
 const RoomChange = ({ navigation }) => {
     const [type, setType] = useState("")
@@ -31,8 +32,11 @@ const RoomChange = ({ navigation }) => {
           title: "RoomChange",
           headerBackTitleVisible: false,
           headerTitleAlign: "right",
+          headerBackground: () => (
+            <View style={globalStyle.headerShadow} />
+          ),
           headerTitle: () =>(
-              <View style={{flexDirection: "row", alignItems: "center"}}>
+              <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                   <MaterialIcons name="room-preferences" size={24} color="#B8860B" />                
                   <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('delogement')}</Text>
               </View>
@@ -40,7 +44,7 @@ const RoomChange = ({ navigation }) => {
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("My Sweet Hotel")}}>
-                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5}, globalStyle.shadow]} />
               </TouchableOpacity>
           )
       })

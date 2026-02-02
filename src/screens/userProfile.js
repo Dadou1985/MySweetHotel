@@ -20,6 +20,7 @@ import Filter from 'react-css-filter'
 import { fr, pt, en, de, es, it } from '../locales/config'
 import { ModalChatPushNotification, ModalConfirmUpdateCheckout, ModalConfirmationUpdatePhoto, ModalMessageWebsite, ModalUpdateRoom } from '../components/userProfileModals'
 import ModalUpdateEmail from '../components/userProfileModals/modalUpdateEmail'
+import globalStyle from '../utils/globalStyle';
 
 const UserProfile = ({navigation}) => {
   const [img, setImg] = useState(null)
@@ -70,8 +71,11 @@ const UserProfile = ({navigation}) => {
         title: "My Sweet Hotel",
         headerBackTitleVisible: false,
         headerTitleAlign: "right",
+        headerBackground: () => (
+          <View style={globalStyle.headerShadow} />
+        ),
         headerTitle: () =>(
-            <View style={{flexDirection: "row", alignItems: "center"}}>
+            <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
               {userDB.logo ? <Image source={{uri: userDB.logo}} style={{width: 100, height: 70, resizeMode:"contain"}}></Image> : <Image source={require('../../img/msh-newLogo-transparent.png')} style={{width: 80, height: 60}} />}
             </View>
         ),
@@ -81,7 +85,7 @@ const UserProfile = ({navigation}) => {
         name="logout" 
         size={24} 
         color="#B8860B" 
-        style={{marginRight: 20}}
+        style={[{marginRight: 20}, globalStyle.shadow]}
         onPress={() => {
             Logout()
             setTimeout(() => {
@@ -316,7 +320,7 @@ const UserProfile = ({navigation}) => {
 
   const handleCloseConciergePanel = () => setConciergePanel(false)
 
-  console.log("userDB", user)
+  console.log("userDB", user?.photoURL)
    
   if(isForegrounding) {
     return <View style={{width: '100%', height: '100%', flex: 1, flexDirection: "column", justifyContent: "center", alignItems: 'center'}}>
@@ -329,7 +333,12 @@ const UserProfile = ({navigation}) => {
       <KeyboardAvoidingView style={styles.container}>
         <StatusBar style="light" />
         <View style={{flex: 2, width: "100%"}}>
-          {user?.photoURL ? <ImageBackground source={{uri: user?.photoURL}} style={styles.image}>
+        <ImageBackground source={require('../../img/avatar-client.png')} style={styles.image}>
+            <TouchableOpacity style={{padding: 15}} onPress={pickImage}>
+                {/* <MaterialIcons name="add-a-photo" size={35} color="black" />                     */}
+              </TouchableOpacity>  
+          </ImageBackground>
+          {/* {user?.photoURL ? <ImageBackground source={{uri: user?.photoURL}} style={styles.image}>
           <TouchableOpacity style={{padding: 15}} onPress={pickImage}>
                 <MaterialIcons name="add-a-photo" size={35} color="black" />                    
               </TouchableOpacity>
@@ -338,7 +347,7 @@ const UserProfile = ({navigation}) => {
             <TouchableOpacity style={{padding: 15}} onPress={pickImage}>
                 <MaterialIcons name="add-a-photo" size={35} color="black" />                    
               </TouchableOpacity>  
-          </ImageBackground>}
+          </ImageBackground>} */}
         </View>
         <View style={{flexDirection: "column", width: "100%", padding: 10, alignItems: "center"}}>
           <Text style={{fontSize: 30, fontWeight: "bold", color: "#B8860B"}}>{userDB?.username}</Text>    
@@ -356,7 +365,8 @@ const UserProfile = ({navigation}) => {
                     textAlign: "center",
                     color: "grey"
                     }}>
-                      <Fontisto name="world" size={15} color="grey" style={{marginRight: 5}} />
+                      {/* <Fontisto name="world" size={15} color="grey" style={{marginRight: 5}} /> */}
+                      <MaterialCommunityIcons name="web" size={15} color="grey" style={{marginRight: 5}} />
                       {t("website")}
             </Text>
           </TouchableOpacity> : <></>}

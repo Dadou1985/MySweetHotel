@@ -15,6 +15,7 @@ import ModalWeb from 'modal-enhanced-react-native-web';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import { fr, pt, en, de, es, it } from '../locales/config'
 import GlobalTimeFeatureStyle from '../utils/globalTimeFeatureStyle'
+import globalStyle from '../utils/globalStyle';
 
 const Timer = ({navigation}) => {
     const [date, setDate] = useState(new Date())
@@ -58,8 +59,11 @@ const Timer = ({navigation}) => {
             title: "Timer",
             headerBackTitleVisible: false,
             headerTitleAlign: "right",
+            headerBackground: () => (
+                <View style={globalStyle.headerShadow} />
+              ),
             headerTitle: () =>(
-                <View style={{flexDirection: "row", alignItems: "center"}}>
+                <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                     <Ionicons name="alarm" size={24} color="#B8860B" />
                     <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('reveil_titre')}</Text>
                 </View>
@@ -67,7 +71,7 @@ const Timer = ({navigation}) => {
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5}, globalStyle.shadow]} />
                 </TouchableOpacity>
             )
         })

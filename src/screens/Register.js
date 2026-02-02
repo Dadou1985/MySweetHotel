@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import { UserContext } from '../components/userContext'
-
+import globalStyle from '../utils/globalStyle';
 
 const Register = ({ navigation, route }) => {
     const { t } = useTranslation()
@@ -38,8 +38,11 @@ const Register = ({ navigation, route }) => {
           title: "Inscription",
           headerBackTitleVisible: false,
           headerTitleAlign: "right",
+          headerBackground: () => (
+            <View style={globalStyle.headerShadow} />
+          ),
           headerTitle: () =>(
-              <View style={{flexDirection: "row", alignItems: "center"}}>
+              <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                   <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('inscription_titre')}</Text>
               </View>
           ),

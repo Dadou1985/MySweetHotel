@@ -16,6 +16,7 @@ import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calenda
 import { fr, pt, en, de, es, it } from '../locales/config'
 import Picture from '../img/taxi.svg'
 import GlobalTimeFeatureStyle from '../utils/globalTimeFeatureStyle'
+import globalStyle from '../utils/globalStyle';
 
 const Taxi = ({ navigation }) => {
     const [date, setDate] = useState(new Date())
@@ -61,8 +62,11 @@ const Taxi = ({ navigation }) => {
             title: "Taxi",
             headerBackTitleVisible: false,
             headerTitleAlign: "right",
+            headerBackground: () => (
+                <View style={globalStyle.headerShadow} />
+              ),
             headerTitle: () =>(
-                <View style={{flexDirection: "row", alignItems: "center"}}>
+                <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                     <FontAwesome5 name="taxi" size={24} color="#B8860B" />
                     <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20, marginLeft: 5}}>{t('taxi_titre')}</Text>
                 </View>
@@ -70,7 +74,7 @@ const Taxi = ({ navigation }) => {
             headerLeft: () => (
                 <TouchableOpacity onPress={() => {
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5}, globalStyle.shadow]} />
                 </TouchableOpacity>
             )
         })

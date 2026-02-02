@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import DefaultAvatar from "../../img/avatar-client.png"
-
+import globalStyle from '../utils/globalStyle';
 
 {/*YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -47,8 +47,11 @@ const Chat = ({ navigation }) => {
             title: "Chat",
             headerBackTitleVisible: false,
             headerTitleAlign: "right",
+            headerBackground: () => (
+                <View style={globalStyle.headerShadow} />
+              ),
             headerTitle: () =>(
-                <View style={{flexDirection: "row", alignItems: "center"}}>
+                <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
                     <Entypo name="chat" size={24} color="#B8860B" />            
                     <Text style={{ color: "#B8860B", marginLeft: 10, fontWeight : "bold", fontSize: 20}}>Chat {t('reception')}</Text>
                 </View>
@@ -57,7 +60,7 @@ const Chat = ({ navigation }) => {
                 <TouchableOpacity onPress={() => {
                 outChat()
                 navigation.navigate("My Sweet Hotel")}}>
-                    <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
+                    <AntDesign name="left" size={24} color="#B8860B" style={[{marginLeft: 5} , globalStyle.shadow]} />
                 </TouchableOpacity>
             ),
             headerRight: () => (
@@ -282,7 +285,7 @@ const Chat = ({ navigation }) => {
                         onChangeText={(text) => setInput(text)}
                         onSubmitEditing={sendMessage}
                         placeholder={t('envoi_message')}
-                        style={[styles.input, { outline: "none"}]}
+                        style={[styles.input, globalStyle.shadow, { outline: "none"}]}
                     />
                     <TouchableOpacity
                     activeOpacity={0.5}
@@ -316,13 +319,13 @@ const styles = StyleSheet.create({
         height: 40,
         flex: 1,
         marginRight: 15,
-        borderColor: "transparent",
+        borderColor: "#B8860B",
         backgroundColor: "black",
-        borderWidth: 1,
+        borderWidth: 2,
         paddingVertical: 10,
         paddingHorizontal: "5vw",
         color: "#B8860B",
-        borderRadius: 30, 
+        borderRadius: 30
     },
     footer: {
         flexDirection: "row",

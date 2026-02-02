@@ -10,6 +10,7 @@ import i18next from 'i18next'
 import { AntDesign } from '@expo/vector-icons';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import globalStyle from '../utils/globalStyle';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("")
@@ -281,11 +282,12 @@ const Login = ({ navigation }) => {
             animationType="slide"
             transparent={true}
             visible={showModalLanguage} 
-            style={styles.centeredView}>
+            style={styles.centeredView}
+            >
                 <ScrollView contentContainerStyle={styles.modalView}>
                     <View style={{
                         flexDirection: "row", 
-                        width: 420, 
+                        width: "100%", 
                         alignItems: "center", 
                         justifyContent: "center", 
                         marginBottom: 10, 
@@ -386,16 +388,16 @@ const Login = ({ navigation }) => {
                 resizeMode: "contain",
                 justifyContent: "center",
                 width: "100%",
-                marginLeft: 50}} />
+                marginLeft: "11vw"}} />
             </View>}
             <View style={styles.inputContainer}>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <MaterialIcons name="email" size={24} color="#B8860B" />
+                    <MaterialIcons name="email" size={24} color="#B8860B" style={globalStyle.shadow} />
                     <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1 }} placeholder={t('email')} autofocus type="email" value={email} 
                     onChangeText={(text) => setEmail(text)} />
                 </View>
                 <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <FontAwesome name="lock" size={24} color="#B8860B" style={{marginLeft: 5, marginRight: 5}} />
+                    <FontAwesome name="lock" size={24} color="#B8860B" style={[{marginLeft: 5, marginRight: 5}, globalStyle.shadow]} />
                     <Input style={{ outline: "none", borderBottomColor: "#B8860B", borderBottomWidth: 1  }} placeholder={t('mot_de_passe')} secureTextEntry type="password" value={password} 
                     onChangeText={(text) => setPassword(text)} />
                 </View>
@@ -465,9 +467,7 @@ const styles = StyleSheet.create({
         marginTop: 22,
       },
     modalView: {
-        marginTop: 40,
         backgroundColor: 'white',
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -476,10 +476,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width: "100vw",
+        height: "100%"
     },
     modal: {
         padding: 10,
-        margin: 20,
         borderRadius: 10,
         backgroundColor: 'white',
         alignItems: 'center',
