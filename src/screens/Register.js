@@ -43,13 +43,13 @@ const Register = ({ navigation, route }) => {
           ),
           headerTitle: () =>(
               <View style={[{flexDirection: "row", alignItems: "center"}, globalStyle.shadow]}>
-                  <Text style={{ color: "black", fontWeight : "bold", fontSize: 20}}>{t('inscription_titre')}</Text>
+                  <Text style={{ color: "#B8860B", fontWeight : "bold", fontSize: 20}}>{t('inscription_titre')}</Text>
               </View>
           ),
           headerLeft: () => (
               <TouchableOpacity onPress={() => {
               navigation.navigate("Connexion")}}>
-                  <AntDesign name="left" size={24} color="black" style={{marginLeft: 5}} />
+                  <AntDesign name="left" size={24} color="#B8860B" style={{marginLeft: 5}} />
               </TouchableOpacity>
           )
       })
