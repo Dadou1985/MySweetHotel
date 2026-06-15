@@ -1,6 +1,6 @@
 # My Sweet Hotel 🏨
 
-**My Sweet Hotel** est une application mobile de gestion hôtelière destinée aux clients et au personnel, permettant de centraliser les services de l'hôtel en un seul endroit.
+**My Sweet Hotel** est une application mobile de gestion hôtelière destinée aux clients et permettant de centraliser les services de conciergerie de l'hôtel.
 
 ## À propos
 
